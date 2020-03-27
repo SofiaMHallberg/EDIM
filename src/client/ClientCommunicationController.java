@@ -20,7 +20,7 @@ public class ClientCommunicationController {
     private Buffer<Activity> activityBuffer;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
-    private Socket socket; // Detta är en socket. Det är ff en socket.
+    private Socket socket; // Detta är en socket. Det är ff en socket. Är detta en socket?
     private int port;
     private String ip, className = "Class: ClientCommunicationController, Method: ";
 
