@@ -83,7 +83,7 @@ public class ConnectionServer {
          */
         public void run() {
             while(!Thread.interrupted()) {
-                System.out.println(className+"thread has started");
+              //  System.out.println(className+"thread has started");
                 Socket socket;
                 try {
                     socket=serverSocket.accept();
@@ -133,9 +133,9 @@ public class ConnectionServer {
 
             while(!Thread.interrupted()) {
                 try {
-                    System.out.println(className + "thread is listening");
+                   // System.out.println(className + "thread is listening");
                     ObjectInputStream ois = socketStreamObject.getOis();
-                    System.out.println(className + ois);
+                 //   System.out.println(className + ois);
                     user = (User) ois.readObject();
                     System.out.println(className + user.getUserName());
                     userName=user.getUserName();
@@ -153,9 +153,6 @@ public class ConnectionServer {
                             onLineBuffer.put(user);
                             System.out.println(className+"user logout");
                             interrupt();
-                            break;
-                        case COMPLETEDACTIVITY:
-                            //TODO vad händer när användaren skickar en uppdatering om att en aktivitet är utförd
                             break;
                     }
 

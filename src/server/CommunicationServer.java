@@ -13,14 +13,12 @@ import java.util.LinkedList;
  */
 
 public class CommunicationServer {
-    private ServerSocket serverSocket;
     private int port;
     private ObjectOutputStream oos;
-    private String className="Package: Server. Class: ConnectionServer ";
+    private String className="Package: Server. Class: CommunicationServer ";
     private LinkedList<WorkerThread> threadPool;
     private HashMap<String, SocketStreamObject> socketHashMap;
     private Buffer<User> sendUserBuffer;
-    private Buffer<User> sendNewUserBuffer;
     private Buffer<Activity> sendNewActivityBuffer;
 
 
@@ -29,14 +27,12 @@ public class CommunicationServer {
      * @param port the received port.
      * @param socketHashMap the received socketHashMap.
      * @param sendUserBuffer the received sendUserBuffer.
-     * @param sendNewUserBuffer the received sendNewUserBuffer.
      * @param sendNewActivityBuffer the received sendNewActivityBuffer.
      */
-    public CommunicationServer(int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> sendUserBuffer, Buffer<User> sendNewUserBuffer, Buffer<Activity> sendNewActivityBuffer) {
+    public CommunicationServer(int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> sendUserBuffer, Buffer<Activity> sendNewActivityBuffer) {
         this.port=port;
         this.socketHashMap=socketHashMap;
         this.sendUserBuffer=sendUserBuffer;
-        this.sendNewUserBuffer=sendNewUserBuffer;
         this.sendNewActivityBuffer=sendNewActivityBuffer;
         this.threadPool=new LinkedList<>();
         generateThreadPool(1);
@@ -83,6 +79,7 @@ public class CommunicationServer {
                      */
                     System.out.println(className + "run()");
                     User sendUser=sendUserBuffer.get();
+                    System.out.println(className + sendUser.getUserName());
                     oos=socketHashMap.get(sendUser.getUserName()).getOos();
                     oos.writeObject(sendUser);
 /*
