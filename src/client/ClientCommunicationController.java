@@ -2,7 +2,9 @@ package client;
 
 import server.Activity;
 import server.User;
+import server.UserType;
 
+import javax.swing.*;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -147,8 +149,23 @@ public class ClientCommunicationController {
                     if (object instanceof User) {
                         System.out.println("Inne i första if-satsen");
                         User user = (User) object;
-                        clientController.receiveExistingUser(user);
-                        System.out.println("Skickat till ClientController");
+                        UserType userType = user.getUserType();
+                        System.out.println("Innan Switch " + user.getUserType());
+
+                        switch (userType) {
+                            case SENDUSER:
+                                clientController.receiveExistingUser(user);
+
+                                break;
+
+                            case SENDWELCOME:
+                                clientController.receiveAcceptedUser(user);
+
+                                break;
+
+                        }
+                      //  clientController.receiveExistingUser(user);
+                      //  System.out.println("Skickat till ClientController");
                     }
                     else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
@@ -157,7 +174,7 @@ public class ClientCommunicationController {
                     else if (object instanceof String) {
                         System.out.println("String-objekt");
                         String message = (String) object;
-                        clientController.receiveAcceptedUser(message);
+                      //  clientController.receiveAcceptedUser(user);
 
                     }
                     else System.out.println("Den gick inte in i någon if-sats :(");

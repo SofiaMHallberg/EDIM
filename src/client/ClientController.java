@@ -81,12 +81,13 @@ public class ClientController {
     public void receiveExistingUser(User user) {
         System.out.println("CC, receiveExisting");
         this.user = user;
+
         JOptionPane.showMessageDialog(null, "Välkommen tillbaka, " + user.getUserName());
         System.out.println("Slut på Existing-metoden");
     }
 
-    public void receiveAcceptedUser(String userAccepted) {
-        JOptionPane.showMessageDialog(null, userAccepted);
+    public void receiveAcceptedUser(User userAccepted) {
+        JOptionPane.showMessageDialog(null, "Välkommen " + userAccepted.getUserName());
         //TODO: Detta ska göras i MainFrame.
     }
 /*
