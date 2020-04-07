@@ -1,5 +1,7 @@
 package gui;
 
+import server.Activity;
+
 import javax.swing.*;
 import java.awt.*;
 
@@ -24,6 +26,11 @@ public class MainPanel extends JPanel {
 
     public void showAppPanel() {
         add(appPanel);
+
+        //TODO: De undre raderna ska komma ifrån ClientController.
+        Activity activity = new Activity("Squats");
+        activity.setActivityInfo("Den här övningen ökar din koncentration med 5%");
+        appPanel.updateActivityList(activity);
     }
 
     public void logOut() {
