@@ -57,9 +57,8 @@ public class ClientController {
 
     /**
      *
-     * @param user
      */
-    public void logOut(User user) {
+    public void logOut() {
         //   this.user.setOnlineStatus(false);
 
     }

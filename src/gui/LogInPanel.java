@@ -7,26 +7,25 @@ import java.awt.event.ActionListener;
 
 
 public class LogInPanel extends JPanel {
-    private MainFrame mainFrame;
     private JLabel lblUserName, lblWelcome;
     private JTextField tfUserName;
     private JButton btnLogIn;
 
-    public LogInPanel(MainFrame mainFrame) {
-        this.mainFrame = mainFrame;
+    private MainFrame mainFrame;
+    private LogInFrame logInFrame;
+
+    public LogInPanel(LogInFrame logInFrame) {
+        this.logInFrame = logInFrame;
         createComponents();
-        //setVisible(true);
     }
 
     public void createComponents() {
-        setPreferredSize(new Dimension(400, 70));
+        //setPreferredSize(new Dimension(200, 200));
         lblUserName = new JLabel("Username: ");
-        lblWelcome = new JLabel("Welcome to EDIM, Every Day In Motion. Please enter your username below.");
-        tfUserName = new JTextField();
-        tfUserName.setPreferredSize(new Dimension(80, 20));
+        tfUserName = new JTextField("Chanon");
+        tfUserName.setPreferredSize(new Dimension(100, 20));
         btnLogIn = new JButton("Log In");
         setLayout(new FlowLayout(4));
-        //add(lblWelcome, FlowLayout.LEFT);
         add(lblUserName, FlowLayout.LEFT);
         add(tfUserName, FlowLayout.CENTER);
         add(btnLogIn);
@@ -35,9 +34,10 @@ public class LogInPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String userName = tfUserName.getText();
                 if (!userName.equals("") && !userName.contains(" ")) {
+                    mainFrame = new MainFrame();
                     mainFrame.showAppPanel(userName);
-                }
-                else {
+                    logInFrame.closeWindow();
+                } else {
                     JOptionPane.showMessageDialog(null, "Invalid username");
                 }
             }
