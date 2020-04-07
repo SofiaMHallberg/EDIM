@@ -81,6 +81,7 @@ public class CommunicationServer {
                     User sendUser=sendUserBuffer.get();
                     System.out.println(className + sendUser.getUserName());
                     oos=socketHashMap.get(sendUser.getUserName()).getOos();
+                    System.out.println(className + sendUser.getUserType());
                     oos.writeObject(sendUser);
 /*
                     Activity sendNewActivity=sendNewActivityBuffer.get();

@@ -49,10 +49,13 @@ public class ServerController extends Thread {
             } else {
                 user.setUserType(UserType.SENDWELCOME);
                 userRegister.getUserList().add(user);
-                System.out.println(classname + "checkOnlineUsers - else-satsen");
+                System.out.println(classname + user.getUserType() +  "checkOnlineUsers - else-satsen");
             }
         }
-        System.out.println(classname + user.getUserType());
+        if(user.getUserType() == UserType.LOGIN) {
+            user.setUserType(UserType.SENDWELCOME);
+        }
+        System.out.println(classname + "checkOnlineUsers: " + user.getUserType() );
         return user;
 
     }
