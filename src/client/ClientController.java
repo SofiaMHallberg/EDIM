@@ -43,7 +43,7 @@ public class ClientController {
      * Receives an Activity Object and sends it forth to the ClientCommunicationController.
      * @param activity the received object.
      */
-    public void sendCompletedActivity(Activity activity) {
+    public void sendActivityToCCC(Activity activity) {
         ccc.sendActivity(activity);
     }
 
@@ -68,9 +68,7 @@ public class ClientController {
      * @param activity the received object.
      */
     public void receiveNotificationFromCCC(Activity activity) {
-        JOptionPane.showMessageDialog(null, "Nu är det dags att göra en aktivitet! \nDu ska göra: "
-                + activity.getActivityName() + "\nInformation: " + activity.getActivityInfo());
-        //TODO: skicka vidare till MainFrame.
+        mainFrame.showNotification(activity);
     }
 
     public void receiveCompletedActivity(Activity activity) {

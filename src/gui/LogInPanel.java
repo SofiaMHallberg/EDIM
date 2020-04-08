@@ -14,7 +14,8 @@ public class LogInPanel extends JPanel {
     private MainFrame mainFrame;
     private LogInFrame logInFrame;
 
-    public LogInPanel(LogInFrame logInFrame) {
+    public LogInPanel(LogInFrame logInFrame, MainFrame mainFrame) {
+        this.mainFrame = mainFrame;
         this.logInFrame = logInFrame;
         createComponents();
     }
@@ -34,7 +35,6 @@ public class LogInPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String userName = tfUserName.getText();
                 if (!userName.equals("") && !userName.contains(" ")) {
-                    mainFrame = new MainFrame();
                     mainFrame.showAppPanel(userName);
                     logInFrame.closeWindow();
                 } else {

@@ -43,9 +43,7 @@ public class AppPanel extends JPanel {
         createActivityList();
 
         btnLogOut = new JButton("Logga ut");
-        lblUserInfo = new JLabel("Hej " + userName);
 
-        add(lblUserInfo, BorderLayout.NORTH);
         add(activityList, BorderLayout.CENTER);
         add(btnLogOut, BorderLayout.SOUTH);
 
@@ -57,7 +55,7 @@ public class AppPanel extends JPanel {
         listModel = new DefaultListModel();
         activityList = new JList<>(listModel);
         activityList.setPreferredSize(new Dimension(400, 320));
-        activityList.setBorder(BorderFactory.createTitledBorder("Avklarade aktiviteter!"));
+        activityList.setBorder(BorderFactory.createTitledBorder("Avklarade aktiviteter"));
         activityList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
         Font font = new Font("Courier New", Font.PLAIN, 14);
         activityList.setFont(font);
@@ -86,6 +84,22 @@ public class AppPanel extends JPanel {
 
     public void showActivityInfo(String activityInfo) {
         JOptionPane.showMessageDialog(null, activityInfo);
+    }
+
+    public void showNotification(Activity activity) {
+        String[] buttons = { "Jag har gjort aktiviteten!", "Påminn mig om fem minuter",  };
+
+        int answer = JOptionPane.showOptionDialog(null, activity.getActivityInstruction(), "Ny aktivitet",
+                JOptionPane.WARNING_MESSAGE, 0, null, buttons, buttons[0]);
+        if (answer == 0) {
+            activity.setCompleted(true);
+            mainPanel.sendActivityFromGUI(activity);
+            updateActivityList(activity);
+        }
+        else if (answer == 1) {
+            activity.setCompleted(false);
+            mainPanel.sendActivityFromGUI(activity);
+        }
     }
 
     class ButtonListener implements ActionListener {

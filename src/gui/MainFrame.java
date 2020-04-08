@@ -1,6 +1,7 @@
 package gui;
 
 import client.ClientController;
+import server.Activity;
 
 import javax.swing.*;
 
@@ -17,10 +18,9 @@ public class MainFrame extends JFrame {
     private AppPanel appPanel;
     private NotificationPanel notificationPanel;
     private String userName;
+    private LogInFrame logInFrame;
 
-    public MainFrame() {
-        setupFrame();
-    }
+
 
     /**
      * Receives a clientController object and opens call for the method which opens a GUI window.
@@ -29,9 +29,13 @@ public class MainFrame extends JFrame {
      */
     public MainFrame(ClientController clientController) {
         this.clientController = clientController;
-        setupFrame();
+       // setupFrame();
+        createLoginFrame();
     }
 
+    public void createLoginFrame() {
+        logInFrame = new LogInFrame(this);
+    }
 
     public void setupFrame() {
         setBounds(0, 0, 819, 438);
@@ -54,19 +58,30 @@ public class MainFrame extends JFrame {
 
     public void showAppPanel(String userName) {
         this.userName = userName;
+        setupFrame();
         mainPanel = new MainPanel(this, userName);
         setContentPane(mainPanel);
 
     }
 
     public void logOut() {
-//        clientController.logOut();
+        clientController.logOut();
         dispose();
     }
-
+/*
     public static void main(String[] args) {
         LogInFrame logInFrame = new LogInFrame();
     }
 
+ */
 
+
+    public void showNotification(Activity activity) {
+        appPanel.showNotification(activity);
+    }
+
+
+    public void sendActivityFromGUI(Activity activity) {
+        clientController.sendActivityToCCC(activity);
+    }
 }
