@@ -1,5 +1,6 @@
 package server;
 
+import java.io.*;
 import java.util.HashMap;
 
 /**
@@ -32,6 +33,48 @@ public class ServerController extends Thread {
         connectionServer = new ConnectionServer(this, port, socketHashMap, onLineBuffer);
         communicationServer = new CommunicationServer(port, socketHashMap, sendUserBuffer, sendNewActivityBuffer);
         userRegister = new UserRegister();
+        readContacts("files/users.txt");
+    }
+    /**
+     * Opens a stream and writes the user objects to the stream and then creates a file.
+     *
+     * @param filename the name of the created file.
+     */
+    public void writeContacts(String filename) {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
+            oos.writeInt(userRegister.getUserList().size());
+            for (int i = 0; i < userRegister.getUserList().size(); i++) {
+                oos.writeObject(userRegister.getUserList().get(i));
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Reads a textfile from the files folder and adds them to the contacts array. Then sets the contacts array to oldContactList array.
+     * @param filename the read filename.
+     */
+    public void readContacts(String filename) {
+       // userRegister.getUserList().clear(); //not sure if this is needed
+        File newFile = new File(filename);
+        if(newFile.length() != 0) {
+            try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
+                int size = ois.readInt();
+                for (int i = 0; i < size; i++) {
+                    try {
+                        userRegister.getUserList().add((User) ois.readObject());
+                    } catch (ClassNotFoundException | IOException e) {
+                        System.out.println(e);
+                    }
+                    //System.out.println("Client.ClientController: Sparad kontakt: " + contacts.get(i).getUserName());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+       // oldContactList = contacts;
+
     }
 
     /**
@@ -46,19 +89,19 @@ public class ServerController extends Thread {
             if (userRegister.getUserList().get(i).equals(user)) {
                 user = userRegister.getUserList().get(i);
                 user.setUserType(UserType.SENDUSER);
-            } else {
-                user.setUserType(UserType.SENDWELCOME);
-                userRegister.getUserList().add(user);
-                System.out.println(classname + user.getUserType() +  "checkOnlineUsers - else-satsen");
+
             }
         }
-        if(user.getUserType() == UserType.LOGIN) {
+        if (user.getUserType() == UserType.LOGIN) {
             user.setUserType(UserType.SENDWELCOME);
+            userRegister.getUserList().add(user);
+            writeContacts("files/users.txt");
         }
-        System.out.println(classname + "checkOnlineUsers: " + user.getUserType() );
+        System.out.println(classname + " Antal users i UserRegister " + userRegister.getUserList().size());
         return user;
 
-    }
+        }
+
 
     public void testActivity() {
         Activity testActivity = new Activity("Test-activity");
