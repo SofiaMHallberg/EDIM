@@ -28,12 +28,21 @@ public class MainPanel extends JPanel {
         add(appPanel);
 
         //TODO: De undre raderna ska komma ifrån ClientController.
+        /*
         Activity activity = new Activity("Squats");
         activity.setActivityInfo("Den här övningen ökar din koncentration med 5%");
+        activity.setActivityInstruction("Gör 10 squats");
         appPanel.updateActivityList(activity);
+
+         */
     }
 
     public void logOut() {
         mainFrame.logOut();
     }
+
+    public void sendActivityFromGUI(Activity activity) {
+        mainFrame.sendActivityFromGUI(activity);
+    }
+
 }
