@@ -46,6 +46,7 @@ public class ServerController extends Thread {
             for (int i = 0; i < userRegister.getUserList().size(); i++) {
                 oos.writeObject(userRegister.getUserList().get(i));
             }
+            oos.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -83,10 +84,10 @@ public class ServerController extends Thread {
      * @param user the logged in User.
      * @return an updated User.
      */
-    public User checkOnlineUsers(User user) {
+    public User checkLoginUser(User user) {
         // for(User u:userRegister.getUserList()) {
         for (int i = 0; i < userRegister.getUserList().size(); i++) {
-            if (userRegister.getUserList().get(i).equals(user)) {
+            if (userRegister.getUserList().get(i).getUserName().equals(user.getUserName())) {
                 user = userRegister.getUserList().get(i);
                 user.setUserType(UserType.SENDUSER);
 
@@ -96,6 +97,9 @@ public class ServerController extends Thread {
             user.setUserType(UserType.SENDWELCOME);
             userRegister.getUserList().add(user);
             writeContacts("files/users.txt");
+            for(int i = 0; i<userRegister.getUserList().size(); i++) {
+                System.out.println(userRegister.getUserList().get(i).getUserName());
+            }
         }
         System.out.println(classname + " Antal users i UserRegister " + userRegister.getUserList().size());
         return user;
@@ -103,6 +107,7 @@ public class ServerController extends Thread {
         }
 
 
+        //Metod för att testa att skicka Activity-objekt
     public void testActivity() {
         Activity testActivity = new Activity("Test-activity");
         sendNewActivityBuffer.put(testActivity);
@@ -118,7 +123,7 @@ public class ServerController extends Thread {
                 UserType userType = user.getUserType();
                 switch (userType) {
                     case LOGIN:
-                        User updatedUser = checkOnlineUsers(user);
+                        User updatedUser = checkLoginUser(user);
                         sendUserBuffer.put(updatedUser);
                         testActivity();
 

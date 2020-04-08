@@ -26,8 +26,6 @@ public class ClientController {
      */
     public ClientController() {
         mainFrame = new MainFrame(this);
-        ccc = new ClientCommunicationController(this);
-        createUser(mainFrame.getUserName());
     }
 
     /**
@@ -52,6 +50,7 @@ public class ClientController {
      */
     public void logIn() {
         user.setUserType(UserType.LOGIN);
+        ccc = new ClientCommunicationController(this);
         ccc.sendUser(user);
     }
 
@@ -78,26 +77,9 @@ public class ClientController {
     public void receiveExistingUser(User user) {
         System.out.println("CC, receiveExisting");
         this.user = user;
-
-        JOptionPane.showMessageDialog(null, "Välkommen tillbaka, " + user.getUserName());
-        System.out.println("Slut på Existing-metoden");
     }
 
     public void receiveAcceptedUser(User userAccepted) {
-        JOptionPane.showMessageDialog(null, "Välkommen " + userAccepted.getUserName());
-        //TODO: Detta ska göras i MainFrame.
+        this.user = userAccepted;
     }
-/*
-    public static void main(String[] args) {
-        ClientController cc = new ClientController();
-        Activity act = new Activity();
-        String str = "Välkommen!";
-        User u = new User("Oscar");
-
-        cc.receiveExistingUser(u);
-        cc.receiveNotificationFromCCC(act);
-        cc.receiveAcceptedUser(str);
-    }
-
- */
 }

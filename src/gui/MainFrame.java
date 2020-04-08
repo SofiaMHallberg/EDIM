@@ -57,10 +57,12 @@ public class MainFrame extends JFrame {
     }
 
     public void showAppPanel(String userName) {
+        clientController.createUser(userName);
         this.userName = userName;
         setupFrame();
         mainPanel = new MainPanel(this, userName);
         setContentPane(mainPanel);
+
 
     }
 
