@@ -48,7 +48,7 @@ public class ConnectionServer {
     public void startServer() {
         try {
             serverSocket = new ServerSocket(port);
-            System.out.println(className+": method startServer is executed");
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,7 @@ public class ConnectionServer {
         for(int i=0; i< nbrOfConnections; i++) {
             threadPool.add(new ReceiverThread());
         }
-        System.out.println(className+"ThreadPool generated");
+
     }
 
     /**
@@ -71,7 +71,7 @@ public class ConnectionServer {
     public void startThreadPool() {
         for (ReceiverThread thread:threadPool)
             thread.start();
-        System.out.println(className+"ThreadPool threads are started");
+
     }
 
     // Inner Thread class: creates a connection and sends it forth to the ClientHandler class.
@@ -133,13 +133,9 @@ public class ConnectionServer {
 
             while(!Thread.interrupted()) {
                 try {
-                   // System.out.println(className + "thread is listening");
                     ObjectInputStream ois = socketStreamObject.getOis();
-                 //   System.out.println(className + ois);
                     user = (User) ois.readObject();
-                    System.out.println(className + user.getUserName());
                     userName=user.getUserName();
-                    System.out.println(className+"user received: "+userName);
                     userType=user.getUserType();
 
                     switch (userType) {
@@ -151,7 +147,6 @@ public class ConnectionServer {
                         case LOGOUT:
                             socketHashMap.remove(userName);
                             onLineBuffer.put(user);
-                            System.out.println(className+"user logout");
                             interrupt();
                             break;
                     }

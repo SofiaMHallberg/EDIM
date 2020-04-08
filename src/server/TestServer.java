@@ -14,7 +14,7 @@ public class TestServer {
 
     public TestServer(String ip, int port) {
         this.ip = ip;
-        //this.port = port;
+
         new Connection(port).start();
     }
 

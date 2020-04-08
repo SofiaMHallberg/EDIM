@@ -73,14 +73,11 @@ public class ServerController extends Thread {
             try {
                 User user = onLineBuffer.get();
                 UserType userType = user.getUserType();
-                System.out.println("ServerController: 1 " + user.getUserName());
                 switch (userType) {
                     case LOGIN:
                         User updatedUser = checkOnlineUsers(user);
-                        System.out.println(classname + updatedUser.getUserType());
                         sendUserBuffer.put(updatedUser);
                         testActivity();
-                        System.out.println("ServerController: 2 " + user.getUserName());
 
                         break;
                     case LOGOUT:
@@ -97,7 +94,7 @@ public class ServerController extends Thread {
     }
 
     public static void main(String[] args) {
-        ServerController controller = new ServerController(3343);
+        ServerController controller = new ServerController(4343);
         controller.start();
     }
 

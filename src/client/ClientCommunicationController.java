@@ -22,9 +22,8 @@ public class ClientCommunicationController {
     private Buffer<Activity> activityBuffer;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
-    private Socket socket; // Detta är en socket. Det är ff en socket. Är detta en socket? Det vetifan...
-    private int port;
-    private String ip, className = "Class: ClientCommunicationController, Method: ";
+    private Socket socket;
+    private String className = "Class: ClientCommunicationController, Method: ";
 
     /**
      * Receives a clientController object and then try to connect with the server. Constructs a buffer,
@@ -45,7 +44,7 @@ public class ClientCommunicationController {
      */
     public void connect() {
         try {
-            socket = new Socket("127.0.0.1", 3343);
+            socket = new Socket("127.0.0.1", 4343);
             System.out.println(socket);
 
         } catch (IOException e) {
@@ -90,7 +89,6 @@ public class ClientCommunicationController {
             try {
                 if (oos == null) {
                     oos = new ObjectOutputStream(socket.getOutputStream());
-                    System.out.println(className + "ClientSenders konstruktor");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -104,9 +102,7 @@ public class ClientCommunicationController {
             while (true) {
                 try {
                     User user = userBuffer.get();
-                    System.out.println("Nu skickas användarobjektet till servern" + user.toString());
                     oos.writeObject(user);
-                    System.out.println("Nu har användarobjektet skickats till servern" + user.toString());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -127,7 +123,6 @@ public class ClientCommunicationController {
                     ois = new ObjectInputStream(socket.getInputStream());
                 } catch (Exception e) {
                     e.printStackTrace();
-                    System.out.println(className + "ClientReceiver run()");
                     try {
                         sleep(5000);
                     } catch (InterruptedException ex) {
@@ -139,18 +134,10 @@ public class ClientCommunicationController {
             while (true) {
                 try {
                     sleep(500);
-                    System.out.println("ClientReceiver, precis innan if-satsen" + ois);
-
-
-
                     Object object = ois.readObject();
-
-                    System.out.println("ois: " + object);
                     if (object instanceof User) {
-                        System.out.println("Inne i första if-satsen");
                         User user = (User) object;
                         UserType userType = user.getUserType();
-                        System.out.println("Innan Switch " + user.getUserType());
 
                         switch (userType) {
                             case SENDUSER:
@@ -162,20 +149,11 @@ public class ClientCommunicationController {
                                 clientController.receiveAcceptedUser(user);
 
                                 break;
-
                         }
-                      //  clientController.receiveExistingUser(user);
-                      //  System.out.println("Skickat till ClientController");
                     }
                     else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
                         clientController.receiveNotificationFromCCC(activity);
-                    }
-                    else if (object instanceof String) {
-                        System.out.println("String-objekt");
-                        String message = (String) object;
-                      //  clientController.receiveAcceptedUser(user);
-
                     }
                     else System.out.println("Den gick inte in i någon if-sats :(");
 

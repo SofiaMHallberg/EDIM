@@ -6,7 +6,7 @@ public class UserRegister {
     private LinkedList<User> userList;
 
     public UserRegister() {
-        userList=new LinkedList<User>();
+        userList = new LinkedList<User>();
     }
     public LinkedList<User> getUserList() {
         return userList;

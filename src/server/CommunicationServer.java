@@ -47,7 +47,7 @@ public class CommunicationServer {
         for(int i=0; i< nbrOfConnections; i++) {
             threadPool.add(new WorkerThread());
         }
-        System.out.println(className+"ThreadPool generated");
+
     }
 
     /**
@@ -57,7 +57,7 @@ public class CommunicationServer {
         for (WorkerThread thread:threadPool) {
             thread.start();
         }
-        System.out.println(className+"ThreadPool threads are started");
+
     }
 
     // Inner thread class: handles outgoing communication.
@@ -77,11 +77,9 @@ public class CommunicationServer {
                     System.out.println(className + oos);
 
                      */
-                    System.out.println(className + "run()");
+
                     User sendUser=sendUserBuffer.get();
-                    System.out.println(className + sendUser.getUserName());
                     oos=socketHashMap.get(sendUser.getUserName()).getOos();
-                    System.out.println(className + sendUser.getUserType());
                     oos.writeObject(sendUser);
 /*
                     Activity sendNewActivity=sendNewActivityBuffer.get();
