@@ -24,6 +24,7 @@ public class ClientCommunicationController {
     private ObjectOutputStream oos;
     private Socket socket;
     private String className = "Class: ClientCommunicationController, Method: ";
+    private boolean isConnected = true;
 
     /**
      * Receives a clientController object and then try to connect with the server. Constructs a buffer,
@@ -101,7 +102,7 @@ public class ClientCommunicationController {
          * A thread which retrieves an object from the buffer and then writes it to the stream.
          */
         public void run() {
-            while (true) {
+            while (isConnected) {
                 try {
                     User user = userBuffer.get();
                     oos.writeObject(user);
@@ -109,6 +110,7 @@ public class ClientCommunicationController {
                     if(user.getUserType() == UserType.LOGOUT){
                         System.out.println(className + " user is logging out");
                         disconnect();
+                        isConnected = false;
                     }
 
                     Activity activity = activityBuffer.get();
@@ -141,7 +143,7 @@ public class ClientCommunicationController {
                 }
             }
 
-            while (ois != null) { //TODO: Går ej att logga ut och stänga strömmen. Se över villkor!
+            while (isConnected) { //TODO: Går ej att logga ut och stänga strömmen. Se över villkor!
                 try {
                     sleep(500);
                     Object object = ois.readObject();
