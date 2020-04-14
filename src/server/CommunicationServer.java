@@ -81,15 +81,15 @@ public class CommunicationServer {
                     User sendUser=sendUserBuffer.get();
                     oos=socketHashMap.get(sendUser.getUserName()).getOos();
                     oos.writeObject(sendUser);
-/*
+
                     Activity sendNewActivity=sendNewActivityBuffer.get();
                     for(String userName:socketHashMap.keySet()) {
                         oos=socketHashMap.get(userName).getOos();
                         oos.writeObject(sendNewActivity);
                     }//TODO:  Få metoden att skicka både ett User och ett Activity object.
-                                - Möjligtvis med olika try/catch-satser? alt if/else-satser?
+                     // xTODO:    - Möjligtvis med olika try/catch-satser? alt if/else-satser?
 
- */
+
 
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();

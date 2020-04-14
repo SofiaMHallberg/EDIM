@@ -110,6 +110,7 @@ public class ServerController extends Thread {
         //Metod för att testa att skicka Activity-objekt
     public void testActivity() {
         Activity testActivity = new Activity("Test-activity");
+        testActivity.setActivityInfo("Detta är en testaktivitet. Oscars rumpa är söt!");
         sendNewActivityBuffer.put(testActivity);
     }
 

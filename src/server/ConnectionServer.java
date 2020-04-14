@@ -128,27 +128,37 @@ public class ConnectionServer {
             }
 
             User user=null;
+            Activity activity;
             UserType userType;
             String userName="";
 
             while(!Thread.interrupted()) {
                 try {
                     ObjectInputStream ois = socketStreamObject.getOis();
-                    user = (User) ois.readObject();
-                    userName=user.getUserName();
-                    userType=user.getUserType();
+                    Object object = ois.readObject();
+                    if(object instanceof User) {
+                        user = (User) object;
+                        userName = user.getUserName();
+                        userType = user.getUserType();
 
-                    switch (userType) {
-                        case LOGIN:
-                            socketHashMap.put(userName, socketStreamObject);
-                            onLineBuffer.put(user);
-                            System.out.println(className+"user login");
-                            break;
-                        case LOGOUT:
-                            socketHashMap.remove(userName);
-                            onLineBuffer.put(user);
-                            interrupt();
-                            break;
+
+                        switch (userType) {
+                            case LOGIN:
+                                socketHashMap.put(userName, socketStreamObject);
+                                onLineBuffer.put(user);
+                                System.out.println(className + "user login");
+                                break;
+                            case LOGOUT:
+                                socketHashMap.remove(userName);
+                                onLineBuffer.put(user);
+                                System.out.println(className + "user logout");
+                                interrupt();
+                                break;
+                        }
+                    }else {
+                        activity = (Activity) object;
+                        System.out.println(className+"received activity: " + activity.getActivityName());
+                        //TODO: Hantera inkommande aktiviteter.
                     }
 
                 } catch (IOException | ClassNotFoundException e) {

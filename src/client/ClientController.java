@@ -58,8 +58,8 @@ public class ClientController {
      *
      */
     public void logOut() {
-        //   this.user.setOnlineStatus(false);
-
+        user.setUserType(UserType.LOGOUT);
+        ccc.sendUser(user);
     }
 
     /**

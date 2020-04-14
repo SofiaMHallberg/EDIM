@@ -79,7 +79,7 @@ public class MainFrame extends JFrame {
 
 
     public void showNotification(Activity activity) {
-        appPanel.showNotification(activity);
+        mainPanel.getAppPanel().showNotification(activity);
     }
 
 

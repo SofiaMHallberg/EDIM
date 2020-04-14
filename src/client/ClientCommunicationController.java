@@ -34,6 +34,7 @@ public class ClientCommunicationController {
         this.clientController = clientController;
         connect();
         userBuffer = new Buffer<>();
+        activityBuffer = new Buffer<>();
         ClientSender clientSender = new ClientSender();
         clientSender.start();
         new ClientReceiver().start();
@@ -74,6 +75,7 @@ public class ClientCommunicationController {
     public void disconnect() {
         try {
             socket.close();
+            ois = null;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -104,6 +106,14 @@ public class ClientCommunicationController {
                     User user = userBuffer.get();
                     oos.writeObject(user);
 
+                    if(user.getUserType() == UserType.LOGOUT){
+                        System.out.println(className + " user is logging out");
+                        disconnect();
+                    }
+
+                    Activity activity = activityBuffer.get();
+                    oos.writeObject(activity);
+
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -131,10 +141,11 @@ public class ClientCommunicationController {
                 }
             }
 
-            while (true) {
+            while (ois != null) { //TODO: Går ej att logga ut och stänga strömmen. Se över villkor!
                 try {
                     sleep(500);
                     Object object = ois.readObject();
+
                     if (object instanceof User) {
                         User user = (User) object;
                         UserType userType = user.getUserType();

@@ -37,6 +37,10 @@ public class MainPanel extends JPanel {
          */
     }
 
+    public AppPanel getAppPanel() {
+        return appPanel;
+    }
+
     public void logOut() {
         mainFrame.logOut();
     }
