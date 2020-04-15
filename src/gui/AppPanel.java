@@ -14,6 +14,7 @@ public class AppPanel extends JPanel {
     private MainPanel mainPanel;
 
     private JLabel lblUserInfo;
+    private JTextArea taActivityInfo;
 
     private LinkedList<Activity> activities;
     private JList activityList;
@@ -42,10 +43,19 @@ public class AppPanel extends JPanel {
 
         createActivityList();
 
+        taActivityInfo = new JTextArea();
+        taActivityInfo.setBackground(Color.CYAN);
+        taActivityInfo.setPreferredSize(new Dimension(200,80));
+        taActivityInfo.setLineWrap(true);
+        /*JScrollPane scrollPane = new JScrollPane(taActivityInfo);
+        scrollPane.setBounds(10,60,780,500);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);*/
+
         btnLogOut = new JButton("Logga ut");
 
         add(activityList, BorderLayout.CENTER);
         add(btnLogOut, BorderLayout.SOUTH);
+        add(taActivityInfo,BorderLayout.EAST);
 
         btnLogOut.addActionListener(listener);
         addActivityListener();
@@ -83,7 +93,8 @@ public class AppPanel extends JPanel {
     }
 
     public void showActivityInfo(String activityInfo) {
-        JOptionPane.showMessageDialog(null, activityInfo);
+        //JOptionPane.showMessageDialog(null, activityInfo);
+        taActivityInfo.setText(activityInfo);
     }
 
     public void showNotification(Activity activity) {

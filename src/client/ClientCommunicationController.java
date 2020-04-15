@@ -12,8 +12,9 @@ import java.net.Socket;
 
 /**
  * This class manages the communication between the Client classes and the Server classes.
- * @autor Carolin Nordström & Oscar Kareld.
+ *
  * @version 1.0
+ * @autor Carolin Nordström & Oscar Kareld.
  */
 
 public class ClientCommunicationController {
@@ -24,11 +25,13 @@ public class ClientCommunicationController {
     private ObjectOutputStream oos;
     private Socket socket;
     private String className = "Class: ClientCommunicationController, Method: ";
-    private boolean isConnected = true;
+    private volatile boolean isConnected = true;
+    private volatile boolean oisIsNull = true;
 
     /**
      * Receives a clientController object and then try to connect with the server. Constructs a buffer,
      * ClientSender and a ClientReceiver Object. Then starts two Threads.
+     *
      * @param clientController The received ClientController object.
      */
     public ClientCommunicationController(ClientController clientController) {
@@ -56,6 +59,7 @@ public class ClientCommunicationController {
 
     /**
      * This method lays a User object in a UserBuffer which mission is to be sent to the server.
+     *
      * @param user the object to be sent.
      */
     public void sendUser(User user) {
@@ -64,6 +68,7 @@ public class ClientCommunicationController {
 
     /**
      * This method lays a Activity object in a ActivityBuffer which mission is to be sent to the server.
+     *
      * @param activity the object to be sent.
      */
     public void sendActivity(Activity activity) {
@@ -76,7 +81,6 @@ public class ClientCommunicationController {
     public void disconnect() {
         try {
             socket.close();
-            ois = null;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -107,8 +111,8 @@ public class ClientCommunicationController {
                     User user = userBuffer.get();
                     oos.writeObject(user);
 
-                    if(user.getUserType() == UserType.LOGOUT){
-                        System.out.println(className + " user is logging out");
+                    if (user.getUserType() == UserType.LOGOUT) {
+                        System.out.println(className + "user is logging out");
                         disconnect();
                         isConnected = false;
                     }
@@ -124,15 +128,17 @@ public class ClientCommunicationController {
     }
 
     private class ClientReceiver extends Thread {
+        Object object;
 
         /**
          * Tries to open an Input Stream then tries to read an object from the stream.
          * Then checks the object's class value and sends it to {@link ClientController}.
          */
         public void run() {
-            while (ois == null) {
+            while (oisIsNull) {
                 try {
                     ois = new ObjectInputStream(socket.getInputStream());
+                    oisIsNull = false;
                 } catch (Exception e) {
                     e.printStackTrace();
                     try {
@@ -146,8 +152,8 @@ public class ClientCommunicationController {
             while (isConnected) { //TODO: Går ej att logga ut och stänga strömmen. Se över villkor!
                 try {
                     sleep(500);
-                    Object object = ois.readObject();
-
+                    System.out.println(className + isConnected);
+                    object = ois.readObject();
                     if (object instanceof User) {
                         User user = (User) object;
                         UserType userType = user.getUserType();
@@ -155,23 +161,19 @@ public class ClientCommunicationController {
                         switch (userType) {
                             case SENDUSER:
                                 clientController.receiveExistingUser(user);
-
                                 break;
 
                             case SENDWELCOME:
                                 clientController.receiveAcceptedUser(user);
-
                                 break;
                         }
-                    }
-                    else if (object instanceof Activity) {
+                    } else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
                         clientController.receiveNotificationFromCCC(activity);
-                    }
-                    else System.out.println("Den gick inte in i någon if-sats :(");
+                    } else System.out.println("Den gick inte in i någon if-sats :(");
 
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println(className + "clienten har loggat ut");
                 }
             }
         }

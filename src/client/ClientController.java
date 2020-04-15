@@ -11,8 +11,9 @@ import javax.swing.*;
 
 /**
  * This class manages the logic for the Client and controls the data flow.
- * @autor Carolin Nordström & Oscar Kareld.
+ *
  * @version 1.0
+ * @autor Carolin Nordström & Oscar Kareld.
  */
 
 public class ClientController {
@@ -30,6 +31,7 @@ public class ClientController {
 
     /**
      * Receives a String and creates a new User object and calls the logIn method.
+     *
      * @param userName
      */
     public void createUser(String userName) {
@@ -39,6 +41,7 @@ public class ClientController {
 
     /**
      * Receives an Activity Object and sends it forth to the ClientCommunicationController.
+     *
      * @param activity the received object.
      */
     public void sendActivityToCCC(Activity activity) {
@@ -64,6 +67,7 @@ public class ClientController {
 
     /**
      * Receives an Activity object an sends it forth to MainFrame.
+     *
      * @param activity the received object.
      */
     public void receiveNotificationFromCCC(Activity activity) {
