@@ -49,4 +49,7 @@ public class MainPanel extends JPanel {
         mainFrame.sendActivityFromGUI(activity);
     }
 
+    public void sendChosenInterval(int interval) {
+        mainFrame.sendChosenInterval(interval);
+    }
 }

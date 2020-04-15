@@ -152,7 +152,6 @@ public class ClientCommunicationController {
             while (isConnected) { //TODO: Går ej att logga ut och stänga strömmen. Se över villkor!
                 try {
                     sleep(500);
-                    System.out.println(className + isConnected);
                     object = ois.readObject();
                     if (object instanceof User) {
                         User user = (User) object;

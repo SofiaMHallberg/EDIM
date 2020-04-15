@@ -90,4 +90,8 @@ public class MainFrame extends JFrame {
     public void sendWelcomeMessage(String userName) {
         mainPanel.getAppPanel().showWelcomeMessage(userName);
     }
+
+    public void sendChosenInterval(int interval) {
+        clientController.setInterval(interval);
+    }
 }

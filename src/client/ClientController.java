@@ -21,6 +21,7 @@ public class ClientController {
     private MainFrame mainFrame;
     private ClientCommunicationController ccc;
     private User user;
+    private String className = "ClientController: ";
 
     /**
      * Constructs a MainFrame and a ClientCommunicationController object. Then calls the method createUser.
@@ -79,12 +80,19 @@ public class ClientController {
     }
 
     public void receiveExistingUser(User user) {
-        System.out.println("CC, receiveExisting");
+        System.out.println(className+ "receiveExisting");
         this.user = user;
     }
 
     public void receiveAcceptedUser(User userAccepted) {
         this.user = userAccepted;
         mainFrame.sendWelcomeMessage(userAccepted.getUserName());
+    }
+
+    public void setInterval(int interval){
+        user.setNotificationInterval(interval);
+        user.setUserType(UserType.SENDINTERVAL);
+        System.out.println(className + user.getUserName() +user.getNotificationInterval());
+        ccc.sendUser(user);
     }
 }

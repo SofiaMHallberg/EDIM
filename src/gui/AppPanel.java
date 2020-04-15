@@ -13,19 +13,25 @@ import java.util.LinkedList;
 public class AppPanel extends JPanel {
     private MainPanel mainPanel;
 
+    private String[] interval;
     private JLabel lblUserInfo;
     private JTextArea taActivityInfo;
+    private JComboBox cmbTimeLimit;
 
     private LinkedList<Activity> activities;
     private JList activityList;
 
     private JButton btnLogOut;
+    private JButton btnInterval;
+
+    private JPanel intervalPnl;
 
     private BorderLayout borderLayout = new BorderLayout();
     private ActionListener listener = new ButtonListener();
     private DefaultListModel listModel;
 
     private String className = "AppPanel: ";
+
 
     public AppPanel(MainPanel mainPanel, String userName) {
         this.mainPanel = mainPanel;
@@ -42,23 +48,45 @@ public class AppPanel extends JPanel {
         setLayout(borderLayout);
 
         createActivityList();
-
-        taActivityInfo = new JTextArea();
-        taActivityInfo.setBackground(Color.CYAN);
-        taActivityInfo.setPreferredSize(new Dimension(200,80));
-        taActivityInfo.setLineWrap(true);
-        /*JScrollPane scrollPane = new JScrollPane(taActivityInfo);
-        scrollPane.setBounds(10,60,780,500);
-        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);*/
+        createTAActivityInfo();
+        createCBTimeLimit();
+        createIntervalPanel();
 
         btnLogOut = new JButton("Logga ut");
 
         add(activityList, BorderLayout.CENTER);
         add(btnLogOut, BorderLayout.SOUTH);
-        add(taActivityInfo,BorderLayout.EAST);
+        add(taActivityInfo, BorderLayout.EAST);
+        add(intervalPnl, BorderLayout.WEST);
 
         btnLogOut.addActionListener(listener);
+        btnInterval.addActionListener(listener);
         addActivityListener();
+    }
+
+    public void createIntervalPanel() {
+        intervalPnl = new JPanel();
+        intervalPnl.setBackground(Color.MAGENTA);
+        btnInterval = new JButton("Ändra intervall");
+
+        intervalPnl.add(cmbTimeLimit, BorderLayout.CENTER);
+        intervalPnl.add(btnInterval, BorderLayout.SOUTH);
+    }
+
+    public void createCBTimeLimit() {
+        interval = new String[]{"1", "5", "10", "15", "20", "25", "30", "35", "40", "45"};
+        cmbTimeLimit = new JComboBox(interval);
+
+    }
+
+    public void createTAActivityInfo() {
+        taActivityInfo = new JTextArea();
+        taActivityInfo.setBackground(Color.CYAN);
+        taActivityInfo.setPreferredSize(new Dimension(200, 80));
+        taActivityInfo.setLineWrap(true);
+        taActivityInfo.setWrapStyleWord(true);
+        Font font = new Font("Sanseriff", Font.BOLD, 14);
+        taActivityInfo.setFont(font);
     }
 
     public void createActivityList() {
@@ -113,15 +141,21 @@ public class AppPanel extends JPanel {
     }
 
     public void showWelcomeMessage(String userName) {
-        JOptionPane.showMessageDialog(null,"Välkommen " +userName + "\nNu ska vi röra på oss!");
+        JOptionPane.showMessageDialog(null, "Välkommen " + userName + "\nNu ska vi röra på oss!");
     }
 
     class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             Object click = e.getSource();
+            int index;
             if (click == btnLogOut) {
                 mainPanel.logOut();
             }
+            if (click == btnInterval) {
+                index = Integer.parseInt((String)cmbTimeLimit.getSelectedItem());
+                mainPanel.sendChosenInterval(index);
+            }
         }
     }
+
 }

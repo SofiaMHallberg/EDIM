@@ -6,5 +6,6 @@ public enum UserType {
     COMPLETEDACTIVITY,
     SENDACTIVITY,
     SENDUSER,
-    SENDWELCOME;
+    SENDWELCOME,
+    SENDINTERVAL,
 }
