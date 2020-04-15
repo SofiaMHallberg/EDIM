@@ -4,13 +4,15 @@ import java.io.Serializable;
 
 public class Activity implements Serializable {
     private String activityName;
+    private String activityInstruction;
     private String activityInfo;
 
     private boolean isCompleted = false;
 
-    private String activityInstruction;
+
     private String toUser;
 
+    public Activity () {}
     public Activity(String activityName) {
         this.activityName=activityName;
     }
@@ -23,6 +25,9 @@ public class Activity implements Serializable {
         this.activityInfo = activityInfo;
     }
 
+    public void setActivityName(String activityName) {
+        this.activityName=activityName;
+    }
     public String getActivityName() {
         return activityName;
     }

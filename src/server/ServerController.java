@@ -2,6 +2,7 @@ package server;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * This class handles the logic of the in and out coming object.
@@ -18,6 +19,7 @@ public class ServerController extends Thread {
     private ConnectionServer connectionServer;
     private CommunicationServer communicationServer;
     private UserRegister userRegister;
+    private ActivityRegister activityRegister;
     private String classname = "Server.ServerController";
 
     /**
@@ -34,7 +36,13 @@ public class ServerController extends Thread {
         communicationServer = new CommunicationServer(port, socketHashMap, sendUserBuffer, sendNewActivityBuffer);
         userRegister = new UserRegister();
         readContacts("files/users.txt");
+        activityRegister=new ActivityRegister("files/activities.txt");
+        System.out.println(classname+activityRegister.getActivityRegister().size());
+        System.out.println(classname+activityRegister.getActivityRegister().get(0).getActivityName());
+        System.out.println(classname+activityRegister.getActivityRegister().get(1).getActivityName());
+        System.out.println(classname+activityRegister.getActivityRegister().get(2).getActivityName());
     }
+
     /**
      * Opens a stream and writes the user objects to the stream and then creates a file.
      *
@@ -57,7 +65,6 @@ public class ServerController extends Thread {
      * @param filename the read filename.
      */
     public void readContacts(String filename) {
-       // userRegister.getUserList().clear(); //not sure if this is needed
         File newFile = new File(filename);
         if(newFile.length() != 0) {
             try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
@@ -68,14 +75,11 @@ public class ServerController extends Thread {
                     } catch (ClassNotFoundException | IOException e) {
                         System.out.println(e);
                     }
-                    //System.out.println("Client.ClientController: Sparad kontakt: " + contacts.get(i).getUserName());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-       // oldContactList = contacts;
-
     }
 
     /**
@@ -85,12 +89,10 @@ public class ServerController extends Thread {
      * @return an updated User.
      */
     public User checkLoginUser(User user) {
-        // for(User u:userRegister.getUserList()) {
         for (int i = 0; i < userRegister.getUserList().size(); i++) {
             if (userRegister.getUserList().get(i).getUserName().equals(user.getUserName())) {
                 user = userRegister.getUserList().get(i);
                 user.setUserType(UserType.SENDUSER);
-
             }
         }
         if (user.getUserType() == UserType.LOGIN) {
@@ -103,15 +105,25 @@ public class ServerController extends Thread {
         }
         System.out.println(classname + " Antal users i UserRegister " + userRegister.getUserList().size());
         return user;
-
-        }
-
+    }
 
         //Metod för att testa att skicka Activity-objekt
     public void testActivity() {
         Activity testActivity = new Activity("Test-activity");
         testActivity.setActivityInfo("Detta är en testaktivitet. Oscars rumpa är söt!");
         sendNewActivityBuffer.put(testActivity);
+    }
+
+    public void sendActivity(String userName) {
+        int nbrOfActivities=activityRegister.getActivityRegister().size();
+        Random rand=new Random();
+        int activityNbr=rand.nextInt(nbrOfActivities);
+        Activity activityToSend=new Activity();
+        activityToSend.setActivityName(activityRegister.getActivityRegister().get(activityNbr).getActivityName());
+        activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
+        activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
+        activityToSend.setToUser(userName);
+        sendNewActivityBuffer.put(activityToSend);
     }
 
     /**
@@ -126,7 +138,8 @@ public class ServerController extends Thread {
                     case LOGIN:
                         User updatedUser = checkLoginUser(user);
                         sendUserBuffer.put(updatedUser);
-                        testActivity();
+                        //testActivity();
+                        sendActivity(updatedUser.getUserName());
 
                         break;
                     case LOGOUT:
