@@ -86,4 +86,8 @@ public class MainFrame extends JFrame {
     public void sendActivityFromGUI(Activity activity) {
         clientController.sendActivityToCCC(activity);
     }
+
+    public void sendWelcomeMessage(String userName) {
+        mainPanel.getAppPanel().showWelcomeMessage(userName);
+    }
 }

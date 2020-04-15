@@ -81,5 +81,6 @@ public class ClientController {
 
     public void receiveAcceptedUser(User userAccepted) {
         this.user = userAccepted;
+        mainFrame.sendWelcomeMessage(userAccepted.getUserName());
     }
 }
