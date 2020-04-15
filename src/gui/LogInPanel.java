@@ -22,10 +22,10 @@ public class LogInPanel extends JPanel {
 
     public void createComponents() {
         //setPreferredSize(new Dimension(200, 200));
-        lblUserName = new JLabel("Username: ");
+        lblUserName = new JLabel("Användarnamn: ");
         tfUserName = new JTextField("Chanon");
         tfUserName.setPreferredSize(new Dimension(100, 20));
-        btnLogIn = new JButton("Log In");
+        btnLogIn = new JButton("Logga in");
         setLayout(new FlowLayout(4));
         add(lblUserName, FlowLayout.LEFT);
         add(tfUserName, FlowLayout.CENTER);
@@ -38,7 +38,7 @@ public class LogInPanel extends JPanel {
                     mainFrame.showAppPanel(userName);
                     logInFrame.closeWindow();
                 } else {
-                    JOptionPane.showMessageDialog(null, "Invalid username");
+                    JOptionPane.showMessageDialog(null, "Inkorrekt användarnamn");
                 }
             }
         });
