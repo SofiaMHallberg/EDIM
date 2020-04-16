@@ -30,7 +30,7 @@ public class AppPanel extends JPanel {
     private ActionListener listener = new ButtonListener();
     private DefaultListModel listModel;
 
-    private String className = "AppPanel: ";
+    private String className = "Class: AppPanel: ";
 
 
     public AppPanel(MainPanel mainPanel, String userName) {
@@ -74,8 +74,8 @@ public class AppPanel extends JPanel {
     }
 
     public void createCBTimeLimit() {
-        interval = new String[]{"1", "5", "10", "15", "20", "25", "30", "35", "40", "45"};
-        cmbTimeLimit = new JComboBox(interval);
+        interval = new String[]{"15", "30", "45", "60"};
+        cmbTimeLimit = new JComboBox<>(interval);
 
     }
 

@@ -7,8 +7,6 @@ import gui.MainFrame;
 import server.User;
 import server.UserType;
 
-import javax.swing.*;
-
 /**
  * This class manages the logic for the Client and controls the data flow.
  *
@@ -21,7 +19,7 @@ public class ClientController {
     private MainFrame mainFrame;
     private ClientCommunicationController ccc;
     private User user;
-    private String className = "ClientController: ";
+    private String className = "Class: ClientController ";
 
     /**
      * Constructs a MainFrame and a ClientCommunicationController object. Then calls the method createUser.
@@ -50,7 +48,7 @@ public class ClientController {
     }
 
     /**
-     * Sets the UserType to LOGIN and sends the it to ClientCommunicationController.
+     * Sets the UserType to LOGIN and sends the user object to ClientCommunicationController.
      */
     public void logIn() {
         user.setUserType(UserType.LOGIN);
@@ -59,7 +57,7 @@ public class ClientController {
     }
 
     /**
-     *
+     * Sets the UserType to LOGOUT and sends the user object to ClientCommunicationController.
      */
     public void logOut() {
         user.setUserType(UserType.LOGOUT);
@@ -75,24 +73,24 @@ public class ClientController {
         mainFrame.showNotification(activity);
     }
 
-    public void receiveCompletedActivity(Activity activity) {
-
-    }
-
-    public void receiveExistingUser(User user) {
-        System.out.println(className+ "receiveExisting");
+    /**
+     * Replaces the temporary user object with the already existing object from the server.
+     * If it's a new user, a welcome message is sent.
+     *
+     * @param user the received object.
+     */
+    public void receiveUser(User user) {
+        UserType userType = user.getUserType();
         this.user = user;
+        if (userType == UserType.SENDWELCOME) {
+            mainFrame.sendWelcomeMessage();
+        }
     }
 
-    public void receiveAcceptedUser(User userAccepted) {
-        this.user = userAccepted;
-        mainFrame.sendWelcomeMessage(userAccepted.getUserName());
-    }
-
-    public void setInterval(int interval){
+    public void setInterval(int interval) {
         user.setNotificationInterval(interval);
         user.setUserType(UserType.SENDINTERVAL);
-        System.out.println(className + user.getUserName() +user.getNotificationInterval());
+        System.out.println(className + user.getUserName() + user.getNotificationInterval());
         ccc.sendUser(user);
     }
 }

@@ -10,33 +10,31 @@ import java.util.LinkedList;
 
 /**
  * This class creates a thread pool and handles the communication from the Client.
- * @autor Sofia Hallberg & Chanon Borgström.
+ *
  * @version 1.0
+ * @autor Sofia Hallberg & Chanon Borgström.
  */
 
 public class ConnectionServer {
-    private ServerController serverController;
     private ServerSocket serverSocket;
     private int port;
-    private ObjectInputStream ois;
-    private String className="Package: Server. Class: ConnectionServer ";
+    private String className = "Class: ConnectionServer ";
     private LinkedList<ReceiverThread> threadPool;
     private HashMap<String, SocketStreamObject> socketHashMap;
-    private Buffer<User> onLineBuffer;
+    private Buffer<User> onlineBuffer;
 
     /**
      * Receives all necessary data and starts the server and then generates and starts the thread pool.
-     * @param serverController received controller object.
-     * @param port received port number.
+     *
+     * @param port          received port number.
      * @param socketHashMap received socket HashMap.
-     * @param onLineBuffer received online buffer.
+     * @param onlineBuffer  received online buffer.
      */
-    public ConnectionServer(ServerController serverController, int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> onLineBuffer) {
-        this.serverController=serverController;
-        this.port=port;
-        this.socketHashMap=socketHashMap;
-        this.onLineBuffer=onLineBuffer;
-        this.threadPool=new LinkedList<>();
+    public ConnectionServer(int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> onlineBuffer) {
+        this.port = port;
+        this.socketHashMap = socketHashMap;
+        this.onlineBuffer = onlineBuffer;
+        this.threadPool = new LinkedList<>();
         startServer();
         generateThreadPool(20);
         startThreadPool();
@@ -48,7 +46,6 @@ public class ConnectionServer {
     public void startServer() {
         try {
             serverSocket = new ServerSocket(port);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -56,10 +53,11 @@ public class ConnectionServer {
 
     /**
      * Generates a thread pool with the received int.
+     *
      * @param nbrOfConnections received number of connections.
      */
     public void generateThreadPool(int nbrOfConnections) {
-        for(int i=0; i< nbrOfConnections; i++) {
+        for (int i = 0; i < nbrOfConnections; i++) {
             threadPool.add(new ReceiverThread());
         }
 
@@ -69,26 +67,25 @@ public class ConnectionServer {
      * Starts the thread pool.
      */
     public void startThreadPool() {
-        for (ReceiverThread thread:threadPool)
+        for (ReceiverThread thread : threadPool)
             thread.start();
 
     }
 
     // Inner Thread class: creates a connection and sends it forth to the ClientHandler class.
     private class ReceiverThread extends Thread {
-        private String className="Package: Server. Class: ReceiverThread ";
+        private String className = "Package: Server. Class: ReceiverThread ";
 
         /**
          * creates a connection and sends it forth to the ClientHandler class.
          */
         public void run() {
-            while(!Thread.interrupted()) {
-              //  System.out.println(className+"thread has started");
+            while (!Thread.interrupted()) {
                 Socket socket;
                 try {
-                    socket=serverSocket.accept();
-                    System.out.println(className+"Received socket: "+socket);
-                    ClientHandler clientHandler=new ClientHandler(socket);
+                    socket = serverSocket.accept();
+                    System.out.println(className + "Received socket: " + socket);
+                    new ClientHandler(socket);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -99,14 +96,15 @@ public class ConnectionServer {
     // Inner Thread Class: creates the streams and receives data from the client.
     private class ClientHandler extends Thread {
         private SocketStreamObject socketStreamObject;
-        private String className="Package: Server. Class: ClientHandler ";
+        private String className = "Class: ClientHandler ";
 
         /**
          * Creates a Socket Stream Object with the received socket.
+         *
          * @param socket the received object.
          */
         public ClientHandler(Socket socket) {
-            socketStreamObject=new SocketStreamObject(socket);
+            socketStreamObject = new SocketStreamObject(socket);
             start();
         }
 
@@ -115,28 +113,27 @@ public class ConnectionServer {
          * Checks its value and send it to {@link ServerController}.
          */
         public void run() {
-            Socket socket=socketStreamObject.getSocket();
+            Socket socket = socketStreamObject.getSocket();
 
             try {
-                ObjectOutputStream oos=new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream ois=new ObjectInputStream(socket.getInputStream());
+                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                 socketStreamObject.setOis(ois);
                 socketStreamObject.setOos(oos);
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 
-            User user=null;
+            User user = null;
             Activity activity;
             UserType userType;
-            String userName="";
+            String userName = "";
 
-            while(!Thread.interrupted()) {
+            while (!Thread.interrupted()) {
                 try {
                     ObjectInputStream ois = socketStreamObject.getOis();
                     Object object = ois.readObject();
-                    if(object instanceof User) {
+                    if (object instanceof User) {
                         user = (User) object;
                         userName = user.getUserName();
                         userType = user.getUserType();
@@ -145,19 +142,19 @@ public class ConnectionServer {
                         switch (userType) {
                             case LOGIN:
                                 socketHashMap.put(userName, socketStreamObject);
-                                onLineBuffer.put(user);
+                                onlineBuffer.put(user);
                                 System.out.println(className + "user login");
                                 break;
                             case LOGOUT:
                                 socketHashMap.remove(userName);
-                                onLineBuffer.put(user);
+                                onlineBuffer.put(user);
                                 System.out.println(className + "user logout");
                                 interrupt();
                                 break;
                         }
-                    }else {
+                    } else {
                         activity = (Activity) object;
-                        System.out.println(className+"received activity: " + activity.getActivityName());
+                        System.out.println(className + "received activity: " + activity.getActivityName());
                         //TODO: Hantera inkommande aktiviteter.
                     }
 
@@ -165,7 +162,6 @@ public class ConnectionServer {
                     e.printStackTrace();
                 }
             }
-
         }
     }
 }

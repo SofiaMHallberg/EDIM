@@ -12,9 +12,9 @@ public class LogInPanel extends JPanel {
     private JButton btnLogIn;
 
     private MainFrame mainFrame;
-    private LogInFrame logInFrame;
+    private LoginFrame logInFrame;
 
-    public LogInPanel(LogInFrame logInFrame, MainFrame mainFrame) {
+    public LogInPanel(LoginFrame logInFrame, MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.logInFrame = logInFrame;
         createComponents();
@@ -35,7 +35,8 @@ public class LogInPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 String userName = tfUserName.getText();
                 if (!userName.equals("") && !userName.contains(" ")) {
-                    mainFrame.showAppPanel(userName);
+                    mainFrame.sendUser(userName);
+                    mainFrame.createMainFrame();
                     logInFrame.closeWindow();
                 } else {
                     JOptionPane.showMessageDialog(null, "Inkorrekt användarnamn");

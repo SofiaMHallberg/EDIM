@@ -2,24 +2,20 @@ package gui;
 
 import client.ClientController;
 import server.Activity;
-
 import javax.swing.*;
 
 /**
- * This class starts GUI window and awaits the users input for a user name.
+ * This class starts the Login window and then awaits the user's input, and finally starts the main GUI.
  *
  * @version 1.0
- * @autor Carolin Nordström & Oscar Kareld.
+ * @author Carolin Nordström, Oscar Kareld & Chanon Borgström
  */
 
 public class MainFrame extends JFrame {
     private ClientController clientController;
     private MainPanel mainPanel;
-    private AppPanel appPanel;
-    private NotificationPanel notificationPanel;
+    private String className = "Class: MainFrame ";
     private String userName;
-    private LogInFrame logInFrame;
-
 
 
     /**
@@ -29,68 +25,82 @@ public class MainFrame extends JFrame {
      */
     public MainFrame(ClientController clientController) {
         this.clientController = clientController;
-       // setupFrame();
         createLoginFrame();
     }
 
+    /**
+     * Creates the login window.
+     */
     public void createLoginFrame() {
-        logInFrame = new LogInFrame(this);
+        LoginFrame loginFrame = new LoginFrame(this);
     }
 
+    /**
+     * Sets up the main frame for the GUI.
+     */
     public void setupFrame() {
         setBounds(0, 0, 819, 438);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
         setTitle("EDIM");
-        setResizable(true);            // Prevent user from change size
-        setLocationRelativeTo(null);    // Start middle screen
+        setResizable(true);            
+        setLocationRelativeTo(null);
         setVisible(true);
-
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    public String getUserName() {
-        return userName;
-    }
-
-    public void showAppPanel(String userName) {
-        clientController.createUser(userName);
-        this.userName = userName;
+    /**
+     * Creates the main frame for the GUI.
+     */
+    public void createMainFrame() {
         setupFrame();
         mainPanel = new MainPanel(this, userName);
         setContentPane(mainPanel);
-
-
     }
 
+    /**
+     * Sends the user name to the {@link ClientController}
+     * @param userName the received user name
+     */
+    public void sendUser(String userName) {
+        this.userName = userName;
+        clientController.createUser(userName);
+    }
+
+    /**
+     * Notifies the {@link ClientController} and closes the GUI window.
+     */
     public void logOut() {
         clientController.logOut();
         dispose();
     }
-/*
-    public static void main(String[] args) {
-        LogInFrame logInFrame = new LogInFrame();
-    }
 
- */
-
-
+    /**
+     * Displays a new notification in the GUI.
+     * @param activity the received object.
+     */
     public void showNotification(Activity activity) {
         mainPanel.getAppPanel().showNotification(activity);
     }
 
-
+    /**
+     * Sends a received activity object to the {@link ClientController}.
+     * @param activity the received object.
+     */
     public void sendActivityFromGUI(Activity activity) {
         clientController.sendActivityToCCC(activity);
     }
 
-    public void sendWelcomeMessage(String userName) {
+    /**
+     * Sends a welcome message to a new user.
+     */
+    public void sendWelcomeMessage() {
         mainPanel.getAppPanel().showWelcomeMessage(userName);
     }
 
+    /**
+     * Sends the received interval from the GUI to the {@link ClientController}.
+     * @param interval the integer chosen by the user.
+     */
     public void sendChosenInterval(int interval) {
         clientController.setInterval(interval);
     }
