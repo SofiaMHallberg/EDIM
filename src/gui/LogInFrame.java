@@ -2,9 +2,9 @@ package gui;
 
 import javax.swing.*;
 
-public class LoginFrame extends JFrame {
+public class LogInFrame extends JFrame {
 
-    public LoginFrame(MainFrame mainFrame) {
+    public LogInFrame(MainFrame mainFrame) {
         setupFrame(mainFrame);
     }
 

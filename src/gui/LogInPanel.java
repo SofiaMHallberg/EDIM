@@ -12,9 +12,9 @@ public class LogInPanel extends JPanel {
     private JButton btnLogIn;
 
     private MainFrame mainFrame;
-    private LoginFrame logInFrame;
+    private LogInFrame logInFrame;
 
-    public LogInPanel(LoginFrame logInFrame, MainFrame mainFrame) {
+    public LogInPanel(LogInFrame logInFrame, MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         this.logInFrame = logInFrame;
         createComponents();

@@ -32,7 +32,7 @@ public class MainFrame extends JFrame {
      * Creates the login window.
      */
     public void createLoginFrame() {
-        LoginFrame loginFrame = new LoginFrame(this);
+        LogInFrame loginFrame = new LogInFrame(this);
     }
 
     /**
