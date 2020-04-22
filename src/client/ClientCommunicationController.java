@@ -56,6 +56,17 @@ public class ClientCommunicationController {
     }
 
     /**
+     * This method tries to close the socket and the connection to the server.
+     */
+    public void disconnect() {
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
      * This method lays a User object in a UserBuffer which mission is to be sent to the server.
      *
      * @param user the object to be sent.
@@ -72,18 +83,6 @@ public class ClientCommunicationController {
     public void sendActivity(Activity activity) {
         activityBuffer.put(activity);
     }
-
-    /**
-     * This method tries to close the socket and the connection to the server.
-     */
-    public void disconnect() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
 
 
     // ClientSender starts a new thread which retrieves an object from a buffer and sends it to the server.
