@@ -6,11 +6,10 @@ public class Activity implements Serializable {
     private String activityName;
     private String activityInstruction;
     private String activityInfo;
-
     private boolean isCompleted = false;
-
-
+    private String activityUser;
     private String toUser;
+
 
     public Activity () {}
     public Activity(String activityName) {
@@ -53,5 +52,15 @@ public class Activity implements Serializable {
     public void setCompleted(boolean completed) {
         isCompleted = completed;
     }
+
+    public String getActivityUser() {
+        return activityUser;
+    }
+
+    public void setActivityUser(String activityUser) {
+        this.activityUser = activityUser;
+    }
+
 }
+
 

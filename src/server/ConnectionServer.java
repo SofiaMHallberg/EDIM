@@ -17,6 +17,7 @@ import java.util.LinkedList;
 
 public class ConnectionServer {
     private ServerSocket serverSocket;
+    private ServerController serverController;
     private int port;
     private String className = "Class: ConnectionServer ";
     private LinkedList<ReceiverThread> threadPool;
@@ -151,10 +152,17 @@ public class ConnectionServer {
                                 System.out.println(className + "user logout");
                                 interrupt();
                                 break;
+                            case COMPLETEDACTIVITY:
+                                break;
+                            case SENDINTERVAL:
+                                serverController.setUserTimer(user, user.getUserName());
+                                break;
+
                         }
                     } else {
                         activity = (Activity) object;
                         System.out.println(className + "received activity: " + activity.getActivityName());
+
                         //TODO: Hantera inkommande aktiviteter.
                     }
 
