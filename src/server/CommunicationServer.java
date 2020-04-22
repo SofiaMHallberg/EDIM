@@ -73,8 +73,7 @@ public class CommunicationServer {
                     Activity sendNewActivity = sendNewActivityBuffer.get();
                     oos = socketHashMap.get(sendNewActivity.getActivityUser()).getOos();
                     oos.writeObject(sendNewActivity);
-                    //TODO:  Få metoden att skicka både ett User och ett Activity object.
-                    // TODO:    - Möjligtvis med olika try/catch-satser? alt if/else-satser?
+                    //TODO: kolla upp till vem aktiviteten skickas till efter att timern klickas.
 
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
