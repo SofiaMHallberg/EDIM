@@ -3,7 +3,7 @@ package client;
 import server.Activity;
 
 
-import gui.MainFrame;
+import client.gui.MainFrame;
 import server.User;
 import server.UserType;
 

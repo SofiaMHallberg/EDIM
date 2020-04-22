@@ -1,4 +1,4 @@
-package gui;
+package client.gui;
 
 import client.ClientController;
 import server.Activity;
