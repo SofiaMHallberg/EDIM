@@ -21,6 +21,7 @@ public class ServerController extends Thread {
     private CommunicationServer communicationServer;
     private UserRegister userRegister;
     private ActivityRegister activityRegister;
+    private Random rand;
     private String className = "Class: ServerController ";
 
     /**
@@ -38,6 +39,8 @@ public class ServerController extends Thread {
         userRegister = new UserRegister();
         readContacts("files/users.txt");
         activityRegister = new ActivityRegister("files/activities.txt");
+        userTimerHashMap = new HashMap<>();
+        rand = new Random();
         System.out.println(className + activityRegister.getActivityRegister().size());
         System.out.println(className + activityRegister.getActivityRegister().get(0).getActivityName());
         System.out.println(className + activityRegister.getActivityRegister().get(1).getActivityName());
@@ -73,7 +76,8 @@ public class ServerController extends Thread {
                 int size = ois.readInt();
                 for (int i = 0; i < size; i++) {
                     try {
-                        userRegister.getUserList().add((User) ois.readObject());
+                        User user = (User) ois.readObject();
+                        userRegister.getUserList().put(user.getUserName(), user);
                     } catch (ClassNotFoundException | IOException e) {
                         System.out.println(e);
                     }
@@ -91,34 +95,27 @@ public class ServerController extends Thread {
      * @return an updated User.
      */
     public User checkLoginUser(User user) {
-        for (int i = 0; i < userRegister.getUserList().size(); i++) {
-            if (userRegister.getUserList().get(i).getUserName().equals(user.getUserName())) {
-                user = userRegister.getUserList().get(i);
-                user.setUserType(UserType.SENDUSER);
-            }
-        }
-        if (user.getUserType() == UserType.LOGIN) {
+        if (userRegister.getUserList().get(user.getUserName()).getUserName().equals(user.getUserName())) {
+            user = userRegister.getUserList().get(user.getUserName());
+            user.setUserType(UserType.SENDUSER);
+        } else {
             user.setUserType(UserType.SENDWELCOME);
-            userRegister.getUserList().add(user);
+            userRegister.getUserList().put(user.getUserName(), user);
             writeContacts("files/users.txt");
-            for (int i = 0; i < userRegister.getUserList().size(); i++) {
-                System.out.println(userRegister.getUserList().get(i).getUserName());
-            }
         }
-        System.out.println(className + " Antal users i UserRegister " + userRegister.getUserList().size());
         return user;
     }
 
     public void sendActivity(String userName) {
         int nbrOfActivities = activityRegister.getActivityRegister().size();
-        Random rand = new Random();
         int activityNbr = rand.nextInt(nbrOfActivities);
         Activity activityToSend = new Activity();
         activityToSend.setActivityName(activityRegister.getActivityRegister().get(activityNbr).getActivityName());
         activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
         activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
-        activityToSend.setFromUser(userName);
+        activityToSend.setActivityUser(userName);
         sendNewActivityBuffer.put(activityToSend);
+        System.out.println(className + activityToSend.getActivityName());
     }
 
     public void createUserTimer(User user) {
@@ -127,9 +124,10 @@ public class ServerController extends Thread {
         userTimerHashMap.put(user.getUserName(), userTimer);
     }
 
-    public void setUserTimer(User user, String userName) {
-        int timeInterval = user.getNotificationInterval();
-        userTimerHashMap.get(userName).setTimeInterval(timeInterval);
+    public void setTimeInterval(String userName, int timeInterval) {
+        User user = userRegister.getUserList().get(userName);
+        user.setNotificationInterval(timeInterval);
+        userTimerHashMap.get(userName).updateUser(user);
     }
 
     /**

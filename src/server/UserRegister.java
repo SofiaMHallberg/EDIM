@@ -1,18 +1,18 @@
 package server;
 
-import java.util.LinkedList;
+import java.util.HashMap;
 
 public class UserRegister {
-    private LinkedList<User> userList;
+    private HashMap<String,User> userList;
 
     public UserRegister() {
-        userList = new LinkedList<User>();
+        userList = new HashMap<>();
     }
-    public LinkedList<User> getUserList() {
+    public HashMap<String, User> getUserList() {
         return userList;
     }
 
-    public void setUserList(LinkedList<User> userList) {
+    public void setUserList(HashMap userList) {
         this.userList = userList;
     }
 }

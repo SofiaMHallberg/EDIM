@@ -9,7 +9,6 @@ public class UserTimer implements ActionListener {
 
     private Timer timer;
     private int currentTime;
-    private int timeInterval;
     private ServerController serverController;
     private User user;
 
@@ -17,7 +16,6 @@ public class UserTimer implements ActionListener {
 
     public UserTimer(ServerController serverController, User user) {
         currentTime = 0;
-        timeInterval = 45;
         this.serverController = serverController;
         this.user = user;
     }
@@ -33,13 +31,14 @@ public class UserTimer implements ActionListener {
         timer = null;
     }
 
-    public void setTimeInterval(int timeInterval){
-        this.timeInterval = timeInterval;
+    public void updateUser(User user){
+        this.user = user;
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
         currentTime++;
+        System.out.println(className + checkTimeInterval());
         if (checkTimeInterval()) {
             serverController.sendActivity(user.getUserName());
             stopTimer();
@@ -50,7 +49,7 @@ public class UserTimer implements ActionListener {
 
 
     public boolean checkTimeInterval() {
-        if (user.getNotificationInterval() == timeInterval) {
+        if (user.getNotificationInterval() == currentTime) {
             return true;
         }
         return false;

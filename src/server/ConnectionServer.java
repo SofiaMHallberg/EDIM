@@ -155,7 +155,7 @@ public class ConnectionServer {
                             case COMPLETEDACTIVITY:
                                 break;
                             case SENDINTERVAL:
-                                serverController.setUserTimer(user, user.getUserName());
+                                serverController.setTimeInterval(user.getUserName(),user.getNotificationInterval());
                                 break;
 
                         }

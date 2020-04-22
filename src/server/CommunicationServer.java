@@ -71,10 +71,9 @@ public class CommunicationServer {
                     oos.writeObject(sendUser);
 
                     Activity sendNewActivity = sendNewActivityBuffer.get();
-                    for (String userName : socketHashMap.keySet()) {
-                        oos = socketHashMap.get(userName).getOos();
-                        oos.writeObject(sendNewActivity);
-                    }//TODO:  Få metoden att skicka både ett User och ett Activity object.
+                    oos = socketHashMap.get(sendNewActivity.getActivityUser()).getOos();
+                    oos.writeObject(sendNewActivity);
+                    //TODO:  Få metoden att skicka både ett User och ett Activity object.
                     // TODO:    - Möjligtvis med olika try/catch-satser? alt if/else-satser?
 
                 } catch (InterruptedException | IOException e) {
