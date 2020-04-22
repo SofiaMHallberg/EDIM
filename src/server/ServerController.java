@@ -20,7 +20,7 @@ public class ServerController extends Thread {
     private CommunicationServer communicationServer;
     private UserRegister userRegister;
     private ActivityRegister activityRegister;
-    private String classname = "Class: ServerController ";
+    private String className = "Class: ServerController ";
 
     /**
      * Constructs all the buffers and servers and HashMaps that is needed.
@@ -37,10 +37,10 @@ public class ServerController extends Thread {
         userRegister = new UserRegister();
         readContacts("files/users.txt");
         activityRegister = new ActivityRegister("files/activities.txt");
-        System.out.println(classname + activityRegister.getActivityRegister().size());
-        System.out.println(classname + activityRegister.getActivityRegister().get(0).getActivityName());
-        System.out.println(classname + activityRegister.getActivityRegister().get(1).getActivityName());
-        System.out.println(classname + activityRegister.getActivityRegister().get(2).getActivityName());
+        System.out.println(className + activityRegister.getActivityRegister().size());
+        System.out.println(className + activityRegister.getActivityRegister().get(0).getActivityName());
+        System.out.println(className + activityRegister.getActivityRegister().get(1).getActivityName());
+        System.out.println(className + activityRegister.getActivityRegister().get(2).getActivityName());
     }
 
     /**
@@ -104,7 +104,7 @@ public class ServerController extends Thread {
                 System.out.println(userRegister.getUserList().get(i).getUserName());
             }
         }
-        System.out.println(classname + " Antal users i UserRegister " + userRegister.getUserList().size());
+        System.out.println(className + " Antal users i UserRegister " + userRegister.getUserList().size());
         return user;
     }
 
