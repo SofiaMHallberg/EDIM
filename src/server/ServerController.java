@@ -7,8 +7,8 @@ import java.util.Random;
 /**
  * This class handles the logic of the in and out coming object.
  *
+ * @author Sofia Hallberg & Chanon Borgström.
  * @version 1.0
- * @autor Sofia Hallberg & Chanon Borgström.
  */
 
 public class ServerController extends Thread {
@@ -16,6 +16,7 @@ public class ServerController extends Thread {
     private Buffer<User> sendUserBuffer;
     private Buffer<Activity> sendNewActivityBuffer;
     private HashMap<String, SocketStreamObject> socketHashMap;
+    private HashMap<String, UserTimer> userTimerHashMap;
     private ConnectionServer connectionServer;
     private CommunicationServer communicationServer;
     private UserRegister userRegister;
@@ -116,8 +117,19 @@ public class ServerController extends Thread {
         activityToSend.setActivityName(activityRegister.getActivityRegister().get(activityNbr).getActivityName());
         activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
         activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
-        activityToSend.setToUser(userName);
+        activityToSend.setFromUser(userName);
         sendNewActivityBuffer.put(activityToSend);
+    }
+
+    public void createUserTimer(User user) {
+        UserTimer userTimer = new UserTimer(this, user);
+        userTimer.startTimer();
+        userTimerHashMap.put(user.getUserName(), userTimer);
+    }
+
+    public void setUserTimer(User user, String userName) {
+        int timeInterval = user.getNotificationInterval();
+        userTimerHashMap.get(userName).setTimeInterval(timeInterval);
     }
 
     /**
@@ -130,6 +142,7 @@ public class ServerController extends Thread {
                 UserType userType = user.getUserType();
                 switch (userType) {
                     case LOGIN:
+                        createUserTimer(user);
                         User updatedUser = checkLoginUser(user);
                         sendUserBuffer.put(updatedUser);
                         sendActivity(updatedUser.getUserName());
@@ -141,6 +154,7 @@ public class ServerController extends Thread {
                     case COMPLETEDACTIVITY:
 
                         break;
+
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

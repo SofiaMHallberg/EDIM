@@ -76,7 +76,7 @@ public class AppPanel extends JPanel {
     public void createCBTimeLimit() {
         interval = new String[]{"15", "30", "45", "60"};
         cmbTimeLimit = new JComboBox<>(interval);
-
+        cmbTimeLimit.setSelectedIndex(2);
     }
 
     public void createTAActivityInfo() {
@@ -152,7 +152,7 @@ public class AppPanel extends JPanel {
                 mainPanel.logOut();
             }
             if (click == btnInterval) {
-                index = Integer.parseInt((String)cmbTimeLimit.getSelectedItem());
+                index = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
                 mainPanel.sendChosenInterval(index);
             }
         }

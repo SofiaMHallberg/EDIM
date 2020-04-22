@@ -8,7 +8,7 @@ public class Activity implements Serializable {
     private String activityInfo;
     private boolean isCompleted = false;
     private String activityUser;
-    private String toUser;
+
 
 
     public Activity () {}
@@ -31,13 +31,6 @@ public class Activity implements Serializable {
         return activityName;
     }
 
-    public String getToUser() {
-        return toUser;
-    }
-
-    public void setToUser(String toUser) {
-        this.toUser = toUser;
-    }
     public String getActivityInstruction() {
         return activityInstruction;
     }
