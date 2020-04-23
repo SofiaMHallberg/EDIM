@@ -12,7 +12,7 @@ import java.util.Random;
  */
 
 public class ServerController extends Thread {
-    private Buffer<User> onLineBuffer;
+    private Buffer<User> loginLogoutBuffer;
     private Buffer<User> sendUserBuffer;
     private Buffer<Activity> sendNewActivityBuffer;
     private HashMap<String, SocketStreamObject> socketHashMap;
@@ -30,11 +30,11 @@ public class ServerController extends Thread {
      * @param port the received port number.
      */
     public ServerController(int port) {
-        onLineBuffer = new Buffer();
+        loginLogoutBuffer = new Buffer();
         socketHashMap = new HashMap();
         sendUserBuffer = new Buffer();
         sendNewActivityBuffer = new Buffer();
-        connectionServer = new ConnectionServer(port, socketHashMap, onLineBuffer);
+        connectionServer = new ConnectionServer(this, port, socketHashMap, loginLogoutBuffer);
         communicationServer = new CommunicationServer(socketHashMap, sendUserBuffer, sendNewActivityBuffer);
         userRegister = new UserRegister();
         readContacts("files/users.txt");
@@ -135,8 +135,9 @@ public class ServerController extends Thread {
      */
     public void run() {
         while (true) {
+            //TODO skapa en metod för att hämta userobjekt och gör den syncronized.
             try {
-                User user = onLineBuffer.get();
+                User user = loginLogoutBuffer.get();
                 UserType userType = user.getUserType();
                 switch (userType) {
                     case LOGIN:

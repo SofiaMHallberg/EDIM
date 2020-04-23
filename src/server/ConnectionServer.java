@@ -22,19 +22,20 @@ public class ConnectionServer {
     private String className = "Class: ConnectionServer ";
     private LinkedList<ReceiverThread> threadPool;
     private HashMap<String, SocketStreamObject> socketHashMap;
-    private Buffer<User> onlineBuffer;
+    private Buffer<User> loginLogoutBuffer;
 
     /**
      * Receives all necessary data and starts the server and then generates and starts the thread pool.
      *
      * @param port          received port number.
      * @param socketHashMap received socket HashMap.
-     * @param onlineBuffer  received online buffer.
+     * @param loginLogoutBuffer  received online buffer.
      */
-    public ConnectionServer(int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> onlineBuffer) {
+    public ConnectionServer(ServerController serverController, int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> loginLogoutBuffer) {
+        this.serverController = serverController;
         this.port = port;
         this.socketHashMap = socketHashMap;
-        this.onlineBuffer = onlineBuffer;
+        this.loginLogoutBuffer = loginLogoutBuffer;
         this.threadPool = new LinkedList<>();
         startServer();
         generateThreadPool(20);
@@ -143,12 +144,12 @@ public class ConnectionServer {
                         switch (userType) {
                             case LOGIN:
                                 socketHashMap.put(userName, socketStreamObject);
-                                onlineBuffer.put(user);
+                                loginLogoutBuffer.put(user);
                                 System.out.println(className + "user login");
                                 break;
                             case LOGOUT:
                                 socketHashMap.remove(userName);
-                                onlineBuffer.put(user);
+                                loginLogoutBuffer.put(user);
                                 System.out.println(className + "user logout");
                                 interrupt();
                                 break;

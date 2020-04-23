@@ -110,6 +110,7 @@ public class ClientCommunicationController {
                     User user = userBuffer.get();
                     oos.writeObject(user);
 
+
                     if (user.getUserType() == UserType.LOGOUT) {
                         System.out.println(className + "user is logging out");
                         disconnect();
@@ -118,6 +119,7 @@ public class ClientCommunicationController {
 
                     Activity activity = activityBuffer.get();
                     oos.writeObject(activity);
+                    oos.flush();
 
                 } catch (Exception e) {
                     e.printStackTrace();
