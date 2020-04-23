@@ -160,6 +160,7 @@ public class ClientCommunicationController {
                     } else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
                         clientController.receiveNotificationFromCCC(activity);
+                        System.out.println(className + ((Activity) object).getActivityName());
                     }
 
                 } catch (Exception e) {

@@ -15,6 +15,7 @@ public class ServerController extends Thread {
     private Buffer<User> loginLogoutBuffer;
     private Buffer<User> sendUserBuffer;
     private Buffer<Activity> sendNewActivityBuffer;
+    private Buffer sendBuffer;
     private HashMap<String, SocketStreamObject> socketHashMap;
     private HashMap<String, UserTimer> userTimerHashMap;
     private ConnectionServer connectionServer;
@@ -34,17 +35,14 @@ public class ServerController extends Thread {
         socketHashMap = new HashMap();
         sendUserBuffer = new Buffer();
         sendNewActivityBuffer = new Buffer();
-        connectionServer = new ConnectionServer(this, port, socketHashMap, loginLogoutBuffer);
-        communicationServer = new CommunicationServer(socketHashMap, sendUserBuffer, sendNewActivityBuffer);
+        sendBuffer = new Buffer();
+        connectionServer = new ConnectionServer(this, port, socketHashMap, loginLogoutBuffer, sendBuffer);
+        communicationServer = new CommunicationServer(socketHashMap, sendUserBuffer, sendNewActivityBuffer, sendBuffer);
         userRegister = new UserRegister();
         readContacts("files/users.txt");
         activityRegister = new ActivityRegister("files/activities.txt");
         userTimerHashMap = new HashMap<>();
         rand = new Random();
-        System.out.println(className + activityRegister.getActivityRegister().size());
-        System.out.println(className + activityRegister.getActivityRegister().get(0).getActivityName());
-        System.out.println(className + activityRegister.getActivityRegister().get(1).getActivityName());
-        System.out.println(className + activityRegister.getActivityRegister().get(2).getActivityName());
     }
 
     /**
@@ -114,6 +112,7 @@ public class ServerController extends Thread {
         activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
         activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
         activityToSend.setActivityUser(userName);
+        sendUserBuffer.put(userRegister.getUserList().get(userName)); //test
         sendNewActivityBuffer.put(activityToSend);
         System.out.println(className + activityToSend.getActivityName());
     }

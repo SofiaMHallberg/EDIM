@@ -19,6 +19,7 @@ public class CommunicationServer {
     private HashMap<String, SocketStreamObject> socketHashMap;
     private Buffer<User> sendUserBuffer;
     private Buffer<Activity> sendNewActivityBuffer;
+    private Buffer sendBuffer;
 
 
     /**
@@ -28,9 +29,10 @@ public class CommunicationServer {
      * @param sendUserBuffer        the received sendUserBuffer.
      * @param sendNewActivityBuffer the received sendNewActivityBuffer.
      */
-    public CommunicationServer(HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> sendUserBuffer, Buffer<Activity> sendNewActivityBuffer) {
+    public CommunicationServer(HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> sendUserBuffer, Buffer<Activity> sendNewActivityBuffer, Buffer sendBuffer) {
         this.socketHashMap = socketHashMap;
         this.sendUserBuffer = sendUserBuffer;
+        this.sendBuffer = sendBuffer;
         this.sendNewActivityBuffer = sendNewActivityBuffer;
         this.threadPool = new LinkedList<>();
         generateThreadPool(1);
@@ -66,14 +68,17 @@ public class CommunicationServer {
         public void run() {
             while (true) {
                 try {
+                    System.out.println(className + "WorkerThread i början av try");
                     User sendUser = sendUserBuffer.get();
                     oos = socketHashMap.get(sendUser.getUserName()).getOos();
                     oos.writeObject(sendUser);
+                    System.out.println(className + "WorkerThread i mitten av try");
 
                     Activity sendNewActivity = sendNewActivityBuffer.get();
                     oos = socketHashMap.get(sendNewActivity.getActivityUser()).getOos();
                     oos.writeObject(sendNewActivity);
                     //TODO: kolla upp till vem aktiviteten skickas till efter att timern klickas.
+                    System.out.println(className + sendNewActivity.getActivityUser());
 
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
