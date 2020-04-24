@@ -1,5 +1,6 @@
 package server;
 
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
@@ -17,23 +18,18 @@ public class SenderServer {
     private String className = "Class: CommunicationServer ";
     private LinkedList<WorkerThread> threadPool;
     private HashMap<String, SocketStreamObject> socketHashMap;
-    private Buffer<User> sendUserBuffer;
-    private Buffer<Activity> sendNewActivityBuffer;
     private Buffer sendBuffer;
 
 
     /**
      * Receives all necessary data and then generates and starts the thread pool.
      *
-     * @param socketHashMap         the received socketHashMap.
-     * @param sendUserBuffer        the received sendUserBuffer.
-     * @param sendNewActivityBuffer the received sendNewActivityBuffer.
+     * @param socketHashMap
+     * @param sendBuffer
      */
-    public SenderServer(HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> sendUserBuffer, Buffer<Activity> sendNewActivityBuffer, Buffer sendBuffer) {
+    public SenderServer(HashMap<String, SocketStreamObject> socketHashMap, Buffer sendBuffer) {
         this.socketHashMap = socketHashMap;
-        this.sendUserBuffer = sendUserBuffer;
         this.sendBuffer = sendBuffer;
-        this.sendNewActivityBuffer = sendNewActivityBuffer;
         this.threadPool = new LinkedList<>();
         generateThreadPool(1);
         startThreadPool();
@@ -68,17 +64,23 @@ public class SenderServer {
         public void run() {
             while (true) {
                 try {
-                    System.out.println(className + "WorkerThread i början av try");
-                    User sendUser = sendUserBuffer.get();
-                    oos = socketHashMap.get(sendUser.getUserName()).getOos();
-                    oos.writeObject(sendUser);
-                    System.out.println(className + "WorkerThread i mitten av try");
+                    //System.out.println(className + "WorkerThread i början av try");
 
-                    Activity sendNewActivity = sendNewActivityBuffer.get();
-                    oos = socketHashMap.get(sendNewActivity.getActivityUser()).getOos();
-                    oos.writeObject(sendNewActivity);
-                    //TODO: kolla upp till vem aktiviteten skickas till efter att timern klickas.
-                    System.out.println(className + sendNewActivity.getActivityUser());
+                    Object object = sendBuffer.get();
+                    if (object instanceof User) {
+                        User sendUser = (User) object;
+                        oos = socketHashMap.get(sendUser.getUserName()).getOos();
+                        oos.writeObject(sendUser);
+                    }
+
+                    //System.out.println(className + "WorkerThread i mitten av try");
+                    else if (object instanceof Activity) {
+                        Activity sendNewActivity = (Activity) object;
+                        oos = socketHashMap.get(sendNewActivity.getActivityUser()).getOos();
+                        oos.writeObject(sendNewActivity);
+                        //TODO: kolla upp till vem aktiviteten skickas till efter att timern klickas.
+                        System.out.println(className + sendNewActivity.getActivityUser());
+                    }
 
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
