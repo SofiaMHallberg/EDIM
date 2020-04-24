@@ -17,26 +17,20 @@ import java.util.LinkedList;
 
 public class ReceiverServer {
     private ServerSocket serverSocket;
-    private ServerController serverController;
     private int port;
     private String className = "Class: ConnectionServer ";
     private LinkedList<ReceiverThread> threadPool;
     private HashMap<String, SocketStreamObject> socketHashMap;
-    private Buffer<User> loginLogoutBuffer;
     private Buffer receiveBuffer;
 
     /**
      * Receives all necessary data and starts the server and then generates and starts the thread pool.
-     *
      * @param port          received port number.
      * @param socketHashMap received socket HashMap.
-     * @param loginLogoutBuffer  received online buffer.
      */
-    public ReceiverServer(ServerController serverController, int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> loginLogoutBuffer, Buffer receiveBuffer) {
-        this.serverController = serverController;
+    public ReceiverServer(int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer receiveBuffer) {
         this.port = port;
         this.socketHashMap = socketHashMap;
-        this.loginLogoutBuffer = loginLogoutBuffer;
         this.threadPool = new LinkedList<>();
         this.receiveBuffer = receiveBuffer;
         startServer();
@@ -128,8 +122,7 @@ public class ReceiverServer {
                 e.printStackTrace();
             }
 
-            User user = null;
-            Activity activity;
+            User user;
             UserType userType;
             String userName = "";
 
@@ -137,36 +130,22 @@ public class ReceiverServer {
                 try {
                     ObjectInputStream ois = socketStreamObject.getOis();
                     Object object = ois.readObject();
+                    receiveBuffer.put(object);
+
                     if (object instanceof User) {
                         user = (User) object;
                         userName = user.getUserName();
                         userType = user.getUserType();
 
-
                         switch (userType) {
                             case LOGIN:
                                 socketHashMap.put(userName, socketStreamObject);
-                                loginLogoutBuffer.put(user);
-                                System.out.println(className + "user login");
                                 break;
                             case LOGOUT:
                                 socketHashMap.remove(userName);
-                                loginLogoutBuffer.put(user);
-                                System.out.println(className + "user logout");
                                 interrupt();
                                 break;
-                            case COMPLETEDACTIVITY:
-                                break;
-                            case SENDINTERVAL:
-                                serverController.setTimeInterval(user.getUserName(),user.getNotificationInterval());
-                                break;
-
                         }
-                    } else {
-                        activity = (Activity) object;
-                        System.out.println(className + "received activity: " + activity.getActivityName());
-
-                        //TODO: Hantera inkommande aktiviteter.
                     }
 
                 } catch (IOException | ClassNotFoundException e) {
