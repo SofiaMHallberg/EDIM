@@ -23,7 +23,7 @@ public class ReceiverServer {
     private LinkedList<ReceiverThread> threadPool;
     private HashMap<String, SocketStreamObject> socketHashMap;
     private Buffer<User> loginLogoutBuffer;
-    private Buffer sendBuffer;
+    private Buffer receiveBuffer;
 
     /**
      * Receives all necessary data and starts the server and then generates and starts the thread pool.
@@ -32,13 +32,13 @@ public class ReceiverServer {
      * @param socketHashMap received socket HashMap.
      * @param loginLogoutBuffer  received online buffer.
      */
-    public ReceiverServer(ServerController serverController, int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> loginLogoutBuffer, Buffer sendBuffer) {
+    public ReceiverServer(ServerController serverController, int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> loginLogoutBuffer, Buffer receiveBuffer) {
         this.serverController = serverController;
         this.port = port;
         this.socketHashMap = socketHashMap;
         this.loginLogoutBuffer = loginLogoutBuffer;
         this.threadPool = new LinkedList<>();
-        this.sendBuffer = sendBuffer;
+        this.receiveBuffer = receiveBuffer;
         startServer();
         generateThreadPool(20);
         startThreadPool();

@@ -15,7 +15,6 @@ public class ServerController extends Thread {
     private Buffer<User> loginLogoutBuffer;
     private Buffer<User> sendUserBuffer;
     private Buffer<Activity> sendNewActivityBuffer;
-    private Buffer sendBuffer;
     private HashMap<String, SocketStreamObject> socketHashMap;
     private HashMap<String, UserTimer> userTimerHashMap;
     private ReceiverServer receiverServer;
@@ -24,6 +23,8 @@ public class ServerController extends Thread {
     private ActivityRegister activityRegister;
     private Random rand;
     private String className = "Class: ServerController ";
+    private Buffer<Object> receiveBuffer;
+    private Buffer<Object> sendBuffer;
 
     /**
      * Constructs all the buffers and servers and HashMaps that is needed.
@@ -35,14 +36,15 @@ public class ServerController extends Thread {
         socketHashMap = new HashMap();
         sendUserBuffer = new Buffer();
         sendNewActivityBuffer = new Buffer();
-        sendBuffer = new Buffer();
-        receiverServer = new ReceiverServer(this, port, socketHashMap, loginLogoutBuffer, sendBuffer);
+        receiverServer = new ReceiverServer(this, port, socketHashMap, loginLogoutBuffer, receiveBuffer);
         senderServer = new SenderServer(socketHashMap, sendUserBuffer, sendNewActivityBuffer, sendBuffer);
         userRegister = new UserRegister();
         readContacts("files/users.txt");
         activityRegister = new ActivityRegister("files/activities.txt");
         userTimerHashMap = new HashMap<>();
         rand = new Random();
+        receiveBuffer=new Buffer<>();
+        sendBuffer = new Buffer();
     }
 
     /**
