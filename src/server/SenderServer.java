@@ -12,7 +12,7 @@ import java.util.LinkedList;
  * @autor Sofia Hallberg & Chanon Borgström.
  */
 
-public class CommunicationServer {
+public class SenderServer {
     private ObjectOutputStream oos;
     private String className = "Class: CommunicationServer ";
     private LinkedList<WorkerThread> threadPool;
@@ -29,7 +29,7 @@ public class CommunicationServer {
      * @param sendUserBuffer        the received sendUserBuffer.
      * @param sendNewActivityBuffer the received sendNewActivityBuffer.
      */
-    public CommunicationServer(HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> sendUserBuffer, Buffer<Activity> sendNewActivityBuffer, Buffer sendBuffer) {
+    public SenderServer(HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> sendUserBuffer, Buffer<Activity> sendNewActivityBuffer, Buffer sendBuffer) {
         this.socketHashMap = socketHashMap;
         this.sendUserBuffer = sendUserBuffer;
         this.sendBuffer = sendBuffer;

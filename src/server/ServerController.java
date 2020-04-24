@@ -18,8 +18,8 @@ public class ServerController extends Thread {
     private Buffer sendBuffer;
     private HashMap<String, SocketStreamObject> socketHashMap;
     private HashMap<String, UserTimer> userTimerHashMap;
-    private ConnectionServer connectionServer;
-    private CommunicationServer communicationServer;
+    private ReceiverServer receiverServer;
+    private SenderServer senderServer;
     private UserRegister userRegister;
     private ActivityRegister activityRegister;
     private Random rand;
@@ -36,8 +36,8 @@ public class ServerController extends Thread {
         sendUserBuffer = new Buffer();
         sendNewActivityBuffer = new Buffer();
         sendBuffer = new Buffer();
-        connectionServer = new ConnectionServer(this, port, socketHashMap, loginLogoutBuffer, sendBuffer);
-        communicationServer = new CommunicationServer(socketHashMap, sendUserBuffer, sendNewActivityBuffer, sendBuffer);
+        receiverServer = new ReceiverServer(this, port, socketHashMap, loginLogoutBuffer, sendBuffer);
+        senderServer = new SenderServer(socketHashMap, sendUserBuffer, sendNewActivityBuffer, sendBuffer);
         userRegister = new UserRegister();
         readContacts("files/users.txt");
         activityRegister = new ActivityRegister("files/activities.txt");

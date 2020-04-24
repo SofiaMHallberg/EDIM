@@ -15,7 +15,7 @@ import java.util.LinkedList;
  * @autor Sofia Hallberg & Chanon Borgström.
  */
 
-public class ConnectionServer {
+public class ReceiverServer {
     private ServerSocket serverSocket;
     private ServerController serverController;
     private int port;
@@ -32,7 +32,7 @@ public class ConnectionServer {
      * @param socketHashMap received socket HashMap.
      * @param loginLogoutBuffer  received online buffer.
      */
-    public ConnectionServer(ServerController serverController, int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> loginLogoutBuffer, Buffer sendBuffer) {
+    public ReceiverServer(ServerController serverController, int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer<User> loginLogoutBuffer, Buffer sendBuffer) {
         this.serverController = serverController;
         this.port = port;
         this.socketHashMap = socketHashMap;
