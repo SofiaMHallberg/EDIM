@@ -44,6 +44,7 @@ public class ClientController {
      * @param activity the received object.
      */
     public void sendActivityToCCC(Activity activity) {
+        user.getCompletedActivities().add(activity);
         ccc.sendActivity(activity);
     }
 

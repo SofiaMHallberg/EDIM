@@ -33,7 +33,7 @@ public class ServerController extends Thread {
         receiverServer = new ReceiverServer(port, socketHashMap, receiveBuffer);
         senderServer = new SenderServer(socketHashMap,sendBuffer);
         userRegister = new UserRegister();
-        readContacts("files/users.txt");
+        readUsers("files/users.txt");
         activityRegister = new ActivityRegister("files/activities.txt");
         userTimerHashMap = new HashMap<>();
         rand = new Random();
@@ -46,7 +46,7 @@ public class ServerController extends Thread {
      *
      * @param filename the name of the created file.
      */
-    public void writeContacts(String filename) {
+    public void writeUsers(String filename) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
             oos.writeInt(userRegister.getUserList().size());
             for (int i = 0; i < userRegister.getUserList().size(); i++) {
@@ -63,7 +63,7 @@ public class ServerController extends Thread {
      *
      * @param filename the read filename.
      */
-    public void readContacts(String filename) {
+    public void readUsers(String filename) {
         File newFile = new File(filename);
         if (newFile.length() != 0) {
             try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
@@ -95,7 +95,7 @@ public class ServerController extends Thread {
         } else {
             user.setUserType(UserType.SENDWELCOME);
             userRegister.getUserList().put(user.getUserName(), user);
-            writeContacts("files/users.txt");
+            writeUsers("files/users.txt");
         }
         return user;
     }
@@ -108,8 +108,7 @@ public class ServerController extends Thread {
         activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
         activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
         activityToSend.setActivityUser(userName);
-        sendUserBuffer.put(userRegister.getUserList().get(userName)); //test
-        sendNewActivityBuffer.put(activityToSend);
+        sendBuffer.put(activityToSend);
         System.out.println(className + activityToSend.getActivityName());
     }
 
@@ -124,31 +123,48 @@ public class ServerController extends Thread {
         user.setNotificationInterval(timeInterval);
         userTimerHashMap.get(userName).updateUser(user);
     }
+    public void logOutUser(String userName) {
+        try {
+            socketHashMap.get(userName).getOos().close();
+            socketHashMap.get(userName).getOis().close();
+            socketHashMap.get(userName).getSocket().close();
+            socketHashMap.remove(userName);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Receives a User object from the online buffer and checks it value.
      */
     public void run() {
         while (true) {
-            //TODO skapa en metod för att hämta userobjekt och gör den syncronized.
             try {
-                User user = loginLogoutBuffer.get();
-                UserType userType = user.getUserType();
-                switch (userType) {
-                    case LOGIN:
-                        createUserTimer(user);
-                        User updatedUser = checkLoginUser(user);
-                        sendUserBuffer.put(updatedUser);
-                        sendActivity(updatedUser.getUserName());
+                Object object = receiveBuffer.get();
+                if (object instanceof User) {
+                    User user = (User) object;
+                    String userName = user.getUserName();
+                    UserType userType = user.getUserType();
+                    switch (userType) {
+                        case LOGIN:
+                            createUserTimer(user);
+                            User updatedUser = checkLoginUser(user);
+                            sendBuffer.put(updatedUser);
+                            break;
+                        case LOGOUT:
+                            logOutUser(userName);
+                            writeUsers("files/users.txt");
+                            break;
+                    }
+                }
+                else if (object instanceof Activity) {
+                    Activity activity = (Activity) object;
+                    String userName = activity.getActivityUser();
 
-                        break;
-                    case LOGOUT:
-
-                        break;
-                    case COMPLETEDACTIVITY:
-
-                        break;
-
+                    if (activity.isCompleted()) {
+                        userTimerHashMap.get(userName).startTimer();
+                        //TODO Använd UserTimers: get- och setmetoder för att hantera detta.
+                    }
                 }
             } catch (InterruptedException e) {
                 e.printStackTrace();

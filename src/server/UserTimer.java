@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 public class UserTimer implements ActionListener {
 
     private Timer timer;
+
     private int currentTime;
     private ServerController serverController;
     private User user;
@@ -33,6 +34,14 @@ public class UserTimer implements ActionListener {
 
     public void updateUser(User user){
         this.user = user;
+    }
+
+    public int getCurrentTime() {
+        return currentTime;
+    }
+
+    public void setCurrentTime(int currentTime) {
+        this.currentTime = currentTime;
     }
 
     @Override

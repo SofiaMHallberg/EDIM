@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class User implements Serializable {
-    private LinkedList<Activity> completedActivitiesPerDay;
+    private LinkedList<Activity> completedActivities;
     private String userName;
     private int age;
     private int notificationInterval = 10;
@@ -14,12 +14,12 @@ public class User implements Serializable {
     public User(String userName) {
         this.userName=userName;
     }
-    public LinkedList<Activity> getCompletedActivitiesPerDay() {
-        return completedActivitiesPerDay;
+    public LinkedList<Activity> getCompletedActivities() {
+        return completedActivities;
     }
 
-    public void setCompletedActivitiesPerDay(LinkedList<Activity> completedActivitiesPerDay) {
-        this.completedActivitiesPerDay = completedActivitiesPerDay;
+    public void setCompletedActivities(LinkedList<Activity> completedActivities) {
+        this.completedActivities = completedActivities;
     }
 
     public String getUserName() {
