@@ -4,12 +4,14 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class User implements Serializable {
-    private LinkedList<Activity> completedActivities;
+    private static final long serialVersionUID = -6356381908430432467L;
+    private LinkedList<Activity> completedActivities = new LinkedList<>();
     private String userName;
     private int age;
     private int notificationInterval = 10;
     private boolean isOnline;
     private UserType userType;
+    private Activity delayedActivity;
 
     public User(String userName) {
         this.userName=userName;
@@ -17,6 +19,11 @@ public class User implements Serializable {
     public LinkedList<Activity> getCompletedActivities() {
         return completedActivities;
     }
+    public void addActivityToList(Activity activity) {
+        completedActivities.add(activity);
+    }
+    //TODO: Lös problemet med att lägga till activities!
+
 
     public void setCompletedActivities(LinkedList<Activity> completedActivities) {
         this.completedActivities = completedActivities;
@@ -60,5 +67,13 @@ public class User implements Serializable {
 
     public void setUserType(UserType userType) {
         this.userType = userType;
+    }
+
+    public Activity getDelayedActivity() {
+        return delayedActivity;
+    }
+
+    public void setDelayedActivity(Activity delayedActivity) {
+        this.delayedActivity = delayedActivity;
     }
 }

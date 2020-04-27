@@ -29,6 +29,8 @@ public class ServerController extends Thread {
      * @param port the received port number.
      */
     public ServerController(int port) {
+        receiveBuffer=new Buffer<>();
+        sendBuffer = new Buffer();
         socketHashMap = new HashMap();
         receiverServer = new ReceiverServer(port, socketHashMap, receiveBuffer);
         senderServer = new SenderServer(socketHashMap,sendBuffer);
@@ -37,8 +39,7 @@ public class ServerController extends Thread {
         activityRegister = new ActivityRegister("files/activities.txt");
         userTimerHashMap = new HashMap<>();
         rand = new Random();
-        receiveBuffer=new Buffer<>();
-        sendBuffer = new Buffer();
+
     }
 
     /**
@@ -134,6 +135,32 @@ public class ServerController extends Thread {
         }
     }
 
+    public void setDelayedActivity(Activity activity) {
+
+
+        String userName = activity.getActivityUser();
+        User user = userRegister.getUserList().get(userName);
+        int timeInterval = user.getNotificationInterval();
+        user.setDelayedActivity(activity);
+        user.setNotificationInterval(5);
+        userTimerHashMap.get(userName).updateUser(user);
+        userTimerHashMap.get(userName).startTimer();
+        user.setNotificationInterval(timeInterval);
+
+
+    }
+
+    public void updateUserInterval(User user) {
+        UserTimer userTimer = userTimerHashMap.get(user.getUserName());
+        userTimer.updateUser(user);
+        userRegister.updateUser(user);
+        int currentTime = userTimer.getCurrentTime();
+        userTimer.stopTimer();
+        userTimer.setCurrentTime(currentTime);
+        userTimer.startTimer();
+
+    }
+
     /**
      * Receives a User object from the online buffer and checks it value.
      */
@@ -141,6 +168,7 @@ public class ServerController extends Thread {
         while (true) {
             try {
                 Object object = receiveBuffer.get();
+                System.out.println(className + object.getClass());
                 if (object instanceof User) {
                     User user = (User) object;
                     String userName = user.getUserName();
@@ -155,6 +183,11 @@ public class ServerController extends Thread {
                             logOutUser(userName);
                             writeUsers("files/users.txt");
                             break;
+                        case SENDINTERVAL:
+                            updateUserInterval(user);
+                            break;
+
+
                     }
                 }
                 else if (object instanceof Activity) {
@@ -163,7 +196,12 @@ public class ServerController extends Thread {
 
                     if (activity.isCompleted()) {
                         userTimerHashMap.get(userName).startTimer();
-                        //TODO Använd UserTimers: get- och setmetoder för att hantera detta.
+                        System.out.println(className + activity.getActivityName() + " is Completed");
+
+                    }
+                    else {
+                        setDelayedActivity(activity);
+                        System.out.println(className + activity.getActivityName() + " is delayed");
                     }
                 }
             } catch (InterruptedException e) {

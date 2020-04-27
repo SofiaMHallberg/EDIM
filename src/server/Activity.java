@@ -3,6 +3,7 @@ package server;
 import java.io.Serializable;
 
 public class Activity implements Serializable {
+    private static final long serialVersionUID = 200428L;
     private String activityName;
     private String activityInstruction;
     private String activityInfo;

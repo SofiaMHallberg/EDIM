@@ -130,7 +130,9 @@ public class ReceiverServer {
                 try {
                     ObjectInputStream ois = socketStreamObject.getOis();
                     Object object = ois.readObject();
+                    System.out.println(className + object );
                     receiveBuffer.put(object);
+                    System.out.println(className + receiveBuffer.size() + "recevebuffertens storlek");
 
                     if (object instanceof User) {
                         user = (User) object;

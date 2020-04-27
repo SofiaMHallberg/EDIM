@@ -15,4 +15,9 @@ public class UserRegister {
     public void setUserList(HashMap userList) {
         this.userList = userList;
     }
+
+    public void updateUser(User updatedUser) {
+        userList.remove(updatedUser.getUserName());
+        userList.put(updatedUser.getUserName(), updatedUser);
+    }
 }

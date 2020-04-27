@@ -164,7 +164,7 @@ public class ClientCommunicationController {
                     }
 
                 } catch (Exception e) {
-                    System.out.println(className + "client has logged out");
+                   e.printStackTrace();
                 }
             }
         }

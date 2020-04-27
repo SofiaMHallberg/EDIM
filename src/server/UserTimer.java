@@ -8,12 +8,11 @@ import java.awt.event.ActionListener;
 public class UserTimer implements ActionListener {
 
     private Timer timer;
-
     private int currentTime;
     private ServerController serverController;
     private User user;
-
     private String className = "Class: UserTimer ";
+
 
     public UserTimer(ServerController serverController, User user) {
         currentTime = 0;
@@ -51,14 +50,13 @@ public class UserTimer implements ActionListener {
         if (checkTimeInterval()) {
             serverController.sendActivity(user.getUserName());
             stopTimer();
-            startTimer();
         }
         System.out.println(className + currentTime);
     }
 
 
     public boolean checkTimeInterval() {
-        if (user.getNotificationInterval() == currentTime) {
+        if (user.getNotificationInterval() >= currentTime) {
             return true;
         }
         return false;
