@@ -1,23 +1,25 @@
 package server;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class UserRegister {
-    private HashMap<String,User> userList;
+    private Map<String,User> userHashMap;
 
     public UserRegister() {
-        userList = new HashMap<>();
-    }
-    public HashMap<String, User> getUserList() {
-        return userList;
+        userHashMap = new HashMap<>();
     }
 
-    public void setUserList(HashMap userList) {
-        this.userList = userList;
+    public Map<String, User> getUserHashMap() {
+        return userHashMap;
+    }
+
+    public void setUserHashMap(HashMap userList) {
+        this.userHashMap = userList;
     }
 
     public void updateUser(User updatedUser) {
-        userList.remove(updatedUser.getUserName());
-        userList.put(updatedUser.getUserName(), updatedUser);
+        userHashMap.remove(updatedUser.getUserName());
+        userHashMap.put(updatedUser.getUserName(), updatedUser);
     }
 }

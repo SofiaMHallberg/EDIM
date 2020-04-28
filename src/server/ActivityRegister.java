@@ -1,16 +1,14 @@
 package server;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.LinkedList;
 
 public class ActivityRegister {
     private LinkedList<Activity> activityRegister;
-    private String className="server.ActivityRegister ";
+    private String className="Class: ActivityRegister ";
 
     public ActivityRegister(String file) {
         createRegister(file);
-        System.out.println(className+activityRegister.get(1).getActivityName());
     }
 
     private void createRegister(String file) {

@@ -2,6 +2,8 @@ package server;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -22,6 +24,7 @@ public class ServerController extends Thread {
     private String className = "Class: ServerController ";
     private Buffer<Object> receiveBuffer;
     private Buffer<Object> sendBuffer;
+    private String userFilePath="files/users.txt";
 
     /**
      * Constructs all the buffers and servers and HashMaps that is needed.
@@ -29,13 +32,13 @@ public class ServerController extends Thread {
      * @param port the received port number.
      */
     public ServerController(int port) {
-        receiveBuffer=new Buffer<>();
+        receiveBuffer = new Buffer<>();
         sendBuffer = new Buffer();
         socketHashMap = new HashMap();
         receiverServer = new ReceiverServer(port, socketHashMap, receiveBuffer);
-        senderServer = new SenderServer(socketHashMap,sendBuffer);
+        senderServer = new SenderServer(socketHashMap, sendBuffer);
         userRegister = new UserRegister();
-        readUsers("files/users.txt");
+        readUsers(userFilePath);
         activityRegister = new ActivityRegister("files/activities.txt");
         userTimerHashMap = new HashMap<>();
         rand = new Random();
@@ -49,9 +52,12 @@ public class ServerController extends Thread {
      */
     public void writeUsers(String filename) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
-            oos.writeInt(userRegister.getUserList().size());
-            for (int i = 0; i < userRegister.getUserList().size(); i++) {
-                oos.writeObject(userRegister.getUserList().get(i));
+            oos.writeInt(userRegister.getUserHashMap().size());
+            Iterator it=userRegister.getUserHashMap().entrySet().iterator();
+            while(it.hasNext()) {
+                Map.Entry userToStream=(Map.Entry) it.next();
+                oos.writeObject(userToStream.getValue());
+                it.remove();
             }
             oos.flush();
         } catch (IOException e) {
@@ -72,7 +78,7 @@ public class ServerController extends Thread {
                 for (int i = 0; i < size; i++) {
                     try {
                         User user = (User) ois.readObject();
-                        userRegister.getUserList().put(user.getUserName(), user);
+                        userRegister.getUserHashMap().put(user.getUserName(), user);
                     } catch (ClassNotFoundException | IOException e) {
                         System.out.println(e);
                     }
@@ -90,14 +96,22 @@ public class ServerController extends Thread {
      * @return an updated User.
      */
     public User checkLoginUser(User user) {
-        if (userRegister.getUserList().get(user.getUserName()).getUserName().equals(user.getUserName())) {
-            user = userRegister.getUserList().get(user.getUserName());
-            user.setUserType(UserType.SENDUSER);
+        if (userRegister.getUserHashMap().size() != 0) {
+            if (userRegister.getUserHashMap().get(user.getUserName()).getUserName().equals(user.getUserName())) {
+                user = userRegister.getUserHashMap().get(user.getUserName());
+                user.setUserType(UserType.SENDUSER);
+
+            } else {
+                user.setUserType(UserType.SENDWELCOME);
+                userRegister.getUserHashMap().put(user.getUserName(), user);
+                writeUsers(userFilePath);
+            }
         } else {
             user.setUserType(UserType.SENDWELCOME);
-            userRegister.getUserList().put(user.getUserName(), user);
-            writeUsers("files/users.txt");
+            userRegister.getUserHashMap().put(user.getUserName(), user);
+            writeUsers(userFilePath);
         }
+
         return user;
     }
 
@@ -120,10 +134,11 @@ public class ServerController extends Thread {
     }
 
     public void setTimeInterval(String userName, int timeInterval) {
-        User user = userRegister.getUserList().get(userName);
+        User user = userRegister.getUserHashMap().get(userName);
         user.setNotificationInterval(timeInterval);
         userTimerHashMap.get(userName).updateUser(user);
     }
+
     public void logOutUser(String userName) {
         try {
             socketHashMap.get(userName).getOos().close();
@@ -139,7 +154,7 @@ public class ServerController extends Thread {
 
 
         String userName = activity.getActivityUser();
-        User user = userRegister.getUserList().get(userName);
+        User user = userRegister.getUserHashMap().get(userName);
         int timeInterval = user.getNotificationInterval();
         user.setDelayedActivity(activity);
         user.setNotificationInterval(5);
@@ -168,7 +183,6 @@ public class ServerController extends Thread {
         while (true) {
             try {
                 Object object = receiveBuffer.get();
-                System.out.println(className + object.getClass());
                 if (object instanceof User) {
                     User user = (User) object;
                     String userName = user.getUserName();
@@ -181,7 +195,7 @@ public class ServerController extends Thread {
                             break;
                         case LOGOUT:
                             logOutUser(userName);
-                            writeUsers("files/users.txt");
+                            writeUsers(userFilePath);
                             break;
                         case SENDINTERVAL:
                             updateUserInterval(user);
@@ -189,8 +203,7 @@ public class ServerController extends Thread {
 
 
                     }
-                }
-                else if (object instanceof Activity) {
+                } else if (object instanceof Activity) {
                     Activity activity = (Activity) object;
                     String userName = activity.getActivityUser();
 
@@ -198,8 +211,7 @@ public class ServerController extends Thread {
                         userTimerHashMap.get(userName).startTimer();
                         System.out.println(className + activity.getActivityName() + " is Completed");
 
-                    }
-                    else {
+                    } else {
                         setDelayedActivity(activity);
                         System.out.println(className + activity.getActivityName() + " is delayed");
                     }
