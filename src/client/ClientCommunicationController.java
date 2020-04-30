@@ -57,15 +57,12 @@ public class ClientCommunicationController {
      * This method tries to close the socket and the connection to the server.
      */
     public void disconnect() {
-        try {
-            socket.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        isConnected = false;
     }
 
     /**
      * This method lays an object in a buffer which mission is to be sent to the server.
+     *
      * @param object the object to be sent.
      */
 
@@ -97,19 +94,17 @@ public class ClientCommunicationController {
                 try {
                     Object object = buffer.get();
 
-                    if(object instanceof User) {
+                    if (object instanceof User) {
                         User user = (User) object;
                         oos.writeObject(user);
                         oos.flush();
-
                         if (user.getUserType() == UserType.LOGOUT) {
                             System.out.println(className + "user is logging out");
+                            sleep(5000);
                             disconnect();
-                            isConnected = false;
+                            clientController.exitApplication();
                         }
-                    }
-
-                    else if(object instanceof Activity) {
+                    } else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
                         oos.writeObject(activity);
                         oos.flush();
@@ -150,6 +145,7 @@ public class ClientCommunicationController {
                     if (object instanceof User) {
                         User user = (User) object;
                         clientController.receiveUser(user);
+
                     } else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
                         clientController.receiveNotificationFromCCC(activity);
@@ -157,7 +153,7 @@ public class ClientCommunicationController {
                     }
 
                 } catch (Exception e) {
-                   e.printStackTrace();
+                    e.printStackTrace();
                 }
             }
         }

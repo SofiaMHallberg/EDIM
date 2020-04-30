@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * This class creates a thread pool and handles the communication from the Client.
@@ -20,7 +21,7 @@ public class ReceiverServer {
     private int port;
     private String className = "Class: ReceiverServer ";
     private LinkedList<ReceiverThread> threadPool;
-    private HashMap<String, SocketStreamObject> socketHashMap;
+    private Map<String, SocketStreamObject> socketHashMap;
     private Buffer receiveBuffer;
 
     /**
@@ -34,7 +35,7 @@ public class ReceiverServer {
         this.threadPool = new LinkedList<>();
         this.receiveBuffer = receiveBuffer;
         startServer();
-        generateThreadPool(20);
+        generateThreadPool(5);
         startThreadPool();
     }
 
@@ -130,9 +131,8 @@ public class ReceiverServer {
                 try {
                     ObjectInputStream ois = socketStreamObject.getOis();
                     Object object = ois.readObject();
-                    System.out.println(className + object );
                     receiveBuffer.put(object);
-                    System.out.println(className + receiveBuffer.size() + "recevebuffertens storlek");
+                    System.out.println(className + receiveBuffer.size() + "receivebuffer's size ");
 
                     if (object instanceof User) {
                         user = (User) object;
@@ -144,7 +144,6 @@ public class ReceiverServer {
                                 socketHashMap.put(userName, socketStreamObject);
                                 break;
                             case LOGOUT:
-                                socketHashMap.remove(userName);
                                 interrupt();
                                 break;
                         }

@@ -1,10 +1,10 @@
 package server;
 
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 /**
  * This class creates a thread pool and handles the communication to the Client.
@@ -17,7 +17,7 @@ public class SenderServer {
     private ObjectOutputStream oos;
     private String className = "Class: SenderServer ";
     private LinkedList<WorkerThread> threadPool;
-    private HashMap<String, SocketStreamObject> socketHashMap;
+    private Map<String, SocketStreamObject> socketHashMap;
     private Buffer sendBuffer;
 
 

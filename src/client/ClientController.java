@@ -95,4 +95,8 @@ public class ClientController {
         System.out.println(className + user.getUserName() + user.getNotificationInterval());
         ccc.sendObject(user);
     }
+
+    public void exitApplication(){
+        System.exit(1);
+    }
 }

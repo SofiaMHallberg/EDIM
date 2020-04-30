@@ -54,8 +54,10 @@ public class ServerController extends Thread {
         try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
             oos.writeInt(userRegister.getUserHashMap().size());
             Iterator it=userRegister.getUserHashMap().entrySet().iterator();
-            while(it.hasNext()) {
+            System.out.println(className + "writeUsers: "+userRegister.getUserHashMap().entrySet().iterator());
+            while(it.hasNext()) { //TODO: Vet ej hur man loopar igenom en hashmap / gör om HashMap till LinkedList
                 Map.Entry userToStream=(Map.Entry) it.next();
+                System.out.println(className + "writeUsers: "+userToStream.getValue());
                 oos.writeObject(userToStream.getValue());
                 it.remove();
             }
@@ -133,6 +135,12 @@ public class ServerController extends Thread {
         userTimerHashMap.put(user.getUserName(), userTimer);
     }
 
+    public void removeUserTimer(String userName){
+        UserTimer userTimer = userTimerHashMap.get(userName);
+        userTimer.stopTimer();
+        userTimerHashMap.remove(userName);
+    }
+
     public void setTimeInterval(String userName, int timeInterval) {
         User user = userRegister.getUserHashMap().get(userName);
         user.setNotificationInterval(timeInterval);
@@ -141,6 +149,7 @@ public class ServerController extends Thread {
 
     public void logOutUser(String userName) {
         try {
+            System.out.println(className+ "logOutUser: " + userName + " socketHashMap " + socketHashMap.get(userName));
             socketHashMap.get(userName).getOos().close();
             socketHashMap.get(userName).getOis().close();
             socketHashMap.get(userName).getSocket().close();
@@ -191,7 +200,9 @@ public class ServerController extends Thread {
                             sendBuffer.put(updatedUser);
                             break;
                         case LOGOUT:
+                            System.out.println(className+ "run: " + userName + " socketHashMap " + socketHashMap.get(userName));
                             logOutUser(userName);
+                            removeUserTimer(userName);
                             writeUsers(userFilePath);
                             break;
                         case SENDINTERVAL:
