@@ -151,17 +151,14 @@ public class ServerController extends Thread {
     }
 
     public void setDelayedActivity(Activity activity) {
-
-
         String userName = activity.getActivityUser();
         User user = userRegister.getUserHashMap().get(userName);
-        int timeInterval = user.getNotificationInterval();
         user.setDelayedActivity(activity);
-        user.setNotificationInterval(5);
-        userTimerHashMap.get(userName).updateUser(user);
-        userTimerHashMap.get(userName).startTimer();
-        user.setNotificationInterval(timeInterval);
 
+        UserTimer userTimer = userTimerHashMap.get(userName);
+        userTimer.setActiveDelay(true);
+        userTimer.setDelayTimer(5);
+        userTimer.startTimer();
 
     }
 

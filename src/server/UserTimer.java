@@ -9,8 +9,10 @@ public class UserTimer implements ActionListener {
 
     private Timer timer;
     private int currentTime;
+    private int delay;
+    private boolean activateDelay;
     private ServerController serverController;
-    private User user;
+    private volatile User user;
     private String className = "Class: UserTimer ";
 
 
@@ -31,7 +33,7 @@ public class UserTimer implements ActionListener {
         timer = null;
     }
 
-    public void updateUser(User user){
+    public void updateUser(User user) {
         this.user = user;
     }
 
@@ -43,20 +45,48 @@ public class UserTimer implements ActionListener {
         this.currentTime = currentTime;
     }
 
-    @Override
+    public User getUser() {
+        return user;
+    }
+
+    public void setDelayTimer(int delay) {
+        this.delay = delay;
+    }
+
+    public void setActiveDelay(boolean active){
+        this.activateDelay = active;
+    }
+
     public void actionPerformed(ActionEvent e) {
         currentTime++;
         System.out.println(className + checkTimeInterval());
+        System.out.println(className + "user's notInterval: " + user.getNotificationInterval());
         if (checkTimeInterval()) {
-            serverController.sendActivity(user.getUserName());
+            sendActivity();
             stopTimer();
+        } else if (activateDelay) {
+            if (checkDelayInterval()) {
+                sendActivity();
+                stopTimer();
+            }
         }
         System.out.println(className + currentTime);
     }
 
+    public void sendActivity() {
+        serverController.sendActivity(user.getUserName());
+    }
+
+    public boolean checkDelayInterval() {
+        if (currentTime >= delay) {
+            return true;
+        }
+        return false;
+    }
+
 
     public boolean checkTimeInterval() {
-        if (user.getNotificationInterval() >= currentTime) {
+        if (currentTime >= user.getNotificationInterval()) {
             return true;
         }
         return false;

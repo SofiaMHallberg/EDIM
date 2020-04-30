@@ -15,7 +15,7 @@ import java.util.LinkedList;
 
 public class SenderServer {
     private ObjectOutputStream oos;
-    private String className = "Class: CommunicationServer ";
+    private String className = "Class: SenderServer ";
     private LinkedList<WorkerThread> threadPool;
     private HashMap<String, SocketStreamObject> socketHashMap;
     private Buffer sendBuffer;

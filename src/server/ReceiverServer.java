@@ -18,7 +18,7 @@ import java.util.LinkedList;
 public class ReceiverServer {
     private ServerSocket serverSocket;
     private int port;
-    private String className = "Class: ConnectionServer ";
+    private String className = "Class: ReceiverServer ";
     private LinkedList<ReceiverThread> threadPool;
     private HashMap<String, SocketStreamObject> socketHashMap;
     private Buffer receiveBuffer;
