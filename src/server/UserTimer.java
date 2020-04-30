@@ -59,8 +59,6 @@ public class UserTimer implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         currentTime++;
-        System.out.println(className + checkTimeInterval());
-        System.out.println(className + "user's notInterval: " + user.getNotificationInterval());
         if (checkTimeInterval()) {
             sendActivity();
             stopTimer();

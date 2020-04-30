@@ -79,7 +79,7 @@ public class SenderServer {
                         oos = socketHashMap.get(sendNewActivity.getActivityUser()).getOos();
                         oos.writeObject(sendNewActivity);
                         //TODO: kolla upp till vem aktiviteten skickas till efter att timern klickas.
-                        System.out.println(className + sendNewActivity.getActivityUser());
+                        System.out.println(className + sendNewActivity.getActivityUser()+" activityName: "+sendNewActivity.getActivityName());
                     }
 
                 } catch (InterruptedException | IOException e) {

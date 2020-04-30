@@ -46,7 +46,7 @@ public class ClientController {
      */
     public void sendActivityToCCC(Activity activity) {
         user.addActivityToList(activity);
-        ccc.sendActivity(activity);
+        ccc.sendObject(activity);
     }
 
     /**
@@ -55,7 +55,7 @@ public class ClientController {
     public void logIn() {
         user.setUserType(UserType.LOGIN);
         ccc = new ClientCommunicationController(this);
-        ccc.sendUser(user);
+        ccc.sendObject(user);
     }
 
     /**
@@ -63,7 +63,7 @@ public class ClientController {
      */
     public void logOut() {
         user.setUserType(UserType.LOGOUT);
-        ccc.sendUser(user);
+        ccc.sendObject(user);
     }
 
     /**
@@ -93,6 +93,6 @@ public class ClientController {
         user.setNotificationInterval(interval);
         user.setUserType(UserType.SENDINTERVAL);
         System.out.println(className + user.getUserName() + user.getNotificationInterval());
-        ccc.sendUser(user);
+        ccc.sendObject(user);
     }
 }

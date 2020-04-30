@@ -18,8 +18,7 @@ import java.net.Socket;
 
 public class ClientCommunicationController {
     private ClientController clientController;
-    private Buffer<User> userBuffer;
-    private Buffer<Activity> activityBuffer;
+    private Buffer buffer;
     private ObjectInputStream ois;
     private ObjectOutputStream oos;
     private Socket socket;
@@ -36,8 +35,7 @@ public class ClientCommunicationController {
     public ClientCommunicationController(ClientController clientController) {
         this.clientController = clientController;
         connect();
-        userBuffer = new Buffer<>();
-        activityBuffer = new Buffer<>();
+        buffer = new Buffer();
         new ClientSender().start();
         new ClientReceiver().start();
     }
@@ -67,23 +65,13 @@ public class ClientCommunicationController {
     }
 
     /**
-     * This method lays a User object in a UserBuffer which mission is to be sent to the server.
-     *
-     * @param user the object to be sent.
+     * This method lays an object in a buffer which mission is to be sent to the server.
+     * @param object the object to be sent.
      */
-    public void sendUser(User user) {
-        userBuffer.put(user);
-    }
 
-    /**
-     * This method lays a Activity object in a ActivityBuffer which mission is to be sent to the server.
-     *
-     * @param activity the object to be sent.
-     */
-    public void sendActivity(Activity activity) {
-        activityBuffer.put(activity);
+    public void sendObject(Object object) {
+        buffer.put(object);
     }
-
 
     // ClientSender starts a new thread which retrieves an object from a buffer and sends it to the server.
     private class ClientSender extends Thread {
@@ -107,20 +95,25 @@ public class ClientCommunicationController {
         public void run() {
             while (isConnected) {
                 try {
-                    User user = userBuffer.get();
-                    oos.writeObject(user);
+                    Object object = buffer.get();
 
+                    if(object instanceof User) {
+                        User user = (User) object;
+                        oos.writeObject(user);
+                        oos.flush();
 
-                    if (user.getUserType() == UserType.LOGOUT) {
-                        System.out.println(className + "user is logging out");
-                        disconnect();
-                        isConnected = false;
+                        if (user.getUserType() == UserType.LOGOUT) {
+                            System.out.println(className + "user is logging out");
+                            disconnect();
+                            isConnected = false;
+                        }
                     }
 
-                    Activity activity = activityBuffer.get();
-                    oos.writeObject(activity);
-                    oos.flush();
-
+                    else if(object instanceof Activity) {
+                        Activity activity = (Activity) object;
+                        oos.writeObject(activity);
+                        oos.flush();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -160,7 +153,7 @@ public class ClientCommunicationController {
                     } else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
                         clientController.receiveNotificationFromCCC(activity);
-                        System.out.println(className + ((Activity) object).getActivityName());
+                        System.out.println(className + activity.getActivityName());
                     }
 
                 } catch (Exception e) {
