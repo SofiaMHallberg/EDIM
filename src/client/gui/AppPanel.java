@@ -3,6 +3,7 @@ package client.gui;
 import server.Activity;
 
 import javax.swing.*;
+import javax.swing.border.BevelBorder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import java.awt.*;
@@ -31,6 +32,11 @@ public class AppPanel extends JPanel {
     private DefaultListModel listModel;
 
     private String className = "Class: AppPanel: ";
+    private ImageIcon activityIcon;
+    private Color clrPanels = new Color(142, 166, 192);
+    private Color clrMidPanel = new Color(127, 140, 151, 151);
+
+
 
 
     public AppPanel(MainPanel mainPanel, String userName) {
@@ -62,11 +68,13 @@ public class AppPanel extends JPanel {
         btnLogOut.addActionListener(listener);
         btnInterval.addActionListener(listener);
         addActivityListener();
+        createActivityIcon();
     }
 
     public void createIntervalPanel() {
         intervalPnl = new JPanel();
-        intervalPnl.setBackground(Color.MAGENTA);
+        intervalPnl.setBackground(clrPanels); //TODO Färg
+        intervalPnl.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY));
         btnInterval = new JButton("Ändra intervall");
 
         intervalPnl.add(cmbTimeLimit, BorderLayout.CENTER);
@@ -81,12 +89,13 @@ public class AppPanel extends JPanel {
 
     public void createTAActivityInfo() {
         taActivityInfo = new JTextArea();
-        taActivityInfo.setBackground(Color.CYAN);
+        taActivityInfo.setBackground(clrPanels); //TODO Färg
         taActivityInfo.setPreferredSize(new Dimension(200, 80));
         taActivityInfo.setLineWrap(true);
         taActivityInfo.setWrapStyleWord(true);
-        Font font = new Font("Sanseriff", Font.BOLD, 14);
+        Font font = new Font("SansSerif", Font.PLAIN, 14); //Sarseriff
         taActivityInfo.setFont(font);
+        taActivityInfo.setEditable(false);
     }
 
     public void createActivityList() {
@@ -95,7 +104,8 @@ public class AppPanel extends JPanel {
         activityList.setPreferredSize(new Dimension(400, 320));
         activityList.setBorder(BorderFactory.createTitledBorder("Avklarade aktiviteter"));
         activityList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
-        Font font = new Font("Courier New", Font.PLAIN, 14);
+        //activityList.setBackground(clrMidPanel); //TODO Färg
+        Font font = new Font("SansSerif", Font.PLAIN, 14);
         activityList.setFont(font);
     }
 
@@ -125,11 +135,18 @@ public class AppPanel extends JPanel {
         taActivityInfo.setText(activityInfo);
     }
 
+    public void createActivityIcon() {
+        activityIcon = new ImageIcon("images/exercise.png");
+        Image image = activityIcon.getImage();
+        Image newImg = image.getScaledInstance(50,50, Image.SCALE_SMOOTH);
+        activityIcon = new ImageIcon(newImg);
+    }
+
     public void showNotification(Activity activity) {
         String[] buttons = {"Jag har gjort aktiviteten!", "Påminn mig om fem minuter",};
 
         int answer = JOptionPane.showOptionDialog(null, activity.getActivityInstruction(), "Ny aktivitet",
-                JOptionPane.WARNING_MESSAGE, 0, null, buttons, buttons[0]);
+                JOptionPane.WARNING_MESSAGE, 0, activityIcon, buttons, buttons[0]);
         if (answer == 0) {
             activity.setCompleted(true);
             mainPanel.sendActivityFromGUI(activity);

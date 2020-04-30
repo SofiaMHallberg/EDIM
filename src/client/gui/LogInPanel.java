@@ -24,7 +24,7 @@ public class LogInPanel extends JPanel {
         //setPreferredSize(new Dimension(200, 200));
         lblUserName = new JLabel("Användarnamn: ");
         tfUserName = new JTextField("Chanon");
-        tfUserName.setPreferredSize(new Dimension(100, 20));
+        tfUserName.setPreferredSize(new Dimension(100, 30));
         btnLogIn = new JButton("Logga in");
         setLayout(new FlowLayout(4));
         add(lblUserName, FlowLayout.LEFT);

@@ -9,10 +9,12 @@ public class MainPanel extends JPanel {
     private MainFrame mainFrame;
     private AppPanel appPanel;
     private String userName;
+    private Color backGroundColor;
 
     public MainPanel(MainFrame mainFrame, String userName) {
         this.mainFrame = mainFrame;
         this.userName = userName;
+        backGroundColor = new Color(134, 144, 154, 145); //64, 87, 139
         setupPanel();
         appPanel = new AppPanel(this, userName);
         showAppPanel();
@@ -20,7 +22,7 @@ public class MainPanel extends JPanel {
 
     public void setupPanel() {
         setSize(new Dimension(819, 438));
-        setBackground(Color.YELLOW);
+        setBackground(backGroundColor);
         setBorder(BorderFactory.createTitledBorder("Välkommen, " + userName));
     }
 

@@ -25,6 +25,14 @@ public class MainFrame extends JFrame {
      */
     public MainFrame(ClientController clientController) {
         this.clientController = clientController;
+
+        //Oscars test:
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        }
+        catch (UnsupportedLookAndFeelException | ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
         createLoginFrame();
     }
 
@@ -72,6 +80,7 @@ public class MainFrame extends JFrame {
     public void logOut() {
         clientController.logOut();
         dispose();
+        new LogInFrame(this);
     }
 
     /**
