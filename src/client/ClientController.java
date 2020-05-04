@@ -97,6 +97,6 @@ public class ClientController {
     }
 
     public void exitApplication(){
-        System.exit(1);
+        System.exit(0);
     }
 }
