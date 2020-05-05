@@ -154,6 +154,7 @@ public class ClientCommunicationController {
 
                 } catch (Exception e) {
                     e.printStackTrace();
+
                 }
             }
         }

@@ -35,7 +35,7 @@ public class ReceiverServer {
         this.threadPool = new LinkedList<>();
         this.receiveBuffer = receiveBuffer;
         startServer();
-        generateThreadPool(5);
+        generateThreadPool(1);
         startThreadPool();
     }
 

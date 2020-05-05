@@ -68,7 +68,7 @@ public class UserTimer implements ActionListener {
                 stopTimer();
             }
         }
-        System.out.println(className + currentTime);
+//        System.out.println(className + currentTime);
     }
 
     public void sendActivity() {

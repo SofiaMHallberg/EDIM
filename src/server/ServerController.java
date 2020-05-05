@@ -24,7 +24,7 @@ public class ServerController extends Thread {
     private String className = "Class: ServerController ";
     private Buffer<Object> receiveBuffer;
     private Buffer<Object> sendBuffer;
-    private String userFilePath="files/users.txt";
+    private String userFilePath="files/users.dat";
 
     /**
      * Constructs all the buffers and servers and HashMaps that is needed.
@@ -52,14 +52,9 @@ public class ServerController extends Thread {
      */
     public void writeUsers(String filename) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
-            oos.writeInt(userRegister.getUserHashMap().size());
-            Iterator it=userRegister.getUserHashMap().entrySet().iterator();
-            System.out.println(className + "writeUsers: "+userRegister.getUserHashMap().entrySet().iterator());
-            while(it.hasNext()) { //TODO: Vet ej hur man loopar igenom en hashmap / gör om HashMap till LinkedList
-                Map.Entry userToStream=(Map.Entry) it.next();
-                System.out.println(className + "writeUsers: "+userToStream.getValue());
-                oos.writeObject(userToStream.getValue());
-                it.remove();
+            oos.writeInt(userRegister.getUserLinkedList().size());
+            for(User user: userRegister.getUserLinkedList()) {
+                oos.writeObject(user);
             }
             oos.flush();
         } catch (IOException e) {
@@ -74,13 +69,17 @@ public class ServerController extends Thread {
      */
     public void readUsers(String filename) {
         File newFile = new File(filename);
+        System.out.println(className + " file length: " + newFile.length());
         if (newFile.length() != 0) {
             try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
                 int size = ois.readInt();
+                System.out.println(className + " size från filen: " + size);
                 for (int i = 0; i < size; i++) {
                     try {
                         User user = (User) ois.readObject();
+                        System.out.println(className + " username i readUsers " + user.getUserName());
                         userRegister.getUserHashMap().put(user.getUserName(), user);
+                        userRegister.getUserLinkedList().add(user);
                     } catch (ClassNotFoundException | IOException e) {
                         System.out.println(e);
                     }
@@ -89,6 +88,7 @@ public class ServerController extends Thread {
                 e.printStackTrace();
             }
         }
+        System.out.println(className + " storleken på userRegister när det har uppdaterats från fil " + userRegister.getUserHashMap().size());
     }
 
     /**
@@ -99,13 +99,16 @@ public class ServerController extends Thread {
      */
     public User checkLoginUser(User user) {
         if (userRegister.getUserHashMap().size() != 0) {
-            if (userRegister.getUserHashMap().get(user.getUserName()).getUserName().equals(user.getUserName())) {
+            System.out.println(className + " första if-satsen i checkLoginUser " + userRegister.getUserHashMap().size());
+            if (userRegister.getUserHashMap().containsKey(user.getUserName())) { //userRegister.getUserHashMap().get(user.getUserName()).getUserName().equals(user.getUserName())
+                System.out.println(className + " checkLoginUser inne i if-satsen");
                 user = userRegister.getUserHashMap().get(user.getUserName());
                 user.setUserType(UserType.SENDUSER);
 
             } else {
                 user.setUserType(UserType.SENDWELCOME);
                 userRegister.getUserHashMap().put(user.getUserName(), user);
+                System.out.println(className + " antal element i userRegister innan den skrivs till fil " + userRegister.getUserHashMap().size());
                 writeUsers(userFilePath);
             }
         } else {
