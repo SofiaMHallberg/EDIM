@@ -26,6 +26,7 @@ public class ReceiverServer {
 
     /**
      * Receives all necessary data and starts the server and then generates and starts the thread pool.
+     *
      * @param port          received port number.
      * @param socketHashMap received socket HashMap.
      */
@@ -96,6 +97,7 @@ public class ReceiverServer {
     private class ClientHandler extends Thread {
         private SocketStreamObject socketStreamObject;
         private String className = "Class: ClientHandler ";
+        private volatile boolean running = true;
 
         /**
          * Creates a Socket Stream Object with the received socket.
@@ -127,12 +129,12 @@ public class ReceiverServer {
             UserType userType;
             String userName = "";
 
-            while (!Thread.interrupted()) {
+            while (running) {
                 try {
                     ObjectInputStream ois = socketStreamObject.getOis();
                     Object object = ois.readObject();
                     receiveBuffer.put(object);
-                    System.out.println(className + receiveBuffer.size() + "receivebuffer's size ");
+                    System.out.println(className + receiveBuffer.size() + " receivebuffer's size ");
 
                     if (object instanceof User) {
                         user = (User) object;
@@ -144,7 +146,8 @@ public class ReceiverServer {
                                 socketHashMap.put(userName, socketStreamObject);
                                 break;
                             case LOGOUT:
-                                interrupt();
+                                System.out.println(className + "logout");
+                                running = false;
                                 break;
                         }
                     }

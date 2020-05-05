@@ -153,11 +153,12 @@ public class ServerController extends Thread {
     public void logOutUser(String userName) {
         try {
             System.out.println(className+ "logOutUser: " + userName + " socketHashMap " + socketHashMap.get(userName));
+            sleep(5000);
             socketHashMap.get(userName).getOos().close();
             socketHashMap.get(userName).getOis().close();
             socketHashMap.get(userName).getSocket().close();
             socketHashMap.remove(userName);
-        } catch (IOException e) {
+        } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
@@ -204,8 +205,9 @@ public class ServerController extends Thread {
                             break;
                         case LOGOUT:
                             System.out.println(className+ "run: " + userName + " socketHashMap " + socketHashMap.get(userName));
-                            logOutUser(userName);
+                            sendBuffer.put(user);
                             removeUserTimer(userName);
+                            logOutUser(userName);
                             writeUsers(userFilePath);
                             break;
                         case SENDINTERVAL:
