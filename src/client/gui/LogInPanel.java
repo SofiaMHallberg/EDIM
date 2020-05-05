@@ -36,6 +36,12 @@ public class LogInPanel extends JPanel {
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                try {
+                    logInFrame.dispose();
+                    Thread.sleep(3000);
+                } catch (InterruptedException ex) {
+                    ex.printStackTrace();
+                }
                 System.exit(0);
 
             }

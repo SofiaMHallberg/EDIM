@@ -134,7 +134,7 @@ public class ReceiverServer {
                     ObjectInputStream ois = socketStreamObject.getOis();
                     Object object = ois.readObject();
                     receiveBuffer.put(object);
-                    System.out.println(className + receiveBuffer.size() + "receivebuffer's size ");
+                    System.out.println(className + receiveBuffer.size() + " receivebuffer's size ");
 
                     if (object instanceof User) {
                         user = (User) object;
@@ -146,6 +146,7 @@ public class ReceiverServer {
                                 socketHashMap.put(userName, socketStreamObject);
                                 break;
                             case LOGOUT:
+                                System.out.println(className + "logout");
                                 running = false;
                                 break;
                         }

@@ -58,6 +58,13 @@ public class ClientCommunicationController {
      */
     public void disconnect() {
         isConnected = false;
+        try {
+            Thread.sleep(2000);
+            socket.close();
+            System.out.println(className + socket.isClosed());
+        } catch (InterruptedException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -98,12 +105,7 @@ public class ClientCommunicationController {
                         User user = (User) object;
                         oos.writeObject(user);
                         oos.flush();
-                        if (user.getUserType() == UserType.LOGOUT) {
-                            System.out.println(className + "user is logging out");
-                            sleep(5000);
-                            disconnect();
-                            clientController.exitApplication();
-                        }
+
                     } else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
                         oos.writeObject(activity);
@@ -142,9 +144,14 @@ public class ClientCommunicationController {
                 try {
                     sleep(500);
                     object = ois.readObject();
+
                     if (object instanceof User) {
                         User user = (User) object;
                         clientController.receiveUser(user);
+                        if (user.getUserType() == UserType.LOGOUT) {
+                            System.out.println(className + "user is logging out");
+                            disconnect();
+                        }
 
                     } else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
