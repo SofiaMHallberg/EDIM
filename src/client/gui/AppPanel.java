@@ -151,10 +151,16 @@ public class AppPanel extends JPanel {
             activity.setCompleted(true);
             mainPanel.sendActivityFromGUI(activity);
             updateActivityList(activity);
+
+            //Oscars testkod:
+//            int index = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
+//            mainPanel.sendChosenInterval(index);
+//            System.out.println("index: " + index);
+
         } else if (answer == 1) {
             activity.setCompleted(false);
             mainPanel.sendActivityFromGUI(activity);
-        }
+        } //TODO: Vad ska hända om användaren trycker på krysset på en aktivitet?
     }
 
     public void showWelcomeMessage(String userName) {

@@ -8,7 +8,7 @@ public class User implements Serializable {
     private LinkedList<Activity> completedActivities;
     private String userName;
     private int age;
-    private int notificationInterval = 10;
+    private int notificationInterval = 45;
     private boolean isOnline;
     private UserType userType;
     private Activity delayedActivity;

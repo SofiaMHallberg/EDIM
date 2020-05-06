@@ -45,7 +45,7 @@ public class ClientController {
      * @param activity the received object.
      */
     public void sendActivityToCCC(Activity activity) {
-        user.addActivityToList(activity);
+        user.addActivityToList(activity); //TODO Ska det verkligen läggas till i completedActivities? Inte säkert att det är genomfört
         ccc.sendObject(activity);
     }
 
