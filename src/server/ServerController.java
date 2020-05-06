@@ -108,12 +108,14 @@ public class ServerController extends Thread {
             } else {
                 user.setUserType(UserType.SENDWELCOME);
                 userRegister.getUserHashMap().put(user.getUserName(), user);
+                userRegister.getUserLinkedList().add(user);
                 System.out.println(className + " antal element i userRegister innan den skrivs till fil " + userRegister.getUserHashMap().size());
                 writeUsers(userFilePath);
             }
         } else {
             user.setUserType(UserType.SENDWELCOME);
             userRegister.getUserHashMap().put(user.getUserName(), user);
+            userRegister.getUserLinkedList().add(user);
             writeUsers(userFilePath);
         }
 
