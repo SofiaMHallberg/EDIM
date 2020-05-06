@@ -5,7 +5,7 @@ import server.Activity;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainPanel extends JPanel {
+public class MainPanel extends JPanel { //TODO: Fixa så att man kan trycka på krysset
     private MainFrame mainFrame;
     private AppPanel appPanel;
     private String userName;
@@ -28,15 +28,6 @@ public class MainPanel extends JPanel {
 
     public void showAppPanel() {
         add(appPanel);
-
-        //TODO: De undre raderna ska komma ifrån ClientController.
-        /*
-        Activity activity = new Activity("Squats");
-        activity.setActivityInfo("Den här övningen ökar din koncentration med 5%");
-        activity.setActivityInstruction("Gör 10 squats");
-        appPanel.updateActivityList(activity);
-
-         */
     }
 
     public AppPanel getAppPanel() {

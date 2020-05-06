@@ -10,6 +10,7 @@ public class UserTimer implements ActionListener {
     private Timer timer;
     private int currentTime;
     private int delay;
+    private int userInterval;
     private boolean activateDelay;
     private ServerController serverController;
     private volatile User user;
@@ -25,7 +26,6 @@ public class UserTimer implements ActionListener {
     public void startTimer() {
         timer = new Timer(1000, this);
         timer.start();
-        System.out.println(className + user + ":s timer startad");
     }
 
     public void stopTimer() {
@@ -70,7 +70,7 @@ public class UserTimer implements ActionListener {
                 activateDelay = false;
             }
         }
-        System.out.println(className + currentTime + " delay: " + delay);
+        System.out.println(className + currentTime);
     }
 
     public void sendActivity() {
@@ -86,7 +86,6 @@ public class UserTimer implements ActionListener {
 
 
     public boolean checkTimeInterval() {
-        System.out.println(className + "Användarens notificationInterval: " + user.getNotificationInterval());
         if (currentTime >= user.getNotificationInterval()) {
             return true;
         }

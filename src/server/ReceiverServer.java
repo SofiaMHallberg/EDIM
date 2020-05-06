@@ -84,8 +84,10 @@ public class ReceiverServer {
                 Socket socket;
                 try {
                     socket = serverSocket.accept();
+                    ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
+                    ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
                     System.out.println(className + "Received socket: " + socket);
-                    new ClientHandler(socket);
+                    new ClientHandler(socket, ois, oos);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -98,14 +100,16 @@ public class ReceiverServer {
         private SocketStreamObject socketStreamObject;
         private String className = "Class: ClientHandler ";
         private volatile boolean running = true;
+        private ObjectInputStream ois;
 
         /**
          * Creates a Socket Stream Object with the received socket.
          *
          * @param socket the received object.
          */
-        public ClientHandler(Socket socket) {
-            socketStreamObject = new SocketStreamObject(socket);
+        public ClientHandler(Socket socket, ObjectInputStream ois, ObjectOutputStream oos) {
+            socketStreamObject = new SocketStreamObject(socket, ois, oos);
+            this.ois = ois;
             start();
         }
 
@@ -114,16 +118,6 @@ public class ReceiverServer {
          * Checks its value and send it to {@link ServerController}.
          */
         public void run() {
-            Socket socket = socketStreamObject.getSocket();
-
-            try {
-                ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-                ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                socketStreamObject.setOis(ois);
-                socketStreamObject.setOos(oos);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
             User user;
             UserType userType;
@@ -131,10 +125,8 @@ public class ReceiverServer {
 
             while (running) {
                 try {
-                    ObjectInputStream ois = socketStreamObject.getOis();
                     Object object = ois.readObject();
                     receiveBuffer.put(object);
-                    System.out.println(className + receiveBuffer.size() + " receivebuffer's size ");
 
                     if (object instanceof User) {
                         user = (User) object;

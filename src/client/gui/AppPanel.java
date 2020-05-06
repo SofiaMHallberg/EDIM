@@ -152,15 +152,10 @@ public class AppPanel extends JPanel {
             mainPanel.sendActivityFromGUI(activity);
             updateActivityList(activity);
 
-            //Oscars testkod:
-//            int index = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
-//            mainPanel.sendChosenInterval(index);
-//            System.out.println("index: " + index);
-
-        } else if (answer == 1) {
+        } else { //if (answer == 1)
             activity.setCompleted(false);
             mainPanel.sendActivityFromGUI(activity);
-        } //TODO: Vad ska hända om användaren trycker på krysset på en aktivitet?
+        }
     }
 
     public void showWelcomeMessage(String userName) {
@@ -170,13 +165,13 @@ public class AppPanel extends JPanel {
     class ButtonListener implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             Object click = e.getSource();
-            int index;
+            int interval;
             if (click == btnLogOut) {
                 mainPanel.logOut();
             }
             if (click == btnInterval) {
-                index = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
-                mainPanel.sendChosenInterval(index);
+                interval = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
+                mainPanel.sendChosenInterval(interval);
             }
         }
     }

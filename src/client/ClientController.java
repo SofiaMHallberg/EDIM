@@ -35,7 +35,6 @@ public class ClientController {
      */
     public void createUser(String userName) {
         user = new User(userName);
-        System.out.println(className+" listan completed activities "+user.getCompletedActivities());
         logIn();
     }
 
@@ -92,7 +91,7 @@ public class ClientController {
     public void setInterval(int interval) {
         user.setNotificationInterval(interval);
         user.setUserType(UserType.SENDINTERVAL);
-        System.out.println(className + user.getUserName() + user.getNotificationInterval());
+        System.out.println(className + user.getUserName() + user.getNotificationInterval() + " userType: " + user.getUserType());
         ccc.sendObject(user);
     }
 

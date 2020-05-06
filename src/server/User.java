@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.LinkedList;
 
 public class User implements Serializable {
-    private static final long serialVersionUID = -6356381908430432467L;
+    private static final long serialVersionUID = 42L; //489241266336029083L;//-6356381908430432467L;
     private LinkedList<Activity> completedActivities;
     private String userName;
     private int age;

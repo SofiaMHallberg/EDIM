@@ -24,7 +24,7 @@ public class ServerController extends Thread {
     private String className = "Class: ServerController ";
     private Buffer<Object> receiveBuffer;
     private Buffer<Object> sendBuffer;
-    private String userFilePath="files/users.dat";
+    private String userFilePath = "files/users.dat";
 
     /**
      * Constructs all the buffers and servers and HashMaps that is needed.
@@ -53,7 +53,7 @@ public class ServerController extends Thread {
     public void writeUsers(String filename) {
         try (ObjectOutputStream oos = new ObjectOutputStream(new BufferedOutputStream(new FileOutputStream(filename)))) {
             oos.writeInt(userRegister.getUserLinkedList().size());
-            for(User user: userRegister.getUserLinkedList()) {
+            for (User user : userRegister.getUserLinkedList()) {
                 oos.writeObject(user);
             }
             oos.flush();
@@ -123,15 +123,20 @@ public class ServerController extends Thread {
     }
 
     public void sendActivity(String userName) {
-        int nbrOfActivities = activityRegister.getActivityRegister().size();
-        int activityNbr = rand.nextInt(nbrOfActivities);
-        Activity activityToSend = new Activity();
-        activityToSend.setActivityName(activityRegister.getActivityRegister().get(activityNbr).getActivityName());
-        activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
-        activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
-        activityToSend.setActivityUser(userName);
-        sendBuffer.put(activityToSend);
-        System.out.println(className + activityToSend.getActivityName());
+        User user = userRegister.getUserHashMap().get(userName);
+        if (user.getDelayedActivity() != null) {
+            sendBuffer.put(user.getDelayedActivity());
+            user.setDelayedActivity(null);
+        } else {
+            int nbrOfActivities = activityRegister.getActivityRegister().size();
+            int activityNbr = rand.nextInt(nbrOfActivities);
+            Activity activityToSend = new Activity();
+            activityToSend.setActivityName(activityRegister.getActivityRegister().get(activityNbr).getActivityName());
+            activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
+            activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
+            activityToSend.setActivityUser(userName);
+            sendBuffer.put(activityToSend);
+        }
     }
 
     public void createUserTimer(User user) {
@@ -140,7 +145,7 @@ public class ServerController extends Thread {
         userTimerHashMap.put(user.getUserName(), userTimer);
     }
 
-    public void removeUserTimer(String userName){
+    public void removeUserTimer(String userName) {
         UserTimer userTimer = userTimerHashMap.get(userName);
         userTimer.stopTimer();
         userTimerHashMap.remove(userName);
@@ -154,7 +159,7 @@ public class ServerController extends Thread {
 
     public void logOutUser(String userName) {
         try {
-            System.out.println(className+ "logOutUser: " + userName + " socketHashMap " + socketHashMap.get(userName));
+            System.out.println(className + "logOutUser: " + userName + " socketHashMap " + socketHashMap.get(userName));
             sleep(5000);
             socketHashMap.get(userName).getOos().close();
             socketHashMap.get(userName).getOis().close();
@@ -206,7 +211,6 @@ public class ServerController extends Thread {
                             sendBuffer.put(updatedUser);
                             break;
                         case LOGOUT:
-                            System.out.println(className+ "run: " + userName + " socketHashMap " + socketHashMap.get(userName));
                             sendBuffer.put(user);
                             removeUserTimer(userName);
                             logOutUser(userName);

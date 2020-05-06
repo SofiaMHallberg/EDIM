@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 
-public class LogInPanel extends JPanel {
+public class LogInPanel extends JPanel { //TODO: Fixa så att man kan trycka på krysset
     private JLabel lblUserName, lblWelcome;
     private JTextField tfUserName;
     private JButton btnLogIn;

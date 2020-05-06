@@ -103,7 +103,7 @@ public class ClientCommunicationController {
 
                     if (object instanceof User) {
                         User user = (User) object;
-                        oos.writeObject(user);
+                        oos.writeUnshared(user);
                         oos.flush();
 
                     } else if (object instanceof Activity) {
