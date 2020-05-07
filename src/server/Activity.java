@@ -2,6 +2,13 @@ package server;
 
 import java.io.Serializable;
 
+/**
+ * This class handles the information about an Activity object.
+ *
+ * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @version 1.0
+ */
+
 public class Activity implements Serializable {
     private static final long serialVersionUID = 200428L;
     private String activityName;
@@ -13,6 +20,7 @@ public class Activity implements Serializable {
 
 
     public Activity () {}
+
     public Activity(String activityName) {
         this.activityName=activityName;
     }
@@ -28,6 +36,7 @@ public class Activity implements Serializable {
     public void setActivityName(String activityName) {
         this.activityName=activityName;
     }
+
     public String getActivityName() {
         return activityName;
     }
@@ -39,6 +48,7 @@ public class Activity implements Serializable {
     public void setActivityInstruction(String activityInstruction) {
         this.activityInstruction = activityInstruction;
     }
+
     public boolean isCompleted() {
         return isCompleted;
     }

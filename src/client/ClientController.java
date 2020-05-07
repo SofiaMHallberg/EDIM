@@ -11,7 +11,7 @@ import server.UserType;
  * This class manages the logic for the Client and controls the data flow.
  *
  * @version 1.0
- * @autor Carolin Nordström & Oscar Kareld.
+ * @autor Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
  */
 
 public class ClientController {
@@ -88,14 +88,15 @@ public class ClientController {
         }
     }
 
+    /**
+     * Sets a users interval and the UserType to SENDINTERVAL and sends it to {@link ClientCommunicationController}.
+     * @param interval the notification interval.
+     */
     public void setInterval(int interval) {
         user.setNotificationInterval(interval);
         user.setUserType(UserType.SENDINTERVAL);
-        System.out.println(className + user.getUserName() + user.getNotificationInterval() + " userType: " + user.getUserType());
+        System.out.println(className + user.getUsername() + user.getNotificationInterval() + " userType: " + user.getUserType());
         ccc.sendObject(user);
     }
 
-    public void exitApplication(){
-        System.exit(0);
-    }
 }

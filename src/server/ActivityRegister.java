@@ -3,6 +3,13 @@ package server;
 import java.io.*;
 import java.util.LinkedList;
 
+/**
+ * This class creates a register that handles Activity objects.
+ *
+ * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @version 1.0
+ */
+
 public class ActivityRegister {
     private LinkedList<Activity> activityRegister;
     private String className="Class: ActivityRegister ";

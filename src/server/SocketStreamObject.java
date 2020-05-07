@@ -1,9 +1,15 @@
 package server;
 
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+/**
+ * This class handles a socket and the input/output streams.
+ *
+ * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @version 1.0
+ */
 
 public class SocketStreamObject {
     private Socket socket;

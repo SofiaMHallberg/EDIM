@@ -2,14 +2,12 @@ package server;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Random;
 
 /**
- * This class handles the logic of the in and out coming object.
+ * This class handles the logic of the in and out coming objects from the clients.
  *
- * @author Sofia Hallberg & Chanon Borgström.
+ * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
  * @version 1.0
  */
 
@@ -69,26 +67,22 @@ public class ServerController extends Thread {
      */
     public void readUsers(String filename) {
         File newFile = new File(filename);
-        System.out.println(className + " file length: " + newFile.length());
         if (newFile.length() != 0) {
             try (ObjectInputStream ois = new ObjectInputStream(new BufferedInputStream(new FileInputStream(filename)))) {
                 int size = ois.readInt();
-                System.out.println(className + " size från filen: " + size);
                 for (int i = 0; i < size; i++) {
                     try {
                         User user = (User) ois.readObject();
-                        System.out.println(className + " username i readUsers " + user.getUserName());
-                        userRegister.getUserHashMap().put(user.getUserName(), user);
+                        userRegister.getUserHashMap().put(user.getUsername(), user);
                         userRegister.getUserLinkedList().add(user);
                     } catch (ClassNotFoundException | IOException e) {
-                        System.out.println(e);
+                        e.printStackTrace();
                     }
                 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
-        System.out.println(className + " storleken på userRegister när det har uppdaterats från fil " + userRegister.getUserHashMap().size());
     }
 
     /**
@@ -100,21 +94,21 @@ public class ServerController extends Thread {
     public User checkLoginUser(User user) {
         if (userRegister.getUserHashMap().size() != 0) {
             System.out.println(className + " första if-satsen i checkLoginUser " + userRegister.getUserHashMap().size());
-            if (userRegister.getUserHashMap().containsKey(user.getUserName())) { //userRegister.getUserHashMap().get(user.getUserName()).getUserName().equals(user.getUserName())
+            if (userRegister.getUserHashMap().containsKey(user.getUsername())) { //userRegister.getUserHashMap().get(user.getUserName()).getUserName().equals(user.getUserName())
                 System.out.println(className + " checkLoginUser inne i if-satsen");
-                user = userRegister.getUserHashMap().get(user.getUserName());
+                user = userRegister.getUserHashMap().get(user.getUsername());
                 user.setUserType(UserType.SENDUSER);
 
             } else {
                 user.setUserType(UserType.SENDWELCOME);
-                userRegister.getUserHashMap().put(user.getUserName(), user);
+                userRegister.getUserHashMap().put(user.getUsername(), user);
                 userRegister.getUserLinkedList().add(user);
                 System.out.println(className + " antal element i userRegister innan den skrivs till fil " + userRegister.getUserHashMap().size());
                 writeUsers(userFilePath);
             }
         } else {
             user.setUserType(UserType.SENDWELCOME);
-            userRegister.getUserHashMap().put(user.getUserName(), user);
+            userRegister.getUserHashMap().put(user.getUsername(), user);
             userRegister.getUserLinkedList().add(user);
             writeUsers(userFilePath);
         }
@@ -122,8 +116,14 @@ public class ServerController extends Thread {
         return user;
     }
 
-    public void sendActivity(String userName) {
-        User user = userRegister.getUserHashMap().get(userName);
+    /**
+     * Receives a username and gets a User-object from the HashMap. If the user's activity has been delayed a delayed activity is sent to the sendBuffer,
+     * else a new activity is sent to the client.
+     *
+     * @param username the received username.
+     */
+    public void sendActivity(String username) {
+        User user = userRegister.getUserHashMap().get(username);
         if (user.getDelayedActivity() != null) {
             sendBuffer.put(user.getDelayedActivity());
             user.setDelayedActivity(null);
@@ -134,42 +134,57 @@ public class ServerController extends Thread {
             activityToSend.setActivityName(activityRegister.getActivityRegister().get(activityNbr).getActivityName());
             activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
             activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
-            activityToSend.setActivityUser(userName);
+            activityToSend.setActivityUser(username);
             sendBuffer.put(activityToSend);
         }
     }
 
+    /**
+     * Creates a UserTimer-object and starts the timer and puts the object in a UserTimerHashMap.
+     *
+     * @param user the received User which the UserTimer is connected to.
+     */
     public void createUserTimer(User user) {
         UserTimer userTimer = new UserTimer(this, user);
         userTimer.startTimer();
-        userTimerHashMap.put(user.getUserName(), userTimer);
+        userTimerHashMap.put(user.getUsername(), userTimer);
     }
 
-    public void removeUserTimer(String userName) {
-        UserTimer userTimer = userTimerHashMap.get(userName);
+    /**
+     * Retrieves a UserTimer object from the UserTimerHashMap and stops the received Timer.
+     *
+     * @param username the key that the UserTimerHashMap uses.
+     */
+    public void removeUserTimer(String username) {
+        UserTimer userTimer = userTimerHashMap.get(username);
         userTimer.stopTimer();
-        userTimerHashMap.remove(userName);
+        userTimerHashMap.remove(username);
     }
 
-    public void setTimeInterval(String userName, int timeInterval) {
-        User user = userRegister.getUserHashMap().get(userName);
-        user.setNotificationInterval(timeInterval);
-        userTimerHashMap.get(userName).updateUser(user);
-    }
-
-    public void logOutUser(String userName) {
+    /**
+     * Receives the socket with the username and closes it and removes the socket from the HashMap.
+     *
+     * @param username
+     */
+    public void logOutUser(String username) {
         try {
-            System.out.println(className + "logOutUser: " + userName + " socketHashMap " + socketHashMap.get(userName));
+            System.out.println(className + "logOutUser: " + username + " socketHashMap " + socketHashMap.get(username));
             sleep(5000);
-            socketHashMap.get(userName).getOos().close();
-            socketHashMap.get(userName).getOis().close();
-            socketHashMap.get(userName).getSocket().close();
-            socketHashMap.remove(userName);
+            socketHashMap.get(username).getOos().close();
+            socketHashMap.get(username).getOis().close();
+            socketHashMap.get(username).getSocket().close();
+            socketHashMap.remove(username);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Receives an activity object and gets a user with the help of the activity object and sets a user's delayed activity with the activity.
+     * Then gets the connected userTimer and set the delay to 5min and set the activeDelay to true and then starts the Timer.
+     *
+     * @param activity the received activity.
+     */
     public void setDelayedActivity(Activity activity) {
         String userName = activity.getActivityUser();
         User user = userRegister.getUserHashMap().get(userName);
@@ -179,11 +194,16 @@ public class ServerController extends Thread {
         userTimer.setActiveDelay(true);
         userTimer.setDelayTimer(5);
         userTimer.startTimer();
-
     }
 
+    /**
+     * receives a UserTimer object and update the UserTimer's User object and stops the timer and
+     * sets the currentTime with the recent currentTime and starts the timer.
+     *
+     * @param user the received User object.
+     */
     public void updateUserInterval(User user) {
-        UserTimer userTimer = userTimerHashMap.get(user.getUserName());
+        UserTimer userTimer = userTimerHashMap.get(user.getUsername());
         userTimer.updateUser(user);
         userRegister.updateUser(user);
         int currentTime = userTimer.getCurrentTime();
@@ -194,7 +214,7 @@ public class ServerController extends Thread {
     }
 
     /**
-     * Receives a User object from the online buffer and checks it value.
+     * Receives a User object from the receive-Buffer and checks if it's a User or a Activity.
      */
     public void run() {
         while (true) {
@@ -202,7 +222,7 @@ public class ServerController extends Thread {
                 Object object = receiveBuffer.get();
                 if (object instanceof User) {
                     User user = (User) object;
-                    String userName = user.getUserName();
+                    String username = user.getUsername();
                     UserType userType = user.getUserType();
                     switch (userType) {
                         case LOGIN:
@@ -212,8 +232,8 @@ public class ServerController extends Thread {
                             break;
                         case LOGOUT:
                             sendBuffer.put(user);
-                            removeUserTimer(userName);
-                            logOutUser(userName);
+                            removeUserTimer(username);
+                            logOutUser(username);
                             writeUsers(userFilePath);
                             break;
                         case SENDINTERVAL:
@@ -224,10 +244,10 @@ public class ServerController extends Thread {
                     }
                 } else if (object instanceof Activity) {
                     Activity activity = (Activity) object;
-                    String userName = activity.getActivityUser();
+                    String username = activity.getActivityUser();
 
                     if (activity.isCompleted()) {
-                        userTimerHashMap.get(userName).startTimer();
+                        userTimerHashMap.get(username).startTimer();
                         System.out.println(className + activity.getActivityName() + " is Completed");
 
                     } else {
@@ -241,8 +261,5 @@ public class ServerController extends Thread {
         }
     }
 
-    public static void main(String[] args) {
-        ServerController controller = new ServerController(4343);
-        controller.start();
-    }
+
 }
