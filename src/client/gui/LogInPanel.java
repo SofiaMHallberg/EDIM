@@ -21,7 +21,6 @@ public class LogInPanel extends JPanel { //TODO: Fixa så att man kan trycka på
     }
 
     public void createComponents() {
-        //setPreferredSize(new Dimension(200, 200));
         lblUserName = new JLabel("Användarnamn: ");
         tfUserName = new JTextField();
         tfUserName.setPreferredSize(new Dimension(100, 30));
@@ -32,7 +31,12 @@ public class LogInPanel extends JPanel { //TODO: Fixa så att man kan trycka på
         add(tfUserName, FlowLayout.CENTER);
         add(btnLogIn);
         add(btnExit);
-
+        tfUserName.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+              logIn();
+            }
+        });
         btnExit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -49,19 +53,24 @@ public class LogInPanel extends JPanel { //TODO: Fixa så att man kan trycka på
         btnLogIn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String userName = tfUserName.getText();
-                if (!userName.equals("") && !userName.contains(" ")) {
-                    mainFrame.sendUser(userName);
-                    mainFrame.createMainFrame();
-                    logInFrame.closeWindow();
-                } else if (userName.equals("")) {
-                    JOptionPane.showMessageDialog(null, "Du måste välja ett användarnamn");
-                } else {
-                    JOptionPane.showMessageDialog(null, "Ditt användarnamn får inte innehålla mellanslag");
-
-                }
+              logIn();
             }
         });
+
+
+    }
+    public void logIn(){
+        String userName = tfUserName.getText();
+        if (!userName.equals("") && !userName.contains(" ")) {
+            mainFrame.sendUser(userName);
+            mainFrame.createMainFrame();
+            logInFrame.closeWindow();
+        } else if (userName.equals("")) {
+            JOptionPane.showMessageDialog(null, "Du måste välja ett användarnamn");
+        } else {
+            JOptionPane.showMessageDialog(null, "Ditt användarnamn får inte innehålla mellanslag");
+
+        }
     }
 
 }
