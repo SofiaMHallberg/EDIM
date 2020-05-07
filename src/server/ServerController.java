@@ -93,9 +93,7 @@ public class ServerController extends Thread {
      */
     public User checkLoginUser(User user) {
         if (userRegister.getUserHashMap().size() != 0) {
-            System.out.println(className + " första if-satsen i checkLoginUser " + userRegister.getUserHashMap().size());
             if (userRegister.getUserHashMap().containsKey(user.getUsername())) { //userRegister.getUserHashMap().get(user.getUserName()).getUserName().equals(user.getUserName())
-                System.out.println(className + " checkLoginUser inne i if-satsen");
                 user = userRegister.getUserHashMap().get(user.getUsername());
                 user.setUserType(UserType.SENDUSER);
 
@@ -103,7 +101,6 @@ public class ServerController extends Thread {
                 user.setUserType(UserType.SENDWELCOME);
                 userRegister.getUserHashMap().put(user.getUsername(), user);
                 userRegister.getUserLinkedList().add(user);
-                System.out.println(className + " antal element i userRegister innan den skrivs till fil " + userRegister.getUserHashMap().size());
                 writeUsers(userFilePath);
             }
         } else {
@@ -168,7 +165,6 @@ public class ServerController extends Thread {
      */
     public void logOutUser(String username) {
         try {
-            System.out.println(className + "logOutUser: " + username + " socketHashMap " + socketHashMap.get(username));
             sleep(5000);
             socketHashMap.get(username).getOos().close();
             socketHashMap.get(username).getOis().close();
@@ -248,11 +244,9 @@ public class ServerController extends Thread {
 
                     if (activity.isCompleted()) {
                         userTimerHashMap.get(username).startTimer();
-                        System.out.println(className + activity.getActivityName() + " is Completed");
 
                     } else {
                         setDelayedActivity(activity);
-                        System.out.println(className + activity.getActivityName() + " is delayed");
                     }
                 }
             } catch (InterruptedException e) {

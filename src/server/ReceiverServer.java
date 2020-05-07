@@ -75,7 +75,7 @@ public class ReceiverServer {
 
     // Inner Thread class: creates a connection and sends it forth to the ClientHandler class.
     private class ReceiverThread extends Thread {
-        private String className = "Package: Server. Class: ReceiverThread ";
+        private String className = "Class: ReceiverThread ";
 
         /**
          * creates a connection and creates the streams and sends it forth to the ClientHandler class.
@@ -87,7 +87,6 @@ public class ReceiverServer {
                     socket = serverSocket.accept();
                     ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
                     ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
-                    System.out.println(className + "Received socket: " + socket);
                     new ClientHandler(socket, ois, oos);
                 } catch (IOException e) {
                     e.printStackTrace();
@@ -138,7 +137,6 @@ public class ReceiverServer {
                                 socketHashMap.put(userName, socketStreamObject);
                                 break;
                             case LOGOUT:
-                                System.out.println(className + "logout");
                                 running = false;
                                 break;
                         }

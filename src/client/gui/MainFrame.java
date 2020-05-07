@@ -52,6 +52,7 @@ public class MainFrame extends JFrame {
         setBounds(0, 0, 819, 438);
         addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent we) {
+                clientController.logOut();
                 createLoginFrame();
             }
         });

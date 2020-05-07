@@ -64,23 +64,19 @@ public class SenderServer {
         public void run() {
             while (true) {
                 try {
-                    //System.out.println(className + "WorkerThread i början av try");
 
                     Object object = sendBuffer.get();
                     if (object instanceof User) {
                         User sendUser = (User) object;
-                        System.out.println(className + "sendUser:s hashcode i SenderServer: " + sendUser.hashCode());
                         oos = socketHashMap.get(sendUser.getUsername()).getOos();
                         oos.writeObject(sendUser);
                     }
 
-                    //System.out.println(className + "WorkerThread i mitten av try");
                     else if (object instanceof Activity) {
                         Activity sendNewActivity = (Activity) object;
                         oos = socketHashMap.get(sendNewActivity.getActivityUser()).getOos();
                         oos.writeObject(sendNewActivity);
                         //TODO: kolla upp till vem aktiviteten skickas till efter att timern klickas.
-                        System.out.println(className + sendNewActivity.getActivityUser()+" activityName: "+sendNewActivity.getActivityName());
                     }
 
                 } catch (InterruptedException | IOException e) {
