@@ -23,7 +23,7 @@ public class LogInPanel extends JPanel { //TODO: Fixa så att man kan trycka på
     public void createComponents() {
         //setPreferredSize(new Dimension(200, 200));
         lblUserName = new JLabel("Användarnamn: ");
-        tfUserName = new JTextField("Chanon");
+        tfUserName = new JTextField();
         tfUserName.setPreferredSize(new Dimension(100, 30));
         btnLogIn = new JButton("Logga in");
         btnExit = new JButton("Avsluta");
@@ -55,7 +55,7 @@ public class LogInPanel extends JPanel { //TODO: Fixa så att man kan trycka på
                     mainFrame.createMainFrame();
                     logInFrame.closeWindow();
                 } else if (userName.equals("")) {
-                    JOptionPane.showMessageDialog(null, "Du måste välja ett korrekt användarnamn");
+                    JOptionPane.showMessageDialog(null, "Du måste välja ett användarnamn");
                 } else {
                     JOptionPane.showMessageDialog(null, "Ditt användarnamn får inte innehålla mellanslag");
 
