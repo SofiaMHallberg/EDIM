@@ -70,7 +70,7 @@ public class SenderServer {
                     if (object instanceof User) {
                         User sendUser = (User) object;
                         System.out.println(className + "sendUser:s hashcode i SenderServer: " + sendUser.hashCode());
-                        oos = socketHashMap.get(sendUser.getUserName()).getOos();
+                        oos = socketHashMap.get(sendUser.getUsername()).getOos();
                         oos.writeObject(sendUser);
                     }
 

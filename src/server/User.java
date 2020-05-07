@@ -3,10 +3,17 @@ package server;
 import java.io.Serializable;
 import java.util.LinkedList;
 
+/**
+ * This class handles the information about a user-object.
+ *
+ * @version 1.0
+ * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ */
+
 public class User implements Serializable {
     private static final long serialVersionUID = 42L; //489241266336029083L;//-6356381908430432467L;
     private LinkedList<Activity> completedActivities;
-    private String userName;
+    private String username;
     private int age;
     private int notificationInterval = 45;
     private boolean isOnline;
@@ -14,8 +21,8 @@ public class User implements Serializable {
     private Activity delayedActivity;
     private String className="Class: User ";
 
-    public User(String userName) {
-        this.userName=userName;
+    public User(String username) {
+        this.username = username;
         completedActivities=new LinkedList<>();
     }
 
@@ -31,12 +38,12 @@ public class User implements Serializable {
         this.completedActivities = completedActivities;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public int getAge() {

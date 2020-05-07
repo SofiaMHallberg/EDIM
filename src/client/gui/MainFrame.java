@@ -3,12 +3,13 @@ package client.gui;
 import client.ClientController;
 import server.Activity;
 import javax.swing.*;
+import java.awt.event.WindowEvent;
 
 /**
  * This class starts the Login window and then awaits the user's input, and finally starts the main GUI.
  *
  * @version 1.0
- * @author Carolin Nordström, Oscar Kareld & Chanon Borgström
+ * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
  */
 
 public class MainFrame extends JFrame {
@@ -48,7 +49,7 @@ public class MainFrame extends JFrame {
      */
     public void setupFrame() {
         setBounds(0, 0, 819, 438);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         setLayout(null);
         setTitle("EDIM");
         setResizable(true);            

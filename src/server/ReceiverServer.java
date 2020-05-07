@@ -13,7 +13,7 @@ import java.util.Map;
  * This class creates a thread pool and handles the communication from the Client.
  *
  * @version 1.0
- * @autor Sofia Hallberg & Chanon Borgström.
+ * @autor Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
  */
 
 public class ReceiverServer {
@@ -29,6 +29,7 @@ public class ReceiverServer {
      *
      * @param port          received port number.
      * @param socketHashMap received socket HashMap.
+     * @param receiveBuffer received buffer.
      */
     public ReceiverServer(int port, HashMap<String, SocketStreamObject> socketHashMap, Buffer receiveBuffer) {
         this.port = port;
@@ -52,7 +53,7 @@ public class ReceiverServer {
     }
 
     /**
-     * Generates a thread pool with the received int.
+     * Generates a thread pool that adds as many ReceiverThreads with the argument.
      *
      * @param nbrOfConnections received number of connections.
      */
@@ -77,7 +78,7 @@ public class ReceiverServer {
         private String className = "Package: Server. Class: ReceiverThread ";
 
         /**
-         * creates a connection and sends it forth to the ClientHandler class.
+         * creates a connection and creates the streams and sends it forth to the ClientHandler class.
          */
         public void run() {
             while (!Thread.interrupted()) {
@@ -114,8 +115,7 @@ public class ReceiverServer {
         }
 
         /**
-         * creates the input and output streams and then receives an object.
-         * Checks its value and send it to {@link ServerController}.
+         * Reads an object from the input stream and checks its value and send it to {@link ServerController}.
          */
         public void run() {
 
@@ -130,7 +130,7 @@ public class ReceiverServer {
 
                     if (object instanceof User) {
                         user = (User) object;
-                        userName = user.getUserName();
+                        userName = user.getUsername();
                         userType = user.getUserType();
 
                         switch (userType) {
