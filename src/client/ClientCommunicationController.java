@@ -46,7 +46,6 @@ public class ClientCommunicationController {
     public void connect() {
         try {
             socket = new Socket("127.0.0.1", 4343);
-            System.out.println(socket);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -61,7 +60,6 @@ public class ClientCommunicationController {
         try {
             Thread.sleep(2000);
             socket.close();
-            System.out.println(className + socket.isClosed());
         } catch (InterruptedException | IOException e) {
             e.printStackTrace();
         }
@@ -149,14 +147,12 @@ public class ClientCommunicationController {
                         User user = (User) object;
                         clientController.receiveUser(user);
                         if (user.getUserType() == UserType.LOGOUT) {
-                            System.out.println(className + "user is logging out");
                             disconnect();
                         }
 
                     } else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
                         clientController.receiveNotificationFromCCC(activity);
-                        System.out.println(className + activity.getActivityName());
                     }
 
                 } catch (Exception e) {

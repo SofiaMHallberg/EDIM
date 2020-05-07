@@ -3,6 +3,7 @@ package client.gui;
 import client.ClientController;
 import server.Activity;
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
 /**
@@ -49,7 +50,11 @@ public class MainFrame extends JFrame {
      */
     public void setupFrame() {
         setBounds(0, 0, 819, 438);
-        setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                createLoginFrame();
+            }
+        });
         setLayout(null);
         setTitle("EDIM");
         setResizable(true);            
@@ -114,4 +119,6 @@ public class MainFrame extends JFrame {
     public void sendChosenInterval(int interval) {
         clientController.setInterval(interval);
     }
+
+
 }

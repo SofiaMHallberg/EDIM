@@ -95,7 +95,6 @@ public class ClientController {
     public void setInterval(int interval) {
         user.setNotificationInterval(interval);
         user.setUserType(UserType.SENDINTERVAL);
-        System.out.println(className + user.getUsername() + user.getNotificationInterval() + " userType: " + user.getUserType());
         ccc.sendObject(user);
     }
 

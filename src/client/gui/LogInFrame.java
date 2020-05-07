@@ -1,6 +1,8 @@
 package client.gui;
 
 import javax.swing.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class LogInFrame extends JFrame {
 
@@ -10,7 +12,16 @@ public class LogInFrame extends JFrame {
 
     public void setupFrame(MainFrame mainFrame) {
         setBounds(0, 0, 200, 200);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent we) {
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.exit(0);
+            }
+        });
         setLayout(null);
         setTitle("Inloggning EDIM");
         setResizable(true);            // Prevent user from changing the size of the frame.
@@ -21,7 +32,7 @@ public class LogInFrame extends JFrame {
         setVisible(true);
     }
 
-    public void closeWindow(){
+    public void closeWindow() {
         dispose();
     }
 }
