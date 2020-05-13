@@ -134,6 +134,7 @@ public class ServerController extends Thread {
             activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
             activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
             activityToSend.setActivityUser(username);
+            activityToSend.setActivityImage(activityRegister.getActivityRegister().get(activityNbr).getActivityImage());
             sendBuffer.put(activityToSend);
             System.out.println("Sending activity: " + activityToSend.getActivityName()); //TODO: Ta bort efter användbarhetstestning
         }

@@ -32,7 +32,7 @@ public class AppPanel extends JPanel {
     private DefaultListModel listModel;
 
     private String className = "Class: AppPanel: ";
-    private ImageIcon activityIcon;
+//    private ImageIcon activityIcon;
     private Color clrPanels = new Color(142, 166, 192);
     private Color clrMidPanel = new Color(127, 140, 151, 151);
 
@@ -68,7 +68,7 @@ public class AppPanel extends JPanel {
         btnLogOut.addActionListener(listener);
         btnInterval.addActionListener(listener);
         addActivityListener();
-        createActivityIcon();
+//        createActivityIcon();
     }
 
     public void createIntervalPanel() {
@@ -135,14 +135,15 @@ public class AppPanel extends JPanel {
         taActivityInfo.setText(activityInfo);
     }
 
-    public void createActivityIcon() {
-        activityIcon = new ImageIcon("images/exercise.png");
+    public ImageIcon createActivityIcon(Activity activity) {
+        ImageIcon activityIcon = activity.getActivityImage();
         Image image = activityIcon.getImage();
-        Image newImg = image.getScaledInstance(50,50, Image.SCALE_SMOOTH);
-        activityIcon = new ImageIcon(newImg);
+        Image newImg = image.getScaledInstance(150,150, Image.SCALE_SMOOTH);
+        return new ImageIcon(newImg);
     }
 
     public void showNotification(Activity activity) {
+        ImageIcon activityIcon = createActivityIcon(activity);
         String[] buttons = {"Jag har gjort aktiviteten!", "Påminn mig om fem minuter",};
         String instruction = activity.getActivityInstruction();
 

@@ -1,5 +1,6 @@
 package server;
 
+import javax.swing.*;
 import java.io.Serializable;
 
 /**
@@ -16,6 +17,7 @@ public class Activity implements Serializable {
     private String activityInfo;
     private boolean isCompleted = false;
     private String activityUser;
+    private ImageIcon activityImage;
 
 
 
@@ -65,6 +67,15 @@ public class Activity implements Serializable {
         this.activityUser = activityUser;
     }
 
+    public void setActivityImage(ImageIcon icon) {
+        activityImage = icon;
+    }
+    public ImageIcon getActivityImage() {
+        return activityImage;
+    }
+    public void createActivityImage(String fileName) {
+        activityImage = new ImageIcon(fileName);
+    }
 }
 
 

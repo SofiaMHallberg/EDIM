@@ -29,6 +29,7 @@ public class ActivityRegister {
                 activity.setActivityName(br.readLine());
                 activity.setActivityInstruction(br.readLine());
                 activity.setActivityInfo(br.readLine());
+                activity.createActivityImage(br.readLine());
                 activityRegister.add(activity);
             }
         } catch (IOException e) {
