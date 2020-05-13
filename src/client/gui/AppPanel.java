@@ -144,8 +144,9 @@ public class AppPanel extends JPanel {
 
     public void showNotification(Activity activity) {
         String[] buttons = {"Jag har gjort aktiviteten!", "Påminn mig om fem minuter",};
+        String instruction = activity.getActivityInstruction();
 
-        int answer = JOptionPane.showOptionDialog(null, activity.getActivityInstruction(), "Ny aktivitet",
+        int answer = JOptionPane.showOptionDialog(null, instruction, activity.getActivityName(),
                 JOptionPane.WARNING_MESSAGE, 0, activityIcon, buttons, buttons[0]);
         if (answer == 0) {
             activity.setCompleted(true);
@@ -159,7 +160,9 @@ public class AppPanel extends JPanel {
     }
 
     public void showWelcomeMessage(String userName) {
-        JOptionPane.showMessageDialog(null, "Välkommen " + userName + "\nNu ska vi röra på oss!");
+        JOptionPane.showMessageDialog(null, "Välkommen " + userName + ".\nEDIM kommer skicka notiser till dig med jämna mellanrum,\n" +
+                "med en fysisk aktivitet som ska utföras.\n" +
+                "Hur ofta du vill ha dessa notiser kan du ställa in själv.");
     }
 
     class ButtonListener implements ActionListener {
