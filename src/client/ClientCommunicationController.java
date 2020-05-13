@@ -45,7 +45,7 @@ public class ClientCommunicationController {
      */
     public void connect() {
         try {
-            socket = new Socket("127.0.0.1", 4343);
+            socket = new Socket("127.0.0.1", 4343);//127.0.0.1
 
         } catch (IOException e) {
             e.printStackTrace();
