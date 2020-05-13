@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.LinkedList;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class AppPanel extends JPanel {
     private MainPanel mainPanel;
@@ -36,7 +38,8 @@ public class AppPanel extends JPanel {
     private Color clrPanels = new Color(142, 166, 192);
     private Color clrMidPanel = new Color(127, 140, 151, 151);
 
-
+    private java.util.Timer timer;
+    private int timerInterval;
 
 
     public AppPanel(MainPanel mainPanel, String userName) {
@@ -76,9 +79,10 @@ public class AppPanel extends JPanel {
         intervalPnl.setBackground(clrPanels); //TODO Färg
         intervalPnl.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY));
         btnInterval = new JButton("Ändra intervall");
-
+        createTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()));
         intervalPnl.add(cmbTimeLimit, BorderLayout.CENTER);
-        intervalPnl.add(btnInterval, BorderLayout.SOUTH);
+        intervalPnl.add(btnInterval, BorderLayout.EAST);
+
     }
 
     public void createCBTimeLimit() {
@@ -86,6 +90,28 @@ public class AppPanel extends JPanel {
         cmbTimeLimit = new JComboBox<>(interval);
         cmbTimeLimit.setSelectedIndex(2);
     }
+
+    public void createTimer(int inputInterval) {
+        timerInterval = inputInterval;
+        int delay = 1000;
+        int period = 1000;
+        timer = new Timer();
+        timer.scheduleAtFixedRate(new TimerTask() {
+
+            public void run() {
+                //TODO gör om till double för att få minuter och sekunder
+                System.out.println(timerInterval);
+                timerInterval = decreaseInterval(timerInterval);
+            }
+        }, delay, period);
+    }
+
+    public int decreaseInterval(int interval) {
+        if (interval == 1)
+            timer.cancel();
+        return --interval;
+    }
+
 
     public void createTAActivityInfo() {
         taActivityInfo = new JTextArea();
@@ -138,7 +164,7 @@ public class AppPanel extends JPanel {
     public void createActivityIcon() {
         activityIcon = new ImageIcon("images/exercise.png");
         Image image = activityIcon.getImage();
-        Image newImg = image.getScaledInstance(50,50, Image.SCALE_SMOOTH);
+        Image newImg = image.getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         activityIcon = new ImageIcon(newImg);
     }
 
@@ -175,6 +201,7 @@ public class AppPanel extends JPanel {
             if (click == btnInterval) {
                 interval = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
                 mainPanel.sendChosenInterval(interval);
+                createTimer(interval);
             }
         }
     }
