@@ -17,7 +17,7 @@ public class AppPanel extends JPanel {
     private MainPanel mainPanel;
 
     private String[] interval;
-    private JLabel lblUserInfo;
+    private JLabel lblTimerInfo;
     private JTextArea taActivityInfo;
     private JComboBox cmbTimeLimit;
     private LinkedList<Activity> activities;
@@ -36,7 +36,9 @@ public class AppPanel extends JPanel {
     private Color clrPanels = new Color(142, 166, 192);
     private Color clrMidPanel = new Color(127, 140, 151, 151);
 
-    private java.util.Timer timer;
+    private Timer timer;
+    private int minuteInterval;
+    private int secondInterval;
     private int timerInterval;
 
 
@@ -79,12 +81,13 @@ public class AppPanel extends JPanel {
         intervalPnl.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY));
 
         lblInterval = new JLabel();
+        lblTimerInfo = new JLabel();
         JPanel centerPnl = new JPanel();
         centerPnl.setSize(new Dimension(intervalPnl.getWidth(), intervalPnl.getHeight()));
         centerPnl.setBackground(clrPanels);
         updateLblInterval();
         btnInterval = new JButton("Ändra intervall");
-        createTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()));
+        startTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()),60);
         centerPnl.add(cmbTimeLimit);
         centerPnl.add(btnInterval);
 //        intervalPnl.add(cmbTimeLimit, BorderLayout.CENTER);
@@ -99,30 +102,42 @@ public class AppPanel extends JPanel {
     }
 
     public void createCBTimeLimit() {
-        interval = new String[]{"15", "30", "45", "60"};
+        interval = new String[]{"5","15", "30", "45", "60"};
         cmbTimeLimit = new JComboBox<>(interval);
-        cmbTimeLimit.setSelectedIndex(2);
+        cmbTimeLimit.setSelectedIndex(1);
     }
 
-    public void createTimer(int inputInterval) {
-        timerInterval = inputInterval;
+    public void startTimer(int minutes, int seconds) {
+        minuteInterval = minutes;
+        secondInterval = seconds;
         int delay = 1000;
         int period = 1000;
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
 
             public void run() {
-                //TODO gör om till double för att få minuter och sekunder
-                System.out.println(timerInterval);
-                timerInterval = decreaseInterval(timerInterval);
+                String time = String.format("timer: %d:%d", minuteInterval, secondInterval);
+                lblTimerInfo.setText(time);
+                System.out.println(time);
+                decreaseInterval();
             }
         }, delay, period);
     }
 
-    public int decreaseInterval(int interval) {
-        if (interval == 1)
-            timer.cancel();
-        return --interval;
+    public void decreaseInterval() {
+        secondInterval --;
+        if (secondInterval == 0) {
+            minuteInterval--;
+            if (minuteInterval == 0) {
+                stopTimer();
+            }
+            secondInterval = 59;
+        }
+        updateUI();
+    }
+
+    public void stopTimer() {
+        timer.cancel();
     }
 
 
@@ -229,7 +244,6 @@ public class AppPanel extends JPanel {
                 interval = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
                 mainPanel.sendChosenInterval(interval);
                 updateLblInterval();
-                createTimer(interval);
             }
         }
     }
