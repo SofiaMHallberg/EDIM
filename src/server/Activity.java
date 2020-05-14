@@ -2,6 +2,9 @@ package server;
 
 import javax.swing.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Date;
+
 
 /**
  * This class handles the information about an Activity object.
@@ -18,10 +21,18 @@ public class Activity implements Serializable {
     private boolean isCompleted = false;
     private String activityUser;
     private ImageIcon activityImage;
+    private Date date=new Date();
+    private long time;
+
 
 
 
     public Activity () {}
+
+    public String getTime() {
+        String dateTime=date.toString();
+        return dateTime;
+    }
 
     public Activity(String activityName) {
         this.activityName=activityName;

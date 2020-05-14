@@ -151,7 +151,7 @@ public class AppPanel extends JPanel {
 
     public void updateActivityList(Activity activity) {
         activities.add(activity);
-        listModel.addElement(activity.getActivityName());
+        listModel.addElement(activity.getActivityName()+" "+activity.getTime());
 //        System.out.println(className +"updateActivityList: "+ lblActivity.getText());
         updateUI();
     }
