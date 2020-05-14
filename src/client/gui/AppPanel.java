@@ -172,9 +172,15 @@ public class AppPanel extends JPanel {
         ImageIcon activityIcon = createActivityIcon(activity);
         String[] buttons = {"Jag har gjort aktiviteten!", "Påminn mig om fem minuter",};
         String instruction = activity.getActivityInstruction();
+        String[] instructions = new String[3];
 
-        int answer = JOptionPane.showOptionDialog(null, instruction, activity.getActivityName(),
-                JOptionPane.WARNING_MESSAGE, 0, activityIcon, buttons, buttons[0]);
+        if(instruction.contains("&")) {
+            instructions = instruction.split("&");
+        }
+
+        int answer = MyJOptionPane.showOptionDialog(null, instructions, activity.getActivityName(),
+                JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, activityIcon, buttons, buttons[0]);
+
         if (answer == 0) {
             activity.setCompleted(true);
             mainPanel.sendActivityFromGUI(activity);
@@ -183,6 +189,13 @@ public class AppPanel extends JPanel {
         } else { //if (answer == 1)
             activity.setCompleted(false);
             mainPanel.sendActivityFromGUI(activity);
+        }
+    }
+
+    public class MyJOptionPane extends JOptionPane {
+        @Override
+        public int getMaxCharactersPerLineCount() {
+            return 10;
         }
     }
 
