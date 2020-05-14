@@ -20,21 +20,19 @@ public class AppPanel extends JPanel {
     private JLabel lblUserInfo;
     private JTextArea taActivityInfo;
     private JComboBox cmbTimeLimit;
-
     private LinkedList<Activity> activities;
     private JList activityList;
 
     private JButton btnLogOut;
     private JButton btnInterval;
-
     private JPanel intervalPnl;
+    private JLabel lblInterval;
 
     private BorderLayout borderLayout = new BorderLayout();
     private ActionListener listener = new ButtonListener();
     private DefaultListModel listModel;
 
     private String className = "Class: AppPanel: ";
-//    private ImageIcon activityIcon;
     private Color clrPanels = new Color(142, 166, 192);
     private Color clrMidPanel = new Color(127, 140, 151, 151);
 
@@ -76,13 +74,28 @@ public class AppPanel extends JPanel {
 
     public void createIntervalPanel() {
         intervalPnl = new JPanel();
-        intervalPnl.setBackground(clrPanels); //TODO Färg
+        intervalPnl.setLayout(new BorderLayout());
+        intervalPnl.setBackground(clrPanels);
         intervalPnl.setBorder(BorderFactory.createBevelBorder(BevelBorder.LOWERED, Color.LIGHT_GRAY, Color.LIGHT_GRAY));
+
+        lblInterval = new JLabel();
+        JPanel centerPnl = new JPanel();
+        centerPnl.setSize(new Dimension(intervalPnl.getWidth(), intervalPnl.getHeight()));
+        centerPnl.setBackground(clrPanels);
+        updateLblInterval();
         btnInterval = new JButton("Ändra intervall");
         createTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()));
-        intervalPnl.add(cmbTimeLimit, BorderLayout.CENTER);
-        intervalPnl.add(btnInterval, BorderLayout.EAST);
-
+        centerPnl.add(cmbTimeLimit);
+        centerPnl.add(btnInterval);
+//        intervalPnl.add(cmbTimeLimit, BorderLayout.CENTER);
+//        intervalPnl.add(btnInterval, BorderLayout.EAST);
+        intervalPnl.add(lblInterval, BorderLayout.NORTH);
+        intervalPnl.add(centerPnl, BorderLayout.CENTER);
+    }
+    public void updateLblInterval() {
+        int interval;
+        interval = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
+        lblInterval.setText("Aktivt tidsintervall: " + interval + " minuter");
     }
 
     public void createCBTimeLimit() {
@@ -215,6 +228,7 @@ public class AppPanel extends JPanel {
             if (click == btnInterval) {
                 interval = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
                 mainPanel.sendChosenInterval(interval);
+                updateLblInterval();
                 createTimer(interval);
             }
         }
