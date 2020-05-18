@@ -3,6 +3,7 @@ package server;
 import javax.swing.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.Date;
 
 
@@ -21,17 +22,14 @@ public class Activity implements Serializable {
     private boolean isCompleted = false;
     private String activityUser;
     private ImageIcon activityImage;
-    private Date date=new Date();
-    private long time;
-
-
-
 
     public Activity () {}
 
     public String getTime() {
-        String dateTime=date.toString();
-        return dateTime;
+        Calendar cal=Calendar.getInstance();
+        String datum=cal.getTime().getHours()+":"+cal.getTime().getMinutes();
+        return datum;
+
     }
 
     public Activity(String activityName) {
