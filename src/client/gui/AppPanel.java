@@ -188,7 +188,6 @@ public class AppPanel extends JPanel {
     }
 
     public void showActivityInfo(String activityInfo) {
-        //JOptionPane.showMessageDialog(null, activityInfo);
         taActivityInfo.setText(activityInfo);
     }
 
@@ -200,6 +199,7 @@ public class AppPanel extends JPanel {
     }
 
     public void showNotification(Activity activity) {
+        Toolkit.getDefaultToolkit().beep();
         ImageIcon activityIcon = createActivityIcon(activity);
         String[] buttons = {"Jag har gjort aktiviteten!", "Påminn mig om fem minuter",};
         String instruction = activity.getActivityInstruction();
@@ -218,6 +218,8 @@ public class AppPanel extends JPanel {
             updateActivityList(activity);
 
         } else { //if (answer == 1)
+            stopTimer();
+            startTimer(5,59);
             activity.setCompleted(false);
             mainPanel.sendActivityFromGUI(activity);
         }
