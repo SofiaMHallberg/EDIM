@@ -87,13 +87,14 @@ public class AppPanel extends JPanel {
         centerPnl.setBackground(clrPanels);
         updateLblInterval();
         btnInterval = new JButton("Ändra intervall");
-        startTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()),60);
+        startTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()),59);
         centerPnl.add(cmbTimeLimit);
         centerPnl.add(btnInterval);
 //        intervalPnl.add(cmbTimeLimit, BorderLayout.CENTER);
 //        intervalPnl.add(btnInterval, BorderLayout.EAST);
         intervalPnl.add(lblInterval, BorderLayout.NORTH);
         intervalPnl.add(centerPnl, BorderLayout.CENTER);
+        intervalPnl.add(lblTimerInfo, BorderLayout.SOUTH);
     }
     public void updateLblInterval() {
         int interval;
@@ -108,7 +109,7 @@ public class AppPanel extends JPanel {
     }
 
     public void startTimer(int minutes, int seconds) {
-        minuteInterval = minutes;
+        minuteInterval = minutes -1;
         secondInterval = seconds;
         int delay = 1000;
         int period = 1000;
@@ -178,6 +179,8 @@ public class AppPanel extends JPanel {
     }
 
     public void updateActivityList(Activity activity) {
+        stopTimer();
+        startTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()),59);
         activities.add(activity);
         listModel.addElement(activity.getActivityName()+" "+activity.getTime());
 //        System.out.println(className +"updateActivityList: "+ lblActivity.getText());
@@ -228,9 +231,13 @@ public class AppPanel extends JPanel {
     }
 
     public void showWelcomeMessage(String userName) {
-        JOptionPane.showMessageDialog(null, "Välkommen " + userName + ".\nEDIM kommer skicka notiser till dig med jämna mellanrum,\n" +
+        ImageIcon welcomeIcon = new ImageIcon("imagesClient/exercise.png");
+        Image image = welcomeIcon.getImage();
+        Image newImg = image.getScaledInstance(100,100, Image.SCALE_SMOOTH);
+
+        JOptionPane.showMessageDialog(null, "Välkommen " + userName + "!" +  "\nEDIM kommer skicka notiser till dig med jämna mellanrum,\n" +
                 "med en fysisk aktivitet som ska utföras.\n" +
-                "Hur ofta du vill ha dessa notiser kan du ställa in själv.");
+                "Hur ofta du vill ha dessa notiser kan du ställa in själv.", "Välkommen till Edim ", 2, new ImageIcon(newImg) );
     }
 
     class ButtonListener implements ActionListener {
