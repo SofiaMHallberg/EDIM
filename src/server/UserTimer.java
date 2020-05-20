@@ -43,8 +43,10 @@ public class UserTimer implements ActionListener {
      */
     public void stopTimer() {
         currentTime = 0;
-        timer.stop();
-        timer = null;
+        if(timer!=null) {
+            timer.stop();
+            timer = null;
+        }
     }
 
     /**

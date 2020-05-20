@@ -169,21 +169,37 @@ public class AppPanel extends JPanel {
             @Override
             public void valueChanged(ListSelectionEvent e) {
                 String activityName = (String) activityList.getSelectedValue();
+                String newActivityName = splitActivityNameAndTime(activityName);
                 for (Activity activity : activities) {
-                    if (activity.getActivityName().equals(activityName)) {
+                    if (activity.getActivityName().equals(newActivityName)) {
                         showActivityInfo(activity.getActivityInfo());
                     }
                 }
             }
         });
     }
+    public String splitActivityNameAndTime(String activityName) { //TODO Använd Chanons Alphabetics-lösning istället (se nedan)
+        activityName = activityName.replaceAll("[0-9]", "");
+        activityName = activityName.replaceAll(":", "");
+        activityName = activityName.replaceAll(" ", "");
+        return activityName;
+    }
+    /*
+    for (int i = 0; i < str.length(); i++) {
+            if (Character.isAlphabetic(str.charAt(i))) {
+                System.out.print(str.charAt(i));
+            }
+        }
+     */
 
     public void updateActivityList(Activity activity) {
         stopTimer();
         startTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()),59);
+
         activities.add(activity);
         listModel.addElement(activity.getActivityName()+" "+activity.getTime());
-//        System.out.println(className +"updateActivityList: "+ lblActivity.getText());
+        String newActivityName = splitActivityNameAndTime(activity.getActivityName());
+        activity.setActivityName(newActivityName);
         updateUI();
     }
 
