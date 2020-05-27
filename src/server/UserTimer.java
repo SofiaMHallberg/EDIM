@@ -34,7 +34,7 @@ public class UserTimer implements ActionListener {
      * Starts the timer object.
      */
     public void startTimer() {
-        timer = new Timer(1000, this);
+        timer = new Timer(60000, this); //TODO Nu är Timern ändrad till
         timer.start();
     }
 

@@ -119,7 +119,7 @@ public class AppPanel extends JPanel {
             public void run() {
                 String time = String.format("timer: %d:%d", minuteInterval, secondInterval);
                 lblTimerInfo.setText(time);
-                System.out.println(time);
+//                System.out.println(time);
                 decreaseInterval();
             }
         }, delay, period);
@@ -134,7 +134,25 @@ public class AppPanel extends JPanel {
             }
             secondInterval = 59;
         }
-        updateUI();
+    }
+
+    public void countTimerInterval(int chosenInterval) {
+        int difference = 0;
+        if (minuteInterval > chosenInterval) { //Vi var på 15 (minuteInterval), sedan ändrade vi till 5 (chosenInterval)
+            difference = minuteInterval - chosenInterval;
+            System.out.println("if-satsen: Difference: " + difference);
+            minuteInterval = minuteInterval - difference-1; //-1
+            System.out.println("minuteInterval: " + minuteInterval);
+        }
+        else {
+            difference = chosenInterval - minuteInterval;
+            System.out.println("Else-satsen: Difference: " + difference);
+            minuteInterval = minuteInterval + difference-1;
+            System.out.println("minuteInterval: " + minuteInterval);
+        }
+
+
+
     }
 
     public void stopTimer() {
@@ -267,6 +285,7 @@ public class AppPanel extends JPanel {
             }
             if (click == btnInterval) {
                 interval = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
+                countTimerInterval(interval);
                 mainPanel.sendChosenInterval(interval);
                 updateLblInterval();
             }

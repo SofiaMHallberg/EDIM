@@ -92,7 +92,6 @@ public class ServerController extends Thread {
      * @return an updated User.
      */
     public User checkLoginUser(User user) {
-        System.out.println("User logged in: " + user.getUsername()); //TODO: Ta bort efter användbarhetstestning
         if (userRegister.getUserHashMap().size() != 0) {
             if (userRegister.getUserHashMap().containsKey(user.getUsername())) { //userRegister.getUserHashMap().get(user.getUserName()).getUserName().equals(user.getUserName())
                 user = userRegister.getUserHashMap().get(user.getUsername());
@@ -125,7 +124,6 @@ public class ServerController extends Thread {
         if (user.getDelayedActivity() != null) {
             sendBuffer.put(user.getDelayedActivity());
             user.setDelayedActivity(null);
-            System.out.println("Sending delayed activity"); //TODO: Ta bort efter användbarhetstestning
         } else {
             int nbrOfActivities = activityRegister.getActivityRegister().size();
             int activityNbr = rand.nextInt(nbrOfActivities);
