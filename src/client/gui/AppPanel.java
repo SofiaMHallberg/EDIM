@@ -117,9 +117,14 @@ public class AppPanel extends JPanel {
         timer.scheduleAtFixedRate(new TimerTask() {
 
             public void run() {
-                String time = String.format("timer: %d:%d", minuteInterval, secondInterval);
+                String time;
+                if(secondInterval < 10){
+                    time = String.format("timer: %d:0%d", minuteInterval, secondInterval);
+                }else {
+                    time = String.format("timer: %d:%d", minuteInterval, secondInterval);
+                    //                System.out.println(time);
+                }
                 lblTimerInfo.setText(time);
-//                System.out.println(time);
                 decreaseInterval();
             }
         }, delay, period);
@@ -129,7 +134,7 @@ public class AppPanel extends JPanel {
         secondInterval --;
         if (secondInterval == 0) {
             minuteInterval--;
-            if (minuteInterval == 0) {
+            if (minuteInterval == -1) {
                 stopTimer();
             }
             secondInterval = 59;
