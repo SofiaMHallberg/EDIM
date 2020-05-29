@@ -39,13 +39,12 @@ public class AppPanel extends JPanel {
     private Timer timer;
     private int minuteInterval;
     private int secondInterval;
-    private int timerInterval;
 
 
-    public AppPanel(MainPanel mainPanel, String userName) {
+    public AppPanel(MainPanel mainPanel) {
         this.mainPanel = mainPanel;
         setupPanel();
-        createComponents(userName);
+        createComponents();
         activities = new LinkedList<>();
     }
 
@@ -53,7 +52,7 @@ public class AppPanel extends JPanel {
         setSize(new Dimension(819, 438));
     }
 
-    public void createComponents(String userName) {
+    public void createComponents() {
         setLayout(borderLayout);
 
         createActivityList();
@@ -71,7 +70,6 @@ public class AppPanel extends JPanel {
         btnLogOut.addActionListener(listener);
         btnInterval.addActionListener(listener);
         addActivityListener();
-//        createActivityIcon();
     }
 
     public void createIntervalPanel() {
@@ -87,15 +85,14 @@ public class AppPanel extends JPanel {
         centerPnl.setBackground(clrPanels);
         updateLblInterval();
         btnInterval = new JButton("Ändra intervall");
-        startTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()),59);
+        startTimer(Integer.parseInt((String) cmbTimeLimit.getSelectedItem()), 59);
         centerPnl.add(cmbTimeLimit);
         centerPnl.add(btnInterval);
-//        intervalPnl.add(cmbTimeLimit, BorderLayout.CENTER);
-//        intervalPnl.add(btnInterval, BorderLayout.EAST);
         intervalPnl.add(lblInterval, BorderLayout.NORTH);
         intervalPnl.add(centerPnl, BorderLayout.CENTER);
         intervalPnl.add(lblTimerInfo, BorderLayout.SOUTH);
     }
+
     public void updateLblInterval() {
         int interval;
         interval = Integer.parseInt((String) cmbTimeLimit.getSelectedItem());
@@ -103,13 +100,13 @@ public class AppPanel extends JPanel {
     }
 
     public void createCBTimeLimit() {
-        interval = new String[]{"5","15", "30", "45", "60"};
+        interval = new String[]{"5", "15", "30", "45", "60"};
         cmbTimeLimit = new JComboBox<>(interval);
         cmbTimeLimit.setSelectedIndex(1);
     }
 
     public void startTimer(int minutes, int seconds) {
-        minuteInterval = minutes -1;
+        minuteInterval = minutes - 1;
         secondInterval = seconds;
         int delay = 1000;
         int period = 1000;
@@ -118,11 +115,10 @@ public class AppPanel extends JPanel {
 
             public void run() {
                 String time;
-                if(secondInterval < 10){
+                if (secondInterval < 10) {
                     time = String.format("timer: %d:0%d", minuteInterval, secondInterval);
-                }else {
+                } else {
                     time = String.format("timer: %d:%d", minuteInterval, secondInterval);
-                    //                System.out.println(time);
                 }
                 lblTimerInfo.setText(time);
                 decreaseInterval();
@@ -131,7 +127,7 @@ public class AppPanel extends JPanel {
     }
 
     public void decreaseInterval() {
-        secondInterval --;
+        secondInterval--;
         if (secondInterval == 0) {
             minuteInterval--;
             if (minuteInterval == -1) {
@@ -146,28 +142,23 @@ public class AppPanel extends JPanel {
         if (minuteInterval > chosenInterval) { //Vi var på 15 (minuteInterval), sedan ändrade vi till 5 (chosenInterval)
             difference = minuteInterval - chosenInterval;
             System.out.println("if-satsen: Difference: " + difference);
-            minuteInterval = minuteInterval - difference-1; //-1
+            minuteInterval = minuteInterval - difference - 1; //-1
             System.out.println("minuteInterval: " + minuteInterval);
-        }
-        else {
+        } else {
             difference = chosenInterval - minuteInterval;
             System.out.println("Else-satsen: Difference: " + difference);
-            minuteInterval = minuteInterval + difference-1;
+            minuteInterval = minuteInterval + difference - 1;
             System.out.println("minuteInterval: " + minuteInterval);
         }
-
-
-
     }
 
     public void stopTimer() {
         timer.cancel();
     }
 
-
     public void createTAActivityInfo() {
         taActivityInfo = new JTextArea();
-        taActivityInfo.setBackground(clrPanels); //TODO Färg
+        taActivityInfo.setBackground(clrPanels);
         taActivityInfo.setPreferredSize(new Dimension(200, 80));
         taActivityInfo.setLineWrap(true);
         taActivityInfo.setWrapStyleWord(true);
@@ -182,7 +173,6 @@ public class AppPanel extends JPanel {
         activityList.setPreferredSize(new Dimension(400, 320));
         activityList.setBorder(BorderFactory.createTitledBorder("Avklarade aktiviteter"));
         activityList.setSelectionMode(DefaultListSelectionModel.SINGLE_SELECTION);
-        //activityList.setBackground(clrMidPanel); //TODO Färg
         Font font = new Font("SansSerif", Font.PLAIN, 14);
         activityList.setFont(font);
     }
@@ -201,26 +191,19 @@ public class AppPanel extends JPanel {
             }
         });
     }
-    public String splitActivityNameAndTime(String activityName) { //TODO Använd Chanons Alphabetics-lösning istället (se nedan)
+
+    public String splitActivityNameAndTime(String activityName) {
         activityName = activityName.replaceAll("[0-9]", "");
         activityName = activityName.replaceAll(":", "");
         activityName = activityName.replaceAll(" ", "");
         return activityName;
     }
-    /*
-    for (int i = 0; i < str.length(); i++) {
-            if (Character.isAlphabetic(str.charAt(i))) {
-                System.out.print(str.charAt(i));
-            }
-        }
-     */
 
     public void updateActivityList(Activity activity) {
         stopTimer();
-        startTimer( Integer.parseInt((String) cmbTimeLimit.getSelectedItem()),59);
-
+        startTimer(Integer.parseInt((String) cmbTimeLimit.getSelectedItem()), 59);
         activities.add(activity);
-        listModel.addElement(activity.getActivityName()+" "+activity.getTime());
+        listModel.addElement(activity.getActivityName() + " " + activity.getTime());
         String newActivityName = splitActivityNameAndTime(activity.getActivityName());
         activity.setActivityName(newActivityName);
         updateUI();
@@ -233,7 +216,7 @@ public class AppPanel extends JPanel {
     public ImageIcon createActivityIcon(Activity activity) {
         ImageIcon activityIcon = activity.getActivityImage();
         Image image = activityIcon.getImage();
-        Image newImg = image.getScaledInstance(150,150, Image.SCALE_SMOOTH);
+        Image newImg = image.getScaledInstance(150, 150, Image.SCALE_SMOOTH);
         return new ImageIcon(newImg);
     }
 
@@ -244,27 +227,25 @@ public class AppPanel extends JPanel {
         String instruction = activity.getActivityInstruction();
         String[] instructions = new String[3];
 
-        if(instruction.contains("&")) {
+        if (instruction.contains("&")) {
             instructions = instruction.split("&");
         }
-
-        int answer = MyJOptionPane.showOptionDialog(null, instructions, activity.getActivityName(),
+        int answer = welcomePane.showOptionDialog(null, instructions, activity.getActivityName(),
                 JOptionPane.OK_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, activityIcon, buttons, buttons[0]);
-
         if (answer == 0) {
             activity.setCompleted(true);
             mainPanel.sendActivityFromGUI(activity);
             updateActivityList(activity);
 
-        } else { //if (answer == 1)
+        } else {
             stopTimer();
-            startTimer(5,59);
+            startTimer(5, 59);
             activity.setCompleted(false);
             mainPanel.sendActivityFromGUI(activity);
         }
     }
 
-    public class MyJOptionPane extends JOptionPane {
+    public class welcomePane extends JOptionPane {
         @Override
         public int getMaxCharactersPerLineCount() {
             return 10;
@@ -274,11 +255,11 @@ public class AppPanel extends JPanel {
     public void showWelcomeMessage(String userName) {
         ImageIcon welcomeIcon = new ImageIcon("imagesClient/exercise.png");
         Image image = welcomeIcon.getImage();
-        Image newImg = image.getScaledInstance(100,100, Image.SCALE_SMOOTH);
+        Image newImg = image.getScaledInstance(100, 100, Image.SCALE_SMOOTH);
 
-        JOptionPane.showMessageDialog(null, "Välkommen " + userName + "!" +  "\nEDIM kommer skicka notiser till dig med jämna mellanrum,\n" +
+        JOptionPane.showMessageDialog(null, "Välkommen " + userName + "!" + "\nEDIM kommer skicka notiser till dig med jämna mellanrum,\n" +
                 "med en fysisk aktivitet som ska utföras.\n" +
-                "Hur ofta du vill ha dessa notiser kan du ställa in själv.", "Välkommen till Edim ", 2, new ImageIcon(newImg) );
+                "Hur ofta du vill ha dessa notiser kan du ställa in själv.", "Välkommen till Edim ", 2, new ImageIcon(newImg));
     }
 
     class ButtonListener implements ActionListener {
@@ -296,5 +277,4 @@ public class AppPanel extends JPanel {
             }
         }
     }
-
 }

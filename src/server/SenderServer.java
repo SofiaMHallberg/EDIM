@@ -5,12 +5,14 @@ import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.concurrent.Executor;
+import java.util.concurrent.ExecutorService;
 
 /**
  * This class creates a thread pool and handles the communication to the Client.
  *
  * @version 1.0
- * @autor Sofia Hallberg & Chanon Borgström.
+ * @author Sofia Hallberg & Chanon Borgström.
  */
 
 public class SenderServer {
@@ -59,26 +61,21 @@ public class SenderServer {
     private class WorkerThread extends Thread {
 
         /**
-         * receives an object from the buffer and sends it to the Client.
+         * Receives an object from the buffer and sends it to the Client.
          */
         public void run() {
             while (true) {
                 try {
-
                     Object object = sendBuffer.get();
                     if (object instanceof User) {
                         User sendUser = (User) object;
                         oos = socketHashMap.get(sendUser.getUsername()).getOos();
                         oos.writeObject(sendUser);
-                    }
-
-                    else if (object instanceof Activity) {
+                    } else if (object instanceof Activity) {
                         Activity sendNewActivity = (Activity) object;
                         oos = socketHashMap.get(sendNewActivity.getActivityUser()).getOos();
                         oos.writeObject(sendNewActivity);
-                        //TODO: kolla upp till vem aktiviteten skickas till efter att timern klickas.
                     }
-
                 } catch (InterruptedException | IOException e) {
                     e.printStackTrace();
                 }

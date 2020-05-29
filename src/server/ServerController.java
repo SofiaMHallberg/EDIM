@@ -40,7 +40,6 @@ public class ServerController extends Thread {
         activityRegister = new ActivityRegister("files/activities.txt");
         userTimerHashMap = new HashMap<>();
         rand = new Random();
-
     }
 
     /**
@@ -61,7 +60,7 @@ public class ServerController extends Thread {
     }
 
     /**
-     * Reads a textfile from the files folder and adds them to the contacts array. Then sets the contacts array to oldContactList array.
+     * Reads a text file from the files folder and adds them to the contacts array. Then sets the contacts array to oldContactList array.
      *
      * @param filename the read filename.
      */
@@ -93,10 +92,10 @@ public class ServerController extends Thread {
      */
     public User checkLoginUser(User user) {
         if (userRegister.getUserHashMap().size() != 0) {
+
             if (userRegister.getUserHashMap().containsKey(user.getUsername())) { //userRegister.getUserHashMap().get(user.getUserName()).getUserName().equals(user.getUserName())
                 user = userRegister.getUserHashMap().get(user.getUsername());
                 user.setUserType(UserType.SENDUSER);
-
             } else {
                 user.setUserType(UserType.SENDWELCOME);
                 userRegister.getUserHashMap().put(user.getUsername(), user);
@@ -109,7 +108,6 @@ public class ServerController extends Thread {
             userRegister.getUserLinkedList().add(user);
             writeUsers(userFilePath);
         }
-
         return user;
     }
 
@@ -128,13 +126,14 @@ public class ServerController extends Thread {
             int nbrOfActivities = activityRegister.getActivityRegister().size();
             int activityNbr = rand.nextInt(nbrOfActivities);
             Activity activityToSend = new Activity();
-            activityToSend.setActivityName(activityRegister.getActivityRegister().get(activityNbr).getActivityName());
-            activityToSend.setActivityInstruction(activityRegister.getActivityRegister().get(activityNbr).getActivityInstruction());
-            activityToSend.setActivityInfo(activityRegister.getActivityRegister().get(activityNbr).getActivityInfo());
+            Activity getActivity = activityRegister.getActivityRegister().get(activityNbr);
+            activityToSend.setActivityName(getActivity.getActivityName());
+            activityToSend.setActivityInstruction(getActivity.getActivityInstruction());
+            activityToSend.setActivityInfo(getActivity.getActivityInfo());
             activityToSend.setActivityUser(username);
-            activityToSend.setActivityImage(activityRegister.getActivityRegister().get(activityNbr).getActivityImage());
+            activityToSend.setActivityImage(getActivity.getActivityImage());
             sendBuffer.put(activityToSend);
-            System.out.println("Sending activity: " + activityToSend.getActivityName()); //TODO: Ta bort efter användbarhetstestning
+            System.out.println("Sending activity: " + activityToSend.getActivityName());
         }
     }
 
@@ -175,7 +174,7 @@ public class ServerController extends Thread {
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
-        System.out.println("User logged out: " + username); //TODO: Ta bort efter användbarhetstestning
+        System.out.println("User logged out: " + username);
     }
 
     /**
@@ -209,7 +208,6 @@ public class ServerController extends Thread {
         userTimer.stopTimer();
         userTimer.setCurrentTime(currentTime);
         userTimer.startTimer();
-
     }
 
     /**
@@ -219,10 +217,12 @@ public class ServerController extends Thread {
         while (true) {
             try {
                 Object object = receiveBuffer.get();
+
                 if (object instanceof User) {
                     User user = (User) object;
                     String username = user.getUsername();
                     UserType userType = user.getUserType();
+
                     switch (userType) {
                         case LOGIN:
                             createUserTimer(user);
@@ -238,8 +238,6 @@ public class ServerController extends Thread {
                         case SENDINTERVAL:
                             updateUserInterval(user);
                             break;
-
-
                     }
                 } else if (object instanceof Activity) {
                     Activity activity = (Activity) object;
@@ -247,7 +245,6 @@ public class ServerController extends Thread {
 
                     if (activity.isCompleted()) {
                         userTimerHashMap.get(username).startTimer();
-
                     } else {
                         setDelayedActivity(activity);
                     }
@@ -257,6 +254,4 @@ public class ServerController extends Thread {
             }
         }
     }
-
-
 }

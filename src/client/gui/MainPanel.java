@@ -16,7 +16,7 @@ public class MainPanel extends JPanel { //TODO: Fixa så att man kan trycka på 
         this.userName = userName;
         backGroundColor = new Color(134, 144, 154, 145); //64, 87, 139
         setupPanel();
-        appPanel = new AppPanel(this, userName);
+        appPanel = new AppPanel(this);
         showAppPanel();
     }
 

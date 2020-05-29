@@ -12,8 +12,8 @@ import java.net.Socket;
 /**
  * This class manages the communication between the Client classes and the Server classes.
  *
- * @version 1.0
  * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @version 1.0
  */
 
 public class ClientCommunicationController {
@@ -45,8 +45,7 @@ public class ClientCommunicationController {
      */
     public void connect() {
         try {
-            socket = new Socket("127.0.0.1", 4343);//127.0.0.1
-
+            socket = new Socket("127.0.0.1", 4343);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -98,17 +97,7 @@ public class ClientCommunicationController {
             while (isConnected) {
                 try {
                     Object object = buffer.get();
-
-                    if (object instanceof User) {
-                        User user = (User) object;
-                        oos.writeUnshared(user);
-                        oos.flush();
-
-                    } else if (object instanceof Activity) {
-                        Activity activity = (Activity) object;
-                        oos.writeObject(activity);
-                        oos.flush();
-                    }
+                    oos.writeUnshared(object);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -117,7 +106,7 @@ public class ClientCommunicationController {
     }
 
     private class ClientReceiver extends Thread {
-        Object object;
+        private Object object;
 
         /**
          * Tries to open an Input Stream then tries to read an object from the stream.
@@ -138,23 +127,20 @@ public class ClientCommunicationController {
                 }
             }
 
-            while (isConnected) { //TODO: Går ej att logga ut och stänga strömmen. Se över villkor!
+            while (isConnected) {
                 try {
                     sleep(500);
                     object = ois.readObject();
-
                     if (object instanceof User) {
                         User user = (User) object;
                         clientController.receiveUser(user);
                         if (user.getUserType() == UserType.LOGOUT) {
                             disconnect();
                         }
-
                     } else if (object instanceof Activity) {
                         Activity activity = (Activity) object;
                         clientController.receiveNotificationFromCCC(activity);
                     }
-
                 } catch (Exception e) {
                     e.printStackTrace();
 

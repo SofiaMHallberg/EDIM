@@ -61,7 +61,6 @@ public class ReceiverServer {
         for (int i = 0; i < nbrOfConnections; i++) {
             threadPool.add(new ReceiverThread());
         }
-
     }
 
     /**
@@ -70,7 +69,6 @@ public class ReceiverServer {
     public void startThreadPool() {
         for (ReceiverThread thread : threadPool)
             thread.start();
-
     }
 
     // Inner Thread class: creates a connection and sends it forth to the ClientHandler class.
@@ -117,7 +115,6 @@ public class ReceiverServer {
          * Reads an object from the input stream and checks its value and send it to {@link ServerController}.
          */
         public void run() {
-
             User user;
             UserType userType;
             String userName = "";
@@ -141,7 +138,6 @@ public class ReceiverServer {
                                 break;
                         }
                     }
-
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
