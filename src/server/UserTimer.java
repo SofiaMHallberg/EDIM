@@ -115,6 +115,7 @@ public class UserTimer implements ActionListener {
      * @return a boolean if they are the same value.
      */
     public boolean checkTimeInterval() {
+        System.out.println("UserTimer:  currentTime: " + currentTime + " notifInterval: " + user.getNotificationInterval());
         if (currentTime >= user.getNotificationInterval()) {
             return true;
         }

@@ -119,9 +119,9 @@ public class AppPanel extends JPanel {
             public void run() {
                 String time;
                 if(secondInterval < 10){
-                    time = String.format("timer: %d:0%d", minuteInterval, secondInterval);
+                    time = String.format("Timer: %d:0%d", minuteInterval, secondInterval);
                 }else {
-                    time = String.format("timer: %d:%d", minuteInterval, secondInterval);
+                    time = String.format("Timer: %d:%d", minuteInterval, secondInterval);
                     //                System.out.println(time);
                 }
                 lblTimerInfo.setText(time);
@@ -132,7 +132,7 @@ public class AppPanel extends JPanel {
 
     public void decreaseInterval() {
         secondInterval --;
-        if (secondInterval == 0) {
+        if (secondInterval == -1) {
             minuteInterval--;
             if (minuteInterval == -1) {
                 stopTimer();
