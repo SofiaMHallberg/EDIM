@@ -17,7 +17,7 @@ import java.util.TimerTask;
  * This is the panel in the frame that contains pretty much all of the components in the GUI.
  *
  * @version 1.0
- * @author Oscar Kareld, Chanon Borgström & Carolin Nordström
+ * @author Oscar Kareld, Chanon Borgstrom, Carolin Nordstrom
  */
 public class AppPanel extends JPanel {
     private MainPanel mainPanel;

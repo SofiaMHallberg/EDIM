@@ -13,7 +13,7 @@ import java.util.Map;
  * This class creates a thread pool and handles the communication from the Client.
  *
  * @version 1.0
- * @autor Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  */
 
 public class ReceiverServer {

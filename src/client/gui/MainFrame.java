@@ -10,7 +10,7 @@ import java.awt.event.WindowEvent;
  * This class starts the Login window and then awaits the user's input, and finally starts the main GUI.
  *
  * @version 1.0
- * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  */
 
 public class MainFrame extends JFrame {

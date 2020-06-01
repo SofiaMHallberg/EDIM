@@ -10,7 +10,7 @@ import java.util.Date;
 /**
  * This class handles the information about an Activity object.
  *
- * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  * @version 1.0
  */
 

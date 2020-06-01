@@ -12,7 +12,7 @@ import java.util.concurrent.ExecutorService;
  * This class creates a thread pool and handles the communication to the Client.
  *
  * @version 1.0
- * @author Sofia Hallberg & Chanon Borgström.
+ * @author Sofia Hallberg, Chanon Borgstrom.
  */
 
 public class SenderServer {

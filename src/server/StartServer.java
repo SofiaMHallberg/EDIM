@@ -3,7 +3,7 @@ package server;
 /**
  * This class creates a server-object and starts the server.
  *
- * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Sofia Hallberg.
  * @version 1.0
  */
 

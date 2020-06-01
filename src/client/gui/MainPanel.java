@@ -5,7 +5,7 @@ import server.Activity;
 import javax.swing.*;
 import java.awt.*;
 
-public class MainPanel extends JPanel { //TODO: Fixa så att man kan trycka på krysset
+public class MainPanel extends JPanel {
     private MainFrame mainFrame;
     private AppPanel appPanel;
     private String userName;

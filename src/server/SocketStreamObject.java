@@ -7,7 +7,7 @@ import java.net.Socket;
 /**
  * This class handles a socket and the input/output streams.
  *
- * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  * @version 1.0
  */
 

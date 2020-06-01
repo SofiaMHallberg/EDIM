@@ -7,7 +7,7 @@ import java.util.Random;
 /**
  * This class handles the logic of the in and out coming objects from the clients.
  *
- * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  * @version 1.0
  */
 

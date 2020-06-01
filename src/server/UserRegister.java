@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * This class handles all the user objects.
  *
- * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  * @version 1.0
  */
 

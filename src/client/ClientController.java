@@ -11,7 +11,7 @@ import server.UserType;
  * This class manages the logic for the Client and controls the data flow.
  *
  * @version 1.0
- * @autor Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  */
 
 public class ClientController {

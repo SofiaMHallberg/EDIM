@@ -9,7 +9,7 @@ import java.awt.event.ActionListener;
  * This class handles the information for a user's timer.
  *
  * @version 1.0
- * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  */
 
 public class UserTimer implements ActionListener {
@@ -34,7 +34,7 @@ public class UserTimer implements ActionListener {
      * Starts the timer object.
      */
     public void startTimer() {
-        timer = new Timer(1000, this);
+        timer = new Timer(60000, this);
         timer.start();
     }
 

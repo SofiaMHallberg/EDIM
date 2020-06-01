@@ -12,7 +12,7 @@ import java.net.Socket;
 /**
  * This class manages the communication between the Client classes and the Server classes.
  *
- * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  * @version 1.0
  */
 

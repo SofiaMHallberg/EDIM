@@ -7,7 +7,7 @@ import java.util.LinkedList;
  * This class handles the information about a user-object.
  *
  * @version 1.0
- * @author Carolin Nordström & Oscar Kareld & Chanon Borgström & Sofia Hallberg.
+ * @author Carolin Nordstrom, Oscar Kareld, Chanon Borgstrom, Sofia Hallberg.
  */
 
 public class User implements Serializable {
