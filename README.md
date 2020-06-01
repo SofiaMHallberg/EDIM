@@ -1,5 +1,5 @@
 # EDIM - Every Day In Motion
-EDIM är en desktop applikation som ska hjälpa användaren att röra på sig i sin vardag 
+EDIM är en desktop-applikation som ska hjälpa användaren att röra på sig i sin vardag 
 genom att få notiser med tips på övningar.
 
 ## Installation
@@ -14,12 +14,15 @@ För att använda applikationen krävs det att användaren loggar in genom att s
 och trycker på loggain-knappen. 
 
 Därefter kommer aktiviteter att skickas beroende på vilket interval som valts. 
-Intervallet är förinställt på 45sek men i förlängningen kommer det istället vara minuter. 
+Intervallet är förinställt på 45 minuter.
 Väljer man att skjuta upp aktiviteten skickas samma aktivitet som är uppskjuten efter 5 minuter.
 
 För att logga ut klickar användaren på logga ut och därefter kommer man tillbaka till inloggningsfönstret.
 
 För att stänga av applikationen klickar användaren på avsluta-knappen.
+
+## Git-repository
+https://github.com/SofiaMHallberg/EDIM
 
 
 

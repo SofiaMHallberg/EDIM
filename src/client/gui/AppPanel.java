@@ -13,6 +13,12 @@ import java.util.LinkedList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+/**
+ * This is the panel in the frame that contains pretty much all of the components in the GUI.
+ *
+ * @version 1.0
+ * @author Oscar Kareld, Chanon Borgström & Carolin Nordström
+ */
 public class AppPanel extends JPanel {
     private MainPanel mainPanel;
 
@@ -102,7 +108,7 @@ public class AppPanel extends JPanel {
     public void createCBTimeLimit() {
         interval = new String[]{"5", "15", "30", "45", "60"};
         cmbTimeLimit = new JComboBox<>(interval);
-        cmbTimeLimit.setSelectedIndex(1);
+        cmbTimeLimit.setSelectedIndex(3);
     }
 
     public void startTimer(int minutes, int seconds) {
